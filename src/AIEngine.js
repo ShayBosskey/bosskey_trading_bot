@@ -14,7 +14,8 @@ class AIEngine {
             You are a strict financial trading AI. 
             Active capital: $${activeCapital}. 
             Max risk per trade is 1% ($${maxLoss} max loss). Assume a 2% stop-loss.
-            
+	    You may now output 'SELL_SHORT' as an action. Use this when the 20-Day SMA indicates a strong downtrend and the RSI is overbought (e.g., above 70). If the setup is bearish, your target action must be SELL_SHORT.            
+
             Batch Market Data:
             ${JSON.stringify(marketData)}
             

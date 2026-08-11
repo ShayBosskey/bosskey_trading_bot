@@ -1,0 +1,30 @@
+[System] Global Error Handler armed for TradingBot
+◇ injected env (9) from ../.env // tip: ◈ encrypted .env [www.dotenvx.com]
+◇ injected env (0) from ../.env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+◇ injected env (0) from ../.env // tip: ⌘ suppress logs { quiet: true }
+--- INITIATING OOP TRADING BOT ---
+
+[System Error]: error: column "pot_name" does not exist
+    at /home/adminbosskey/bosskey_trading_bot/node_modules/pg/lib/client.js:694:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async DatabaseClient.getActiveCapital (/home/adminbosskey/bosskey_trading_bot/src/DatabaseClient.js:20:25)
+    at async runTradingCycle (/home/adminbosskey/bosskey_trading_bot/TradingBot.js:29:31) {
+  length: 107,
+  severity: 'ERROR',
+  code: '42703',
+  detail: undefined,
+  hint: undefined,
+  position: '8',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'parse_relation.c',
+  line: '3716',
+  routine: 'errorMissingColumn'
+}
+[Notifier] 📱 Push notification sent: "Trading Bot Error"

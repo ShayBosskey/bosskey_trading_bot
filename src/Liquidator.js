@@ -42,27 +42,33 @@ async function runHardClose() {
         let liquidatedSymbols = [];
         
         for (const position of positions) {
-            const qty = parseFloat(position.qty);
-            const buyPrice = parseFloat(position.avg_entry_price);
-            const sellPrice = parseFloat(position.current_price);
+            // Alpaca returns short positions as negative quantities. We convert it to a positive absolute number.
+            const rawQty = parseFloat(position.qty);
+            const qty = Math.abs(rawQty);
+            const isShort = rawQty < 0;
             
-            const netProfit = (sellPrice - buyPrice) * qty;
-            const margin = ((sellPrice - buyPrice) / buyPrice) * 100;
+            const entryPrice = parseFloat(position.avg_entry_price);
+            const exitPrice = parseFloat(position.current_price);
+            
+            // Invert the profit math if it is a short position
+            const netProfit = isShort ? (entryPrice - exitPrice) * qty : (exitPrice - entryPrice) * qty;
+            const margin = isShort ? ((entryPrice - exitPrice) / entryPrice) * 100 : ((exitPrice - entryPrice) / entryPrice) * 100;
+            const sideToClose = isShort ? 'buy' : 'sell';
 
-            console.log(`[Liquidator] Selling ${qty} shares of ${position.symbol}...`);
+            console.log(`[Liquidator] Closing ${isShort ? 'Short' : 'Long'} position on ${position.symbol}...`);
+            
             await alpaca.trading.orders.market({
                 symbol: position.symbol,
                 qty: qty,
-                side: 'sell',
+                side: sideToClose,
                 timeInForce: 'day'
             });
             
-            // Update the open trade record
             await db.query(`
                 UPDATE trade_analytics 
                 SET sell_price = $1, net_profit = $2, margin_percentage = $3, status = 'CLOSED'
                 WHERE symbol = $4 AND status = 'OPEN'
-            `, [sellPrice, netProfit, margin, position.symbol]);
+            `, [exitPrice, netProfit, margin, position.symbol]);
 
             liquidatedSymbols.push(position.symbol);
         }

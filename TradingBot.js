@@ -37,25 +37,41 @@ async function runTradingCycle() {
         console.log("\n--- AI TRADE DECISION ---");
         console.log(`Next Action: ${decision.action} | Target: ${decision.target_symbol} | Confidence Score: ${decision.confidence_score} | Reasoning: ${decision.reasoning}`);
         
-        if (decision.action === 'BUY' && decision.target_symbol !== 'NONE') {
-            await notifier.push(
-                "Bot Executing Trade", 
-                `Buying ${decision.target_symbol}\nConfidence: ${decision.confidence_score}/100\nReason: ${decision.reasoning}`, 
-                "chart_with_upwards_trend"
-            );
+        if ((decision.action === 'BUY' || decision.action === 'SELL_SHORT') && decision.target_symbol !== 'NONE') {
             
-            const tradeData = await broker.executeTrade(decision, marketData, activeCapital);
+            // --- DYNAMIC POSITION SIZING (KELLY CRITERION) ---
+            const p = decision.confidence_score / 100;
             
-            // Log the entry to the analytics database
-            if (tradeData && tradeData.executed) {
-                await pgClient.query(`
-                    INSERT INTO trade_analytics (symbol, buy_price, qty, status)
-                    VALUES ($1, $2, $3, 'OPEN')
-                `, [tradeData.symbol, tradeData.price, tradeData.qty]);
-                console.log(`[System] Trade logged to analytics database.`);
+            // Only calculate if confidence is above 50%
+            if (p > 0.5) {
+                const kellyFraction = (2 * p) - 1;
+                const maxRiskPercentage = 0.02; // Absolute max risk is 2% of Active Capital
+                
+                // Calculate the exact dollar amount to risk
+                const dynamicRiskAmount = activeCapital * maxRiskPercentage * kellyFraction;
+                
+                console.log(`[Risk Manager] AI Confidence: ${decision.confidence_score}%. Applying Kelly Fraction: ${kellyFraction.toFixed(2)}`);
+                console.log(`[Risk Manager] Dynamically allocating $${dynamicRiskAmount.toFixed(2)} to this trade.`);
+
+                await notifier.push(
+                	"Bot Executing Trade", 
+                	`Action: ${decision.action}\nTarget: ${decision.target_symbol}\nConfidence: ${decision.confidence_score}/100\nRisk: $${dynamicRiskAmount.toFixed(2)}`, 
+                	decision.action === 'BUY' ? "chart_with_upwards_trend" : "chart_with_downwards_trend"
+            	);
+                
+                // Pass the dynamic risk amount to your broker execution function
+                const tradeData = await broker.executeTrade(decision, marketData, dynamicRiskAmount);
+                
+                if (tradeData && tradeData.executed) {
+                    await pgClient.query(`
+                        INSERT INTO trade_analytics (symbol, buy_price, qty, status)
+                        VALUES ($1, $2, $3, 'OPEN')
+                    `, [tradeData.symbol, tradeData.price, tradeData.qty]);
+                    console.log(`[System] Trade logged to analytics database.`);
+                }
+            } else {
+                console.log("[System] Confidence too low (<50%) to justify capital risk.");
             }
-        } else {
-            console.log("[System] Holding cash. No push notification required.");
         }
         
     } catch (error) {

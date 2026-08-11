@@ -1,6 +1,6 @@
 require('dotenv').config({ path: '../.env' });
 const { Alpaca } = require('@alpacahq/alpaca-trade-api');
-
+const TICKER_UNIVERSE = require('./Tickers');
 class BrokerClient {
     constructor() {
         this.alpaca = new Alpaca({
@@ -40,51 +40,44 @@ class BrokerClient {
     }
 
     async scanMarketMovers() {
-        const topTickers = ['NVDA', 'AAPL', 'MSFT', 'PLTR', 'TSLA', 'AMZN'];
-        const marketData = [];
+        console.log(`[Broker] Initiating multi-threaded scan of ${TICKER_UNIVERSE.length} tickers...`);
+        
+        try {
+            // Ask Alpaca for a snapshot of every single ticker at the same time
+            const snapshots = await this.alpaca.marketData.stocks.getSnapshots({ 
+                symbols: TICKER_UNIVERSE 
+            });
+            
+            let bestSetup = null;
+            let highestMomentum = -999;
 
-        console.log(`[Broker] Scanning live prices and fetching historical indicators...`);
-
-        const startDate = new Date();
-        startDate.setDate(startDate.getDate() - 45);
-        const startStr = startDate.toISOString();
-
-        for (const sym of topTickers) {
-            try {
-                const currentPrice = await this.alpaca.marketData.getLatestPrice(sym);
-                const url = `https://data.alpaca.markets/v2/stocks/bars?symbols=${sym}&timeframe=1Day&start=${startStr}&limit=30&feed=iex`;
+            // Loop through the results to find the stock moving the fastest right now
+            for (const [symbol, snapshot] of Object.entries(snapshots)) {
+                if (!snapshot || !snapshot.dailyBar || !snapshot.prevDailyBar) continue;
                 
-                const response = await fetch(url, {
-                    method: 'GET',
-                    headers: {
-                        'APCA-API-KEY-ID': process.env.ALPACA_API_KEY,
-                        'APCA-API-SECRET-KEY': process.env.ALPACA_SECRET_KEY,
-                        'accept': 'application/json'
-                    }
-                });
-
-                const data = await response.json();
-                let sma20 = null;
-                let rsi14 = null;
-
-                if (data.bars && data.bars[sym] && Array.isArray(data.bars[sym])) {
-                    const closePrices = data.bars[sym].map(bar => bar.c);
-                    sma20 = this.calculateSMA(closePrices, 20);
-                    rsi14 = this.calculateRSI(closePrices, 14);
+                const currentPrice = snapshot.latestTrade.p;
+                const prevClose = snapshot.prevDailyBar.c;
+                const dailyChangePercent = ((currentPrice - prevClose) / prevClose) * 100;
+                
+                // We are looking for the absolute biggest mover (positive or negative)
+                if (Math.abs(dailyChangePercent) > highestMomentum) {
+                    highestMomentum = Math.abs(dailyChangePercent);
+                    bestSetup = {
+                        symbol: symbol,
+                        price: currentPrice,
+                        dailyChange: dailyChangePercent.toFixed(2),
+                        volume: snapshot.dailyBar.v
+                    };
                 }
-
-                marketData.push({ 
-                    symbol: sym, 
-                    price: currentPrice,
-                    sma_20: sma20,
-                    rsi_14: rsi14
-                });
-
-            } catch (err) {
-                console.log(`[Broker] Skipped ${sym}: ${err.message}`);
             }
+
+            console.log(`[Broker] Scan complete. Top mover identified: ${bestSetup.symbol} moving ${bestSetup.dailyChange}% today.`);
+            return bestSetup;
+
+        } catch (err) {
+            console.error(`[Broker Error]: Failed to scan market movers: ${err.message}`);
+            throw err;
         }
-        return marketData;
     }
 
     async executeTrade(decision, marketData, activeCapital) {
@@ -114,16 +107,18 @@ class BrokerClient {
         console.log(`\n[Broker] Formatting MARKET BUY order for ${shares} shares of ${decision.target_symbol}...`);
             
     	try {
+                // If the AI says BUY, we buy. If it says SELL_SHORT, we sell to open the position.
+                const orderSide = decision.action === 'BUY' ? 'buy' : 'sell';
+                
                 const order = await this.alpaca.trading.orders.market({
                     symbol: decision.target_symbol,
-                    qty: shares,
-                    side: 'buy',
+                    qty: shares, // Alpaca expects a positive number for quantity
+                    side: orderSide,
                     timeInForce: 'day'
                 });
-                console.log(`[Broker] Order Executed! Alpaca Order ID: ${order.id}`);
+                console.log(`[Broker] ${decision.action} Order Executed! Alpaca ID: ${order.id}`);
                 
-                // Return the execution data for the analytics logger
-                return { executed: true, symbol: decision.target_symbol, qty: shares, price: target.price };
+                return { executed: true, symbol: decision.target_symbol, qty: shares, price: target.price, action: decision.action };
             } catch (err) {
                 console.log(`[Broker] Order Failed: ${err.message}`);
                 return null;

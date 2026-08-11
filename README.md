@@ -1,70 +1,84 @@
-# Bosskey Trading Bot 🤖📈
+# Bosskey Trading Bot 🤖
 
-An autonomous, quantitative day trading algorithm powered by Node.js, the Alpaca V3 API, and Gemini AI. This system executes a complete daily trading lifecycle, managing market entry, hard-close liquidation, and automated profit distribution using a PostgreSQL database.
-
----
-
-## 🏛️ System Architecture
-
-The architecture is fully modular, object-oriented, and secured by a global error-catching wrapper.
-
-* **`TradingBot.js`**: The master orchestrator. Runs in the afternoon, pulls live market data, queries the AI, and executes market BUY orders.
-* **`src/AIEngine.js`**: The intelligence layer. Prompts the Gemini model with live technical indicators to generate confidence scores and trading decisions.
-* **`src/BrokerClient.js`**: The execution layer. Handles all direct communication with the Alpaca V3 API.
-* **`src/Liquidator.js`**: The risk manager. Forcefully liquidates all open positions right before the market closes to eliminate overnight risk.
-* **`src/Settlement.js`**: The accountant. Calculates daily realized P&L and distributes capital across the PostgreSQL pots.
-* **`src/Notifier.js`**: The communication layer. Sends real-time push notifications to Android devices via the ntfy.sh protocol.
-* **`src/ErrorHandler.js`**: The global safety net. Wraps all scripts to catch unhandled exceptions and send instant crash reports.
-* **`export_analytics.sh`**: A one-click bash script that exports the PostgreSQL trade ledger to a CSV file for Grafana or Excel analysis.
+An autonomous, quantitative day trading algorithm powered by Node.js, the Alpaca V3 API, and Gemini AI. This system features multi-threaded market scanning, dynamic risk allocation via the Kelly Criterion, bidirectional trading (Long/Short), and automated PostgreSQL capital settlement.
 
 ---
 
-## 🧠 Core Strategy & Logic
+## 📊 System Architecture & Data Flow
 
-The bot operates strictly as a day trader. It never holds positions overnight. 
+The system is fully modular and wrapped in a global error-catching net.
 
-### 1. Market Entry (15:35 CEST)
-The bot waits for the opening bell volatility to settle. It calculates two primary technical indicators:
-* **20-Day SMA (Simple Moving Average):** Determines the macroeconomic trend.
-* **14-Day RSI (Relative Strength Index):** Identifies overbought or oversold conditions.
-The AI Engine evaluates these indicators against the active capital and outputs a definitive `BUY` or `HOLD` signal with a confidence score.
-
-### 2. Market Exit (21:55 CEST)
-Five minutes before the New York closing bell, the `Liquidator.js` script initiates a hard close. It queries Alpaca for all open positions, sells them at market price, logs the profit margins to the `trade_analytics` table, and converts the portfolio entirely to cash.
-
-### 3. Capital Settlement (21:58 CEST)
-Daily profits are aggressively managed to ensure compounding growth while protecting against drawdowns and tax liabilities. The `Settlement.js` script distributes realized profits according to the 60/20/10/10 rule:
-* **60% Active Capital:** Reinvested into the trading engine to compound daily buying power.
-* **20% Emergency Reserve:** A drawdown shield to protect baseline capital during losing streaks.
-* **10% Tax Vault:** Set aside in cash to cover potential ESTV professional trading tax liabilities.
-* **10% Personal Payout:** Liquid cash out for personal use.
-* *Note: Losing days are subtracted entirely from Active Capital to protect the vaults.*
+[Cron Job Trigger] 
+       │
+       ▼
+ ┌──────────────┐      [Tickers.js] (Universe of 40+ AI/Tech Stocks)
+ │ TradingBot.js│───────────┐
+ └──────────────┘           ▼
+       │              ┌──────────────┐
+       │              │ BrokerClient │──> Multi-threaded Alpaca API Scan
+       │              └──────────────┘    (Finds #1 Market Mover)
+       ▼                    │
+ ┌──────────────┐           │
+ │ AIEngine.js  │<──────────┘
+ └──────────────┘
+ (Calculates 20 SMA & 14 RSI -> Gemini AI generates BUY, SELL_SHORT, or HOLD)
+       │
+       ▼
+ [Risk Manager] -> Applies Kelly Criterion for Position Sizing
+       │
+       ▼
+ [BrokerClient] -> Executes Trade via Alpaca
+       │
+       ▼
+ [PostgreSQL]   -> Logs entry into 'trade_analytics' table
+       │
+       ▼
+ [Notifier.js]  -> Pushes native Android alert via ntfy.sh
 
 ---
 
-## ⚙️ Deployment & Setup
+## 🧠 Advanced Algorithmic Logic
 
-### Prerequisites
-* Node.js (v18+)
-* PostgreSQL (v14+)
-* An Alpaca Trading Account (Paper or Live)
-* A Gemini API Key
-* The ntfy Android App
+### 1. Multi-Threaded Ticker Scanning
+Instead of sequentially checking stocks, the bot queries the Alpaca API for snapshots of the entire TICKER_UNIVERSE simultaneously. It filters the data to find the single asset with the highest absolute intraday momentum (positive or negative) and feeds it to the AI.
 
-### Environment Variables
-Create a `.env` file in the root directory with the following exact keys:
+### 2. Bidirectional Trading (Short Selling)
+The bot profits in both bull and bear markets. 
+* BUY: Executed when the SMA is trending up and RSI is favorable. 
+* SELL_SHORT: Executed when the SMA shows a strong downtrend and RSI is overbought. The bot borrows shares to sell high, and the liquidator buys them back at the end of the day.
 
-```text
-# Alpaca Broker
-ALPACA_API_KEY=your_key_here
-ALPACA_SECRET_KEY=your_secret_here
+### 3. Dynamic Position Sizing (The Kelly Criterion)
+The bot abandons flat-rate risk. It scales the capital it risks based on the AI's confidence score (p) using a modified Kelly formula:
+f* = 2p - 1
+If the AI is 80% confident (0.8), f* = 0.6. The bot will allocate 60% of its maximum allowable risk to that specific trade.
 
-# AI Engine
-GEMINI_API_KEY=your_key_here
+---
 
-# Database
-DB_HOST=localhost
-DB_PORT=5432
-DB_NAME=bosskey_trading
-DB_USER=your_user
-DB_PASSWORD=your_password
+## ⏱️ The Automation Schedule (Crontab)
+
+The bot operates strictly via Linux Cron Jobs, mapped to standard US Market hours (translated to CEST).
+
+* 15:35 | TradingBot.js : Market Entry. Runs 5 minutes after NY opening bell.
+* 21:55 | Liquidator.js : Hard Close. Forcefully closes all open Long and Short positions.
+* 21:58 | Settlement.js : Capital Distribution. Updates PostgreSQL database pots.
+
+Crontab Configuration:
+
+    # Execute Trade Evaluation (Monday-Friday at 15:35)
+    35 15 * * 1-5 cd /home/adminbosskey/bosskey_trading_bot && /usr/bin/node TradingBot.js >> /home/adminbosskey/bosskey_trading_bot/execution.log 2>&1
+
+    # Execute Hard Close Liquidation (Monday-Friday at 21:55)
+    55 21 * * 1-5 cd /home/adminbosskey/bosskey_trading_bot && /usr/bin/node src/Liquidator.js >> /home/adminbosskey/bosskey_trading_bot/execution.log 2>&1
+
+    # Execute Capital Settlement (Monday-Friday at 21:58)
+    58 21 * * 1-5 cd /home/adminbosskey/bosskey_trading_bot && /usr/bin/node src/Settlement.js >> /home/adminbosskey/bosskey_trading_bot/execution.log 2>&1
+
+---
+
+## 💰 The 60/20/10/10 Settlement Rule
+Profits are mathematically distributed nightly to ensure compounding growth and tax safety:
+* 60% Active Capital: Reinvested into the algorithm.
+* 20% Emergency Reserve: Drawdown protection.
+* 10% Tax Vault: Reserved for potential Swiss ESTV liabilities.
+* 10% Personal Payout: Liquid profit to be wired to a checking account.
+*(Losses are absorbed 100% by Active Capital to shield the vaults).*
