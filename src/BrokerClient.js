@@ -45,18 +45,15 @@ class BrokerClient {
 
         console.log(`[Broker] Scanning live prices and fetching historical indicators...`);
 
-        // Force the API to look back 45 days so we have enough bars for the math
         const startDate = new Date();
         startDate.setDate(startDate.getDate() - 45);
         const startStr = startDate.toISOString();
 
         for (const sym of topTickers) {
             try {
-                // 1. Get live price via SDK
                 const currentPrice = await this.alpaca.marketData.getLatestPrice(sym);
-
-                // 2. Fetch historical bars with an explicit start date
                 const url = `https://data.alpaca.markets/v2/stocks/bars?symbols=${sym}&timeframe=1Day&start=${startStr}&limit=30&feed=iex`;
+                
                 const response = await fetch(url, {
                     method: 'GET',
                     headers: {
@@ -70,7 +67,6 @@ class BrokerClient {
                 let sma20 = null;
                 let rsi14 = null;
 
-                // 3. Extract closing prices safely
                 if (data.bars && data.bars[sym] && Array.isArray(data.bars[sym])) {
                     const closePrices = data.bars[sym].map(bar => bar.c);
                     sma20 = this.calculateSMA(closePrices, 20);
@@ -89,6 +85,49 @@ class BrokerClient {
             }
         }
         return marketData;
+    }
+
+    async executeTrade(decision, marketData, activeCapital) {
+        // Abort if the AI said HOLD
+        if (decision.action !== 'BUY' || decision.target_symbol === 'NONE') return;
+
+        const target = marketData.find(d => d.symbol === decision.target_symbol);
+        if (!target) return;
+
+        // Risk Math: 1% of capital max loss, 2% stop-loss means total position is 50x the risk
+        const maxRisk = activeCapital * 0.01;
+        const positionSize = maxRisk / 0.02; 
+        let shares = Math.floor(positionSize / target.price);
+
+        const cash = await this.getCashBalance();
+        
+        // Safety Check: Never over-leverage the available cash
+        if ((shares * target.price) > cash) {
+            shares = Math.floor(cash / target.price);
+        }
+
+        if (shares <= 0) {
+            console.log(`\n[Broker] Insufficient cash to buy ${decision.target_symbol}.`);
+            return;
+        }
+
+        console.log(`\n[Broker] Formatting MARKET BUY order for ${shares} shares of ${decision.target_symbol}...`);
+            
+    	try {
+                const order = await this.alpaca.trading.orders.market({
+                    symbol: decision.target_symbol,
+                    qty: shares,
+                    side: 'buy',
+                    timeInForce: 'day'
+                });
+                console.log(`[Broker] Order Executed! Alpaca Order ID: ${order.id}`);
+                
+                // Return the execution data for the analytics logger
+                return { executed: true, symbol: decision.target_symbol, qty: shares, price: target.price };
+            } catch (err) {
+                console.log(`[Broker] Order Failed: ${err.message}`);
+                return null;
+            }
     }
 }
 
