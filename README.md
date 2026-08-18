@@ -82,3 +82,35 @@ Profits are mathematically distributed nightly to ensure compounding growth and 
 * 10% Tax Vault: Reserved for potential Swiss ESTV liabilities.
 * 10% Personal Payout: Liquid profit to be wired to a checking account.
 *(Losses are absorbed 100% by Active Capital to shield the vaults).*
+
+---
+
+# Bosskey Trading Bot (v1.1 Multi-Scaling Architecture)
+
+An autonomous, multi-position quantitative trading system built for Bosskey Industries. Powered by Node.js, PostgreSQL, Alpaca API, and Google Gemini AI.
+
+## Core Architecture
+
+The system operates on a 5-Slot Horizontal Scaling model, executing trades based on Momentum Breakouts and managing risk via continuous background monitoring.
+
+* **TradingBot.js**: Runs daily at market open. Scans the Alpaca Top 50 Movers, filters out penny stocks (Current Price and 20-Day SMA < $5.00), and uses Gemini AI to evaluate momentum breakouts. Allocates 15% of active capital per slot. Max 5 open positions.
+* **Liquidator.js**: Runs every 15 minutes during market hours. Continuously evaluates open positions against strict risk parameters:
+  * Take-Profit: +10%
+  * Stop-Loss: -5%
+  * Time-Stop: 3 Days
+* **Settlement.js**: Runs daily after market close. Sweeps all closed trades for the day, calculates net P&L, and distributes profits into Capital Pots (50% Active, 20% Emergency, 20% Tax, 10% Personal).
+* **Logger.js**: Centralized logging system that writes timestamped events directly to the `system_logs` PostgreSQL table.
+
+## Database Schema (PostgreSQL)
+
+* `trade_analytics`: Tracks symbol, buy/sell prices, margins, status (OPEN/CLOSED), and timestamps (`opened_at`, `closed_at`).
+* `capital_pots`: Manages the dynamic distribution of trading capital and profits.
+* `system_logs`: Immutable ledger of all system events, errors, and logic decisions.
+
+## CronJob Schedule (CEST - Swiss Local Time)
+
+\`\`\`bash
+35 15 * * 1-5 /usr/bin/node TradingBot.js
+45,00,15,30 15-21 * * 1-5 /usr/bin/node src/Liquidator.js
+15 22 * * 1-5 /usr/bin/node src/Settlement.js
+\`\`\`

@@ -1,0 +1,65 @@
+[System] Global Error Handler armed for TradingBot
+◇ injected env (9) from ../.env // tip: ◈ encrypted .env [www.dotenvx.com]
+◇ injected env (0) from ../.env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+◇ injected env (0) from ../.env // tip: ⌘ suppress logs { quiet: true }
+--- INITIATING OOP TRADING BOT ---
+
+[System Error]: error: column "pot_name" does not exist
+    at /home/adminbosskey/bosskey_trading_bot/node_modules/pg/lib/client.js:694:17
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async DatabaseClient.getActiveCapital (/home/adminbosskey/bosskey_trading_bot/src/DatabaseClient.js:20:25)
+    at async runTradingCycle (/home/adminbosskey/bosskey_trading_bot/TradingBot.js:29:31) {
+  length: 107,
+  severity: 'ERROR',
+  code: '42703',
+  detail: undefined,
+  hint: undefined,
+  position: '8',
+  internalPosition: undefined,
+  internalQuery: undefined,
+  where: undefined,
+  schema: undefined,
+  table: undefined,
+  column: undefined,
+  dataType: undefined,
+  constraint: undefined,
+  file: 'parse_relation.c',
+  line: '3716',
+  routine: 'errorMissingColumn'
+}
+[Notifier] 📱 Push notification sent: "Trading Bot Error"
+[System] Global Error Handler armed for Liquidator
+◇ injected env (9) from ../.env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+--- INITIATING END OF DAY LIQUIDATION ---
+[Liquidator] Found 1 open position(s). Executing sales and logging analytics...
+[Liquidator] Closing Long position on NVDA...
+[Liquidator] Daily liquidation complete. Capital secured.
+[Notifier] 📱 Push notification sent: "End of Day Liquidation"
+[System] Global Error Handler armed for Settlement
+◇ injected env (9) from ../.env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+--- INITIATING DAILY SETTLEMENT ---
+[Settlement] Loss recorded. Deducting $515.46 from Active Capital...
+[Settlement] ✅ Database successfully updated.
+[Notifier] 📱 Push notification sent: "Losing Day Settled"
+[System] Global Error Handler armed for TradingBot
+◇ injected env (9) from ../.env // tip: ⌘ suppress logs { quiet: true }
+◇ injected env (0) from ../.env // tip: ◈ encrypted .env [www.dotenvx.com]
+--- INITIATING OOP TRADING BOT ---
+[System] Active Capital: $74484.54 | Broker Cash: $99483.72
+
+[Broker] Initiating multi-threaded scan of 38 tickers using direct API call...
+[Broker] Top mover identified: MU. Fetching historical data for indicators...
+[Broker] Indicators calculated -> SMA: 879.03 | RSI: 43.22
+[AI Engine] Routing evaluation through gemini-3.5-flash...
+
+--- AI TRADE DECISION ---
+Next Action: HOLD | Target: NONE | Confidence Score: 85 | Reasoning: MU is trading above its 20-day SMA indicating an uptrend, but with a neutral RSI of 43.22 and no clear entry trigger, holding is the most prudent action.
+[System] Global Error Handler armed for Liquidator
+◇ injected env (9) from ../.env // tip: ⌘ suppress logs { quiet: true }
+--- INITIATING END OF DAY LIQUIDATION ---
+[Liquidator] No open positions to close. Portfolio is cash heavy.
+[Notifier] 📱 Push notification sent: "End of Day Check"
+[System] Global Error Handler armed for Settlement
+◇ injected env (9) from ../.env // tip: ⌘ enable debugging { debug: true }
+--- INITIATING DAILY SETTLEMENT ---
+[Settlement] Breakeven day. No distribution required.

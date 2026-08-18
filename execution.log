@@ -1,30 +1,131 @@
-[System] Global Error Handler armed for TradingBot
-◇ injected env (9) from ../.env // tip: ◈ encrypted .env [www.dotenvx.com]
-◇ injected env (0) from ../.env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
-◇ injected env (0) from ../.env // tip: ⌘ suppress logs { quiet: true }
---- INITIATING OOP TRADING BOT ---
+/home/adminbosskey/bosskey_trading_bot/TradingBot.js:87
+                "shield"
+                ^^^^^^^^
 
-[System Error]: error: column "pot_name" does not exist
-    at /home/adminbosskey/bosskey_trading_bot/node_modules/pg/lib/client.js:694:17
-    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
-    at async DatabaseClient.getActiveCapital (/home/adminbosskey/bosskey_trading_bot/src/DatabaseClient.js:20:25)
-    at async runTradingCycle (/home/adminbosskey/bosskey_trading_bot/TradingBot.js:29:31) {
-  length: 107,
-  severity: 'ERROR',
-  code: '42703',
-  detail: undefined,
-  hint: undefined,
-  position: '8',
-  internalPosition: undefined,
-  internalQuery: undefined,
-  where: undefined,
-  schema: undefined,
-  table: undefined,
-  column: undefined,
-  dataType: undefined,
-  constraint: undefined,
-  file: 'parse_relation.c',
-  line: '3716',
-  routine: 'errorMissingColumn'
-}
-[Notifier] 📱 Push notification sent: "Trading Bot Error"
+SyntaxError: missing ) after argument list
+    at wrapSafe (node:internal/modules/cjs/loader:1866:18)
+    at Module._compile (node:internal/modules/cjs/loader:1908:20)
+    at Object..js (node:internal/modules/cjs/loader:2074:10)
+    at Module.load (node:internal/modules/cjs/loader:1656:32)
+    at Module._load (node:internal/modules/cjs/loader:1448:12)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:261:19)
+    at Module.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:154:5)
+    at node:internal/main/run_main_module:33:47
+
+Node.js v26.6.0
+[System] Global Error Handler armed for Liquidator
+◇ injected env (9) from ../.env // tip: ⌘ override existing { override: true }
+
+
+==================================================
+[13.8.2026, 21:55:01] 🧹 INITIATING END OF DAY LIQUIDATION
+==================================================
+[Liquidator] No open positions to close. Portfolio is cash heavy.
+[Notifier] 📱 Push notification sent: "End of Day Check"
+[System] Global Error Handler armed for Settlement
+◇ injected env (9) from ../.env // tip: ⌘ override existing { override: true }
+
+
+==================================================
+[13.8.2026, 21:58:02] 🏦 INITIATING DAILY SETTLEMENT
+==================================================
+[Settlement] Breakeven day. No distribution required.
+[System] Global Error Handler armed for TradingBot
+◇ injected env (9) from ../.env // tip: ◈ secrets for agents [www.dotenvx.com]
+◇ injected env (0) from ../.env // tip: ◈ secrets for agents [www.dotenvx.com]
+
+
+==================================================
+[14.8.2026, 15:35:01] 🚀 INITIATING OOP TRADING BOT
+==================================================
+[System] Active Capital: $74484.54 | Broker Cash: $99483.72
+
+[Broker] Initiating multi-threaded scan of 38 tickers using direct API call...
+[Broker] Top mover identified: MP. Fetching historical data for indicators...
+[Broker] Indicators calculated -> SMA: 47.2 | RSI: 75.47
+[AI Engine] Routing evaluation through gemini-3.5-flash...
+
+--- AI TRADE DECISION ---
+Next Action: HOLD | Target: NONE | Confidence Score: 90 | Reasoning: RSI is overbought at 75.47 and the price is above the 20-Day SMA, while extremely low volume (4596) presents severe liquidity and slippage risks.
+[System] Executing HOLD strategy. Notifying user.
+[Notifier] 📱 Push notification sent: "Bot Holding Position"
+[System] Global Error Handler armed for Liquidator
+◇ injected env (9) from ../.env // tip: ◈ secrets for agents [www.dotenvx.com]
+
+
+==================================================
+[14.8.2026, 21:55:02] 🧹 INITIATING END OF DAY LIQUIDATION
+==================================================
+[Liquidator] No open positions to close. Portfolio is cash heavy.
+[Notifier] 📱 Push notification sent: "End of Day Check"
+[System] Global Error Handler armed for Settlement
+◇ injected env (9) from ../.env // tip: ⌘ suppress logs { quiet: true }
+
+
+==================================================
+[14.8.2026, 21:58:01] 🏦 INITIATING DAILY SETTLEMENT
+==================================================
+[Settlement] Breakeven day. No distribution required.
+[System] Global Error Handler armed for TradingBot
+◇ injected env (9) from ../.env // tip: ⌘ enable debugging { debug: true }
+
+
+==================================================
+[17.8.2026, 15:35:02] 🚀 INITIATING OOP TRADING BOT
+==================================================
+[System] Active Capital: $74484.54 | Broker Cash: $99483.72
+
+[Broker] Pinging Alpaca Screener API for dynamic top market movers...
+[Broker] Dynamic target locked: NNNN moving 24.71% today.
+[Broker] Indicators calculated -> SMA: 10.14 | RSI: 53.49
+[AI Engine] Routing evaluation through gemini-3.5-flash...
+
+--- AI TRADE DECISION ---
+Next Action: BUY | Target: NNNN | Confidence Score: 88 | Reasoning: NNNN triggers a momentum breakout buy signal because the price is above the 20-Day SMA and $5.00, driven by a strong 24.71% daily gain with a healthy 53.49 RSI indicating further upside potential.
+[Risk Manager] AI Confidence: 88%. Applying Kelly Fraction: 0.76
+[Risk Manager] Dynamically allocating $1132.17 to this trade.
+[Notifier] 📱 Push notification sent: "Bot Executing Trade"
+
+[Broker] Formatting MARKET BUY order for 103 shares of NNNN...
+[Broker] BUY Order Executed! Alpaca ID: 8eeb0202-8fc1-4d59-9eb6-31fa89680d37
+[System] Trade logged to analytics database.
+[System] Global Error Handler armed for Liquidator
+◇ injected env (9) from ../.env // tip: ⌘ enable debugging { debug: true }
+
+
+==================================================
+[17.8.2026, 21:55:02] 🧹 INITIATING END OF DAY LIQUIDATION
+==================================================
+[Liquidator] Found 1 open position(s). Executing sales and logging analytics...
+[Liquidator] Closing Long position on NNNN...
+[Liquidator] Daily liquidation complete. Capital secured.
+[Notifier] 📱 Push notification sent: "End of Day Liquidation"
+[System] Global Error Handler armed for Settlement
+◇ injected env (9) from ../.env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+
+
+==================================================
+[17.8.2026, 21:58:02] 🏦 INITIATING DAILY SETTLEMENT
+==================================================
+[Settlement] Loss recorded. Deducting $332.04 from Active Capital...
+[Settlement] ✅ Database successfully updated.
+[Notifier] 📱 Push notification sent: "Losing Day Settled"
+[System] Global Error Handler armed for TradingBot
+◇ injected env (9) from ../.env // tip: ⌘ suppress logs { quiet: true }
+
+
+==================================================
+[18.8.2026, 15:35:01] 🚀 INITIATING OOP TRADING BOT
+==================================================
+[System] Active Capital: $74152.5 | Broker Cash: $99151.62
+
+[Broker] Pinging Alpaca Screener API for dynamic top market movers...
+[Broker] Dynamic target locked: WETO moving 57.58% today.
+[Broker] Indicators calculated -> SMA: 5.85 | RSI: 91.62
+[AI Engine] Routing evaluation through gemini-3.5-flash...
+[AI Error]: Unexpected non-whitespace character after JSON at position 244 (line 7 column 1)
+
+--- AI TRADE DECISION ---
+Next Action: HOLD | Target: NONE | Confidence Score: 100 | Reasoning: Fallback due to AI error.
+[System] Executing HOLD strategy. Notifying user.
+[Notifier] 📱 Push notification sent: "Bot Holding Position"

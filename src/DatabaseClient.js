@@ -1,14 +1,13 @@
-require('dotenv').config({ path: '../.env' });
 const { Client } = require('pg');
 
 class DatabaseClient {
     constructor() {
         this.client = new Client({
-            user: process.env.PGUSER,
-            password: process.env.PGPASSWORD,
-            host: process.env.PGHOST,
-            port: process.env.PGPORT,
-            database: process.env.PGDATABASE
+            user: process.env.DB_USER,
+            host: process.env.DB_HOST,
+            database: process.env.DB_NAME,
+            password: process.env.DB_PASSWORD,
+            port: process.env.DB_PORT,
         });
     }
 
@@ -17,8 +16,9 @@ class DatabaseClient {
     }
 
     async getActiveCapital() {
-        const potsRes = await this.client.query('SELECT pot_name, balance FROM capital_pots ORDER BY pot_id ASC;');
-        return parseFloat(potsRes.rows[0].balance);
+        // Fetch the active capital from the latest row
+        const res = await this.client.query('SELECT active_capital FROM capital_pots ORDER BY id DESC LIMIT 1');
+        return parseFloat(res.rows[0].active_capital);
     }
 
     async disconnect() {

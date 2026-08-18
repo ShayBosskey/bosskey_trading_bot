@@ -1,102 +1,110 @@
-const attachGlobalErrorLogger = require('./ErrorHandler');
-attachGlobalErrorLogger('Settlement');
 require('dotenv').config({ path: '../.env' });
-const { Client } = require('pg');
-const { Alpaca } = require('@alpacahq/alpaca-trade-api');
+const DatabaseClient = require('./DatabaseClient');
+const Logger = require('./Logger');
 const Notifier = require('./Notifier');
 
-const alpaca = new Alpaca({
-    keyId: process.env.ALPACA_API_KEY,
-    secret: process.env.ALPACA_SECRET_KEY,
-    paper: true
-});
+class Settlement {
+    constructor() {
+        this.db = new DatabaseClient();
+        this.logger = new Logger('Settlement');
+        this.notifier = new Notifier();
+    }
 
-const notifier = new Notifier();
+    async runDailySettlement() {
+        await this.logger.log('==================================================');
+        await this.logger.log('🏦 INITIATING DAILY BATCH SETTLEMENT');
+        await this.logger.log('==================================================');
 
-async function runSettlement() {
-    console.log("--- INITIATING DAILY SETTLEMENT ---");
-    
-    // Connect to PostgreSQL
-    const db = new Client({
-        user: process.env.DB_USER,
-        host: process.env.DB_HOST,
-        database: process.env.DB_NAME,
-        password: process.env.DB_PASSWORD,
-        port: process.env.DB_PORT,
-    });
+        try {
+            await this.db.connect();
 
-    try {
-        await db.connect();
-
-        // 1. Fetch Account Data
-        const account = await alpaca.trading.account.getAccount();
-        const currentEquity = parseFloat(account.equity);
-        const lastEquity = parseFloat(account.last_equity);
-        
-        // Calculate exact daily P&L
-        const dailyProfit = currentEquity - lastEquity;
-        
-        // 2. Fetch Current Database State
-        const result = await db.query('SELECT * FROM capital_pots ORDER BY id DESC LIMIT 1');
-        const state = result.rows[0];
-        
-        let newActive = parseFloat(state.active_capital);
-        let newReserve = parseFloat(state.emergency_reserve);
-        let newTax = parseFloat(state.tax_vault);
-        let newPayout = parseFloat(state.personal_payout);
-
-        let pushTitle = "";
-        let pushBody = "";
-        let pushEmoji = "";
-
-        // 3. The Distribution Math
-        if (dailyProfit > 0) {
-            console.log(`[Settlement] Profitable day secured! Distributing $${dailyProfit.toFixed(2)}...`);
+            // 1. Find ALL trades that were closed today
+            // Using PostgreSQL DATE() function to match today's date
+            const res = await this.db.client.query(`
+                SELECT * FROM trade_analytics 
+                WHERE status = 'CLOSED' 
+                AND DATE(closed_at AT TIME ZONE 'Europe/Zurich') = CURRENT_DATE
+            `);
             
-            newActive += dailyProfit * 0.60;
-            newReserve += dailyProfit * 0.20;
-            newTax += dailyProfit * 0.10;
-            newPayout += dailyProfit * 0.10;
+            const closedTrades = res.rows;
 
-            pushTitle = "📈 Profitable Day Settled!";
-            pushBody = `Profit: $${dailyProfit.toFixed(2)}\n\nActive Cap: $${newActive.toFixed(2)}\nReserves: $${newReserve.toFixed(2)}\nTax Vault: $${newTax.toFixed(2)}\nPayout: $${newPayout.toFixed(2)}`;
-            pushEmoji = "money_with_wings";
-            
-        } else if (dailyProfit < 0) {
-            console.log(`[Settlement] Loss recorded. Deducting $${Math.abs(dailyProfit).toFixed(2)} from Active Capital...`);
-            
-            // Losses are absorbed entirely by Active Capital to protect the vaults
-            newActive += dailyProfit; 
-            
-            pushTitle = "📉 Losing Day Settled";
-            pushBody = `Loss: $${dailyProfit.toFixed(2)}\nActive Capital adjusted to: $${newActive.toFixed(2)}`;
-            pushEmoji = "chart_with_downwards_trend";
-            
-        } else {
-            console.log("[Settlement] Breakeven day. No distribution required.");
-            await db.end();
-            return;
+            if (closedTrades.length === 0) {
+                await this.logger.log('No trades were closed today. No settlement required.');
+                await this.notifier.push(
+                    "Daily Settlement Report", 
+                    "No positions were closed today. Portfolio holding steady.", 
+                    "bank"
+                );
+                return;
+            }
+
+            // 2. Tally up the total profit/loss for the day
+            let dailyNetProfit = 0;
+            for (const trade of closedTrades) {
+                dailyNetProfit += parseFloat(trade.net_profit);
+            }
+
+            await this.logger.log(`Batch processed ${closedTrades.length} closed trades. Daily Net: $${dailyNetProfit.toFixed(2)}`);
+
+            // 3. Pot Distribution Logic
+            if (dailyNetProfit > 0) {
+                // Winning Day: Distribute the profits across the pots
+                const activeAddition = dailyNetProfit * 0.50;
+                const emergencyAddition = dailyNetProfit * 0.20;
+                const taxAddition = dailyNetProfit * 0.20;
+                const personalAddition = dailyNetProfit * 0.10;
+
+                await this.db.client.query(`
+                    UPDATE capital_pots 
+                    SET active_capital = active_capital + $1,
+                        emergency_reserve = emergency_reserve + $2,
+                        tax_vault = tax_vault + $3,
+                        personal_payout = personal_payout + $4,
+                        last_settled = CURRENT_TIMESTAMP
+                    WHERE id = 1
+                `, [activeAddition, emergencyAddition, taxAddition, personalAddition]);
+
+                await this.logger.log(`Profit distributed: 50% Active, 20% Emergency, 20% Tax, 10% Personal.`);
+                
+                await this.notifier.push(
+                    "🟢 Winning Day Settled!", 
+                    `Closed ${closedTrades.length} trades.\nNet Profit: +$${dailyNetProfit.toFixed(2)}\nPersonal Payout Pot: +$${personalAddition.toFixed(2)}`, 
+                    "bank"
+                );
+
+            } else {
+                // Losing/Breakeven Day: Deduct the loss directly from Active Capital
+                await this.db.client.query(`
+                    UPDATE capital_pots 
+                    SET active_capital = active_capital + $1,
+                        last_settled = CURRENT_TIMESTAMP
+                    WHERE id = 1
+                `, [dailyNetProfit]); // dailyNetProfit is negative, so addition works as deduction
+
+                await this.logger.log(`Loss recorded. Deducting $${Math.abs(dailyNetProfit).toFixed(2)} from Active Capital...`);
+                
+                await this.notifier.push(
+                    "🔴 Losing Day Settled", 
+                    `Closed ${closedTrades.length} trades.\nNet Loss: -$${Math.abs(dailyNetProfit).toFixed(2)}\nDeducted from Active Capital.`, 
+                    "bank"
+                );
+            }
+
+            await this.logger.log('✅ Database successfully updated.');
+
+        } catch (err) {
+            await this.logger.log(`[System Error]: ${err.stack}`);
+            await this.notifier.push("Settlement Error", err.message, "error");
+        } finally {
+            await this.db.disconnect();
         }
-
-        // 4. Update the Database
-        const updateQuery = `
-            UPDATE capital_pots 
-            SET active_capital = $1, emergency_reserve = $2, tax_vault = $3, personal_payout = $4, last_settled = CURRENT_TIMESTAMP
-            WHERE id = $5
-        `;
-        await db.query(updateQuery, [newActive, newReserve, newTax, newPayout, state.id]);
-        
-        console.log("[Settlement] ✅ Database successfully updated.");
-
-        // 5. Notify the User
-        await notifier.push(pushTitle, pushBody, pushEmoji);
-
-    } catch (err) {
-        console.error("\n[Settlement Error]:", err.message);
-        await notifier.push("Settlement Failed", err.message, "warning");
-    } finally {
-        await db.end();
     }
 }
 
-runSettlement();
+// Execute
+if (require.main === module) {
+    const settlement = new Settlement();
+    settlement.runDailySettlement();
+}
+
+module.exports = Settlement;

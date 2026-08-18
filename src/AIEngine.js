@@ -1,48 +1,52 @@
-require('dotenv').config({ path: '../.env' });
 const { GoogleGenAI } = require('@google/genai');
 
 class AIEngine {
     constructor() {
         this.ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
-	// 3.5 Flash is the main engine, 3.1 Flash-Lite is the instant fallback
-        this.models = ['gemini-3.5-flash', 'gemini-3.1-flash-lite'];
     }
 
-    async evaluateBatch(marketData, activeCapital) {
-        const maxLoss = (activeCapital * 0.01).toFixed(2);
+    async evaluateBatch(marketData) {
+        console.log(`[AI Engine] Routing evaluation through gemini-3.5-flash...`);
+        
         const prompt = `
-            You are a strict financial trading AI. 
-            Active capital: $${activeCapital}. 
-            Max risk per trade is 1% ($${maxLoss} max loss). Assume a 2% stop-loss.
-	    You may now output 'SELL_SHORT' as an action. Use this when the 20-Day SMA indicates a strong downtrend and the RSI is overbought (e.g., above 70). If the setup is bearish, your target action must be SELL_SHORT.            
+You are a ruthless, highly disciplined quantitative trading AI for Bosskey Industries.
+Analyze the following market data for a potential momentum breakout trade.
 
-            Batch Market Data:
-            ${JSON.stringify(marketData)}
-            
-            Directives:
-            1. ETHICS: Disqualify any company known for severe unethical practices.
-            2. EVALUATION: Calculate risk-to-reward for the remaining assets.
-            3. SELECTION: Pick the single best candidate. If none are viable, choose HOLD.
-            
-            Output ONLY valid JSON containing: "action" (BUY or HOLD), "target_symbol" (ticker or "NONE"), "confidence_score" (1-100), and "reasoning" (brief sentence).
-        `;
+Data:
+- Symbol: ${marketData.symbol}
+- Current Price: ${marketData.price}
+- Daily Change: ${marketData.dailyChange}%
+- 20-Day SMA: ${marketData.sma_20}
+- 14-Day RSI: ${marketData.rsi_14}
 
-        for (const model of this.models) {
-            try {
-                console.log(`[AI Engine] Routing evaluation through ${model}...`);
-                const response = await this.ai.models.generateContent({
-                    model: model,
-                    contents: prompt,
-                });
-                
-                // Strip markdown formatting if the AI wraps the JSON in code blocks
-                const cleanText = response.text.replace(/```json/g, '').replace(/```/g, '').trim();
-                return JSON.parse(cleanText);
-            } catch (err) {
-                console.warn(`[AI Engine] ${model} failed: ${err.message}. Engaging fallback protocol...`);
-            }
+RULES:
+1. PENNY STOCK FILTER: If the Current Price or SMA is under 5.00, you MUST return HOLD. We do not trade micro-cap pump-and-dumps.
+2. BUY (Momentum Breakout): If Price > 5.00 AND Daily Change is highly positive AND Price > SMA. (Note: High RSI is acceptable and often expected in a strong breakout).
+3. SELL_SHORT: Only if Price > 5.00 AND Daily Change is highly negative AND Price < SMA AND RSI > 70 (Overbought).
+4. HOLD: If the setup is chaotic, missing data, or fails the penny stock filter.
+
+Output strictly in JSON format:
+{
+  "action": "BUY" | "SELL_SHORT" | "HOLD",
+  "target_symbol": "${marketData.symbol}" | "NONE",
+  "confidence_score": 1-100,
+  "reasoning": "1 sentence explanation"
+}`;
+
+        try {
+            const response = await this.ai.models.generateContent({
+                model: 'gemini-3.5-flash',
+                contents: prompt,
+                config: {
+                    responseMimeType: "application/json",
+                }
+            });
+
+            return JSON.parse(response.text);
+        } catch (error) {
+            console.error(`[AI Error]: ${error.message}`);
+            return { action: 'HOLD', target_symbol: 'NONE', confidence_score: 100, reasoning: 'Fallback due to AI error.' };
         }
-        throw new Error("All AI models failed or rate limits exceeded.");
     }
 }
 
