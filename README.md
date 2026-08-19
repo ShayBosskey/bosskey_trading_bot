@@ -85,15 +85,15 @@ Profits are mathematically distributed nightly to ensure compounding growth and 
 
 ---
 
-# Bosskey Trading Bot (v1.1 Multi-Scaling Architecture)
+# Bosskey Trading Bot (v1.2 Dynamic Multi-Fill Architecture)
 
 An autonomous, multi-position quantitative trading system built for Bosskey Industries. Powered by Node.js, PostgreSQL, Alpaca API, and Google Gemini AI.
 
 ## Core Architecture
 
-The system operates on a 5-Slot Horizontal Scaling model, executing trades based on Momentum Breakouts and managing risk via continuous background monitoring.
+The system operates on a 5-Slot Horizontal Scaling model, executing trades based on Momentum Breakouts and managing risk via continuous background monitoring. It is designed for dynamic capital allocation, filling multiple available slots within a single execution cycle.
 
-* **TradingBot.js**: Runs daily at market open. Scans the Alpaca Top 50 Movers, filters out penny stocks (Current Price and 20-Day SMA < $5.00), and uses Gemini AI to evaluate momentum breakouts. Allocates 15% of active capital per slot. Max 5 open positions.
+* **TradingBot.js**: Runs every 15 minutes during market hours. Checks available portfolio slots, scans the Alpaca Top 50 Movers, filters out currently held assets and penny stocks (Current Price and 20-Day SMA < $5.00). Evaluates remaining setups sequentially using Gemini AI and allocates 15% of the *remaining* active capital per approved slot.
 * **Liquidator.js**: Runs every 15 minutes during market hours. Continuously evaluates open positions against strict risk parameters:
   * Take-Profit: +10%
   * Stop-Loss: -5%
@@ -103,14 +103,17 @@ The system operates on a 5-Slot Horizontal Scaling model, executing trades based
 
 ## Database Schema (PostgreSQL)
 
-* `trade_analytics`: Tracks symbol, buy/sell prices, margins, status (OPEN/CLOSED), and timestamps (`opened_at`, `closed_at`).
+* `trade_analytics`: Tracks symbol, action, buy/sell prices, margins, status (OPEN/CLOSED), and timestamps (`opened_at`, `closed_at`).
 * `capital_pots`: Manages the dynamic distribution of trading capital and profits.
 * `system_logs`: Immutable ledger of all system events, errors, and logic decisions.
 
 ## CronJob Schedule (CEST - Swiss Local Time)
 
 \`\`\`bash
-35 15 * * 1-5 /usr/bin/node TradingBot.js
-45,00,15,30 15-21 * * 1-5 /usr/bin/node src/Liquidator.js
-15 22 * * 1-5 /usr/bin/node src/Settlement.js
+# Dynamic Multi-Fill Bot & Liquidator (15-min intervals during market hours)
+45,00,15,30 15-21 * * 1-5 cd /home/adminbosskey/bosskey_trading_bot && /usr/bin/node TradingBot.js >> execution.log 2>&1
+45,00,15,30 15-21 * * 1-5 cd /home/adminbosskey/bosskey_trading_bot && /usr/bin/node src/Liquidator.js >> execution.log 2>&1
+
+# Daily Batch Settlement (After market close)
+15 22 * * 1-5 cd /home/adminbosskey/bosskey_trading_bot && /usr/bin/node src/Settlement.js >> execution.log 2>&1
 \`\`\`

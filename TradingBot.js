@@ -11,88 +11,84 @@ async function runTradingCycle() {
     const notifier = new Notifier();
     
     await logger.log('==================================================');
-    await logger.log('🚀 INITIATING OOP TRADING BOT (MULTI-SLOT ARCHITECTURE)');
+    await logger.log('🚀 INITIATING OOP TRADING BOT (DYNAMIC MULTI-FILL)');
     await logger.log('==================================================');
 
     try {
         await db.connect();
 
-        // 1. Check Portfolio Capacity (The 5-Slot Limit)
-        const slotCheck = await db.client.query("SELECT COUNT(*) FROM trade_analytics WHERE status = 'OPEN'");
-        const openPositions = parseInt(slotCheck.rows[0].count);
+        // 1. Check Portfolio Capacity and extract currently held symbols
+        const res = await db.client.query("SELECT symbol FROM trade_analytics WHERE status = 'OPEN'");
+        const heldSymbols = res.rows.map(row => row.symbol);
+        const openPositions = heldSymbols.length;
         const MAX_POSITIONS = 5;
+        const neededSlots = MAX_POSITIONS - openPositions;
 
         await logger.log(`System currently holding ${openPositions}/${MAX_POSITIONS} active positions.`);
 
-        if (openPositions >= MAX_POSITIONS) {
-            await logger.log('Portfolio is at maximum capacity. Standing down to allow Liquidator to manage open trades.');
-            return; // Exit the script gracefully. No buying today.
-        }
-
-        // 2. Fetch Active Capital
-        const activeCapital = await db.getActiveCapital();
-        await logger.log(`Active Capital Available: $${activeCapital}`);
-
-        // 3. Scan the Market (Broker)
-        const broker = new BrokerClient();
-        const marketData = await broker.scanMarketMovers();
-
-        if (marketData.symbol === 'NONE') {
-            await logger.log('No valid setups found in the market today.');
+        if (neededSlots <= 0) {
+            await logger.log('Portfolio is at maximum capacity. Standing down.');
             return;
         }
 
-        // 4. AI Evaluation
+        // 2. Fetch Active Capital
+        let activeCapital = parseFloat(await db.getActiveCapital());
+        await logger.log(`Active Capital Available: $${activeCapital.toFixed(2)}`);
+
+        // 3. Scan the Market for multiple setups
+        const broker = new BrokerClient();
+        const marketDataArray = await broker.scanMarketMovers(heldSymbols, neededSlots);
+
+        if (marketDataArray.length === 0) {
+            await logger.log('No valid setups found in the market right now.');
+            return;
+        }
+
+        // 4. Evaluate and Execute in a loop
         const aiEngine = new AIEngine();
-        const decision = await aiEngine.evaluateBatch(marketData);
 
-        await logger.log(`--- AI TRADE DECISION ---`);
-        await logger.log(`Action: ${decision.action} | Target: ${decision.target_symbol} | Confidence: ${decision.confidence_score}`);
-        await logger.log(`Reasoning: ${decision.reasoning}`);
+        for (const marketData of marketDataArray) {
+            const decision = await aiEngine.evaluateBatch(marketData);
 
-        // 5. Execution
-        if (decision.action === 'BUY' && decision.target_symbol !== 'NONE') {
-            
-            // Kelly Criterion Math (Dynamically scales based on remaining capital and AI confidence)
-            const baseFraction = decision.confidence_score / 100;
-            const tradeAllocation = activeCapital * (baseFraction * 0.15); // Risking max 15% of active capital per slot
-            
-            await logger.log(`[Risk Manager] AI Confidence: ${decision.confidence_score}%. Allocating $${tradeAllocation.toFixed(2)} to this slot.`);
-            
-            // Execute the trade via Alpaca
-            const orderResult = await broker.executeBuyOrder(decision.target_symbol, tradeAllocation);
-            
-            // Log to Database (opened_at is automatically set by our new PostgreSQL schema)
-            await db.client.query(
-                `INSERT INTO trade_analytics (symbol, action, qty, buy_price, status) 
-                 VALUES ($1, $2, $3, $4, 'OPEN')`,
-                [decision.target_symbol, 'BUY', orderResult.qty, orderResult.filled_avg_price]
-            );
+            await logger.log(`--- AI TRADE DECISION FOR ${marketData.symbol} ---`);
+            await logger.log(`Action: ${decision.action} | Confidence: ${decision.confidence_score}`);
+            await logger.log(`Reasoning: ${decision.reasoning}`);
 
-            await logger.log(`Trade securely logged to database analytics.`);
-            await notifier.push(
-                "Bot Executing Trade", 
-                `Purchased ${orderResult.qty} shares of ${decision.target_symbol} at $${orderResult.filled_avg_price}`, 
-                "buy"
-            );
+            if (decision.action === 'BUY' && decision.target_symbol !== 'NONE') {
+                const baseFraction = decision.confidence_score / 100;
+                // Risk 15% of the REMAINING active capital per slot
+                const tradeAllocation = activeCapital * (baseFraction * 0.15); 
+                
+                await logger.log(`[Risk Manager] Allocating $${tradeAllocation.toFixed(2)} to ${decision.target_symbol}.`);
+                
+                const orderResult = await broker.executeBuyOrder(decision.target_symbol, tradeAllocation, marketData.price);
+                
+                await db.client.query(
+                    `INSERT INTO trade_analytics (symbol, action, qty, buy_price, status) 
+                     VALUES ($1, $2, $3, $4, 'OPEN')`,
+                    [decision.target_symbol, decision.action, orderResult.qty, orderResult.filled_avg_price]
+                );
 
-        } else {
-            await logger.log(`Executing HOLD strategy. Target did not meet breakout criteria.`);
-            // Only notify on a hold if you want to know it actively rejected a specific stock
-            await notifier.push(
-                "Bot Holding Position", 
-                `Action: HOLD\nConfidence: ${decision.confidence_score}/100\nReason: ${decision.reasoning}`, 
-                "shield"
-            );
+                // Deduct from local tracking variable so the next loop has accurate capital math
+                activeCapital -= (orderResult.qty * orderResult.filled_avg_price);
+
+                await logger.log(`Trade successfully executed and logged for ${decision.target_symbol}.`);
+                await notifier.push(
+                    "Bot Executing Trade", 
+                    `Purchased ${orderResult.qty} shares of ${decision.target_symbol} at $${orderResult.filled_avg_price}`, 
+                    "buy"
+                );
+            } else {
+                await logger.log(`Executing HOLD strategy for ${marketData.symbol}.`);
+            }
         }
 
     } catch (err) {
         await logger.log(`[System Error]: ${err.stack}`);
-        await notifier.push("Trading Bot Error", err.message, "error");
+        await notifier.push("⚠️ Trading Bot Error", err.message, "error");
     } finally {
         await db.disconnect();
     }
 }
 
-// Execute
 runTradingCycle();

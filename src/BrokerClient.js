@@ -39,8 +39,8 @@ class BrokerClient {
         return parseFloat((100 - (100 / (1 + rs))).toFixed(2));
     }
 
-    async scanMarketMovers() {
-        console.log(`[Broker] Pinging Alpaca Screener API for dynamic top market movers...`);
+    async scanMarketMovers(heldSymbols, neededSlots) {
+        console.log(`[Broker] Pinging Screener API. Looking for ${neededSlots} valid setups...`);
         
         try {
             const screenerUrl = 'https://data.alpaca.markets/v1beta1/screener/stocks/movers?top=50';
@@ -52,31 +52,29 @@ class BrokerClient {
                 }
             });
 
-            if (!response.ok) {
-                throw new Error(`Alpaca Screener API Error: ${response.status}`);
-            }
-
+            if (!response.ok) throw new Error(`Alpaca API Error: ${response.status}`);
             const screenerData = await response.json();
             
-            // Combine gainers and losers
             let allMovers = [...(screenerData.gainers || []), ...(screenerData.losers || [])];
             
-            // Initial filter: Current price must be >= $5.00
-            allMovers = allMovers.filter(mover => mover.price >= 5.00);
+            // Filter 1: Must be >= $5.00
+            // Filter 2: Must NOT be currently held in our portfolio
+            allMovers = allMovers.filter(mover => 
+                mover.price >= 5.00 && 
+                !heldSymbols.includes(mover.symbol)
+            );
             
-            // Sort remaining high-quality stocks by absolute momentum
             allMovers.sort((a, b) => Math.abs(b.percent_change) - Math.abs(a.percent_change));
             
-            let bestSetup = null;
-
+            let validSetups = [];
             const pastDate = new Date();
             pastDate.setDate(pastDate.getDate() - 40);
             const startString = pastDate.toISOString();
 
-            // Iterate down the list of top movers until we find one with a strong historical baseline
             for (const mover of allMovers) {
+                if (validSetups.length >= neededSlots) break; // Stop when we have enough targets
+
                 const barUrl = `https://data.alpaca.markets/v2/stocks/bars?symbols=${mover.symbol}&timeframe=1Day&start=${startString}`;
-                
                 const barResponse = await fetch(barUrl, {
                     headers: {
                         'APCA-API-KEY-ID': process.env.ALPACA_API_KEY,
@@ -85,7 +83,7 @@ class BrokerClient {
                     }
                 });
 
-                if (!barResponse.ok) continue; // If Alpaca fails on this specific ticker, skip it
+                if (!barResponse.ok) continue;
 
                 const barData = await barResponse.json();
                 const bars = barData.bars[mover.symbol];
@@ -94,33 +92,24 @@ class BrokerClient {
                     const closePrices = bars.map(bar => bar.c);
                     const sma_20 = this.calculateSMA(closePrices, 20);
                     
-                    // The Ultimate Shield: The historical 20-day average MUST also be >= $5.00
                     if (sma_20 >= 5.00) {
-                        bestSetup = {
+                        validSetups.push({
                             symbol: mover.symbol,
                             price: mover.price,
                             dailyChange: mover.percent_change.toFixed(2),
                             volume: mover.volume,
                             sma_20: sma_20,
                             rsi_14: this.calculateRSI(closePrices, 14)
-                        };
-                        break; // We found a legitimate, capitalized target! Stop searching.
+                        });
+                        console.log(`[Broker] Valid target added: ${mover.symbol}`);
                     }
                 }
             }
 
-            if (!bestSetup) {
-                console.log("[Broker] No movers passed both current price and historical SMA filters. Holding cash.");
-                return { symbol: 'NONE', price: 0, dailyChange: 0, volume: 0 };
-            }
-
-            console.log(`[Broker] Dynamic target locked: ${bestSetup.symbol} moving ${bestSetup.dailyChange}% today.`);
-            console.log(`[Broker] Indicators calculated -> SMA: ${bestSetup.sma_20} | RSI: ${bestSetup.rsi_14}`);
-
-            return bestSetup;
+            return validSetups; // Now returns an array of targets
 
         } catch (err) {
-            console.error(`[Broker Error]: Failed to scan dynamic movers: ${err.message}`);
+            console.error(`[Broker Error]: ${err.message}`);
             throw err;
         }
     }
@@ -170,6 +159,46 @@ class BrokerClient {
             console.log(`[Broker] Order Failed: ${err.message}`);
             return null;
         }
+    }
+	
+    async executeBuyOrder(symbol, allocateAmount, currentPrice) {
+        // Calculate maximum whole shares we can buy with our allocated Kelly capital
+        const qty = Math.floor(allocateAmount / currentPrice);
+        
+        if (qty < 1) {
+            throw new Error(`Allocated capital ($${allocateAmount.toFixed(2)}) is insufficient to buy 1 share of ${symbol} at $${currentPrice}.`);
+        }
+
+        console.log(`[Broker] Formatting MARKET BUY order for ${qty} shares of ${symbol}...`);
+
+        const orderUrl = 'https://paper-api.alpaca.markets/v2/orders';
+        const response = await fetch(orderUrl, {
+            method: 'POST',
+            headers: {
+                'APCA-API-KEY-ID': process.env.ALPACA_API_KEY,
+                'APCA-API-SECRET-KEY': process.env.ALPACA_SECRET_KEY,
+                'accept': 'application/json',
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify({
+                symbol: symbol,
+                qty: String(qty), // Alpaca expects qty as a string
+                side: 'buy',
+                type: 'market',
+                time_in_force: 'day'
+            })
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(`Alpaca Order API Error: ${errorData.message}`);
+        }
+
+        // Return the exact execution data back to the TradingBot
+        return {
+            qty: qty,
+            filled_avg_price: currentPrice
+        };
     }
 }
 
