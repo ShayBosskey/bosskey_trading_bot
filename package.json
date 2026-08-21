@@ -13,7 +13,9 @@
   "dependencies": {
     "@alpacahq/alpaca-trade-api": "^4.0.1",
     "@google/genai": "^2.16.0",
+    "cors": "^2.8.6",
     "dotenv": "^17.4.2",
+    "express": "^5.2.1",
     "pg": "^8.23.0"
   },
   "devDependencies": {

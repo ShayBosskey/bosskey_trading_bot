@@ -12,6 +12,14 @@ The system operates on a Dynamic Multi-Fill model, executing trades based on Mom
 * **Config.js**: Manages environmental safety. Controls Operational Modes (CONSTRUCTION, PAPER, PRODUCTION) to prevent unauthorized live trading.
 * **Settlement.js**: Runs daily after market close to sweep closed trades and distribute profits into Capital Pots.
 
+* **DashboardAPI.js**: A persistent Express.js REST API daemonized via PM2. Exposes system health, portfolio metrics, and logs over port 3000 to serve the frontend web dashboard.
+
+## Services & Daemons
+The REST API runs continuously in the background. Do not manage it via Cron.
+* Start API: `pm2 start src/DashboardAPI.js --name "bosskey-api"`
+* Monitor Logs: `pm2 logs bosskey-api`
+* Restart API: `pm2 restart bosskey-api`
+
 ## Operational Modes
 
 Controlled via the `.env` file (`SYSTEM_MODE`):
