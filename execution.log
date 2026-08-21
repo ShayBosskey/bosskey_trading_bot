@@ -1868,3 +1868,261 @@ Next Action: HOLD | Target: NONE | Confidence Score: 100 | Reasoning: Fallback d
 [20.8.2026, 22:15:01] [Settlement] Loss recorded. Deducting $5610.68 from Active Capital...
 [Notifier] 📱 Push notification sent: "Losing Day Settled"
 [20.8.2026, 22:15:02] [Settlement] ✅ Database successfully updated.
+◇ injected env (9) from ../.env // tip: ◈ encrypted .env [www.dotenvx.com]
+◇ injected env (0) from ../.env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+◇ injected env (0) from ../.env // tip: ◈ encrypted .env [www.dotenvx.com]
+[21.8.2026, 15:00:01] [TradingBot] ==================================================
+[21.8.2026, 15:00:01] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[21.8.2026, 15:00:01] [TradingBot] ==================================================
+[21.8.2026, 15:00:01] [TradingBot] System Initializing in [CONSTRUCTION] Mode.
+[21.8.2026, 15:00:01] [TradingBot] Trading is DISABLED in Construction Mode. Standing down.
+[Notifier] 📱 Push notification sent: "System Alert"
+◇ injected env (9) from ../.env // tip: ◈ secrets for agents [www.dotenvx.com]
+◇ injected env (0) from ../.env // tip: ⌁ auth for agents [www.vestauth.com]
+◇ injected env (0) from ../.env // tip: ⌁ auth for agents [www.vestauth.com]
+[21.8.2026, 15:15:02] [TradingBot] ==================================================
+[21.8.2026, 15:15:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[21.8.2026, 15:15:02] [TradingBot] ==================================================
+[21.8.2026, 15:15:02] [TradingBot] System Initializing in [CONSTRUCTION] Mode.
+[21.8.2026, 15:15:02] [TradingBot] Trading is DISABLED in Construction Mode. Standing down.
+[Notifier] 📱 Push notification sent: "System Alert"
+◇ injected env (9) from ../.env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+◇ injected env (0) from ../.env // tip: ⌘ enable debugging { debug: true }
+◇ injected env (0) from ../.env // tip: ◈ encrypted .env [www.dotenvx.com]
+[21.8.2026, 15:30:02] [TradingBot] ==================================================
+[21.8.2026, 15:30:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[21.8.2026, 15:30:02] [TradingBot] ==================================================
+[21.8.2026, 15:30:02] [TradingBot] System Initializing in [CONSTRUCTION] Mode.
+[21.8.2026, 15:30:02] [TradingBot] Trading is DISABLED in Construction Mode. Standing down.
+[Notifier] 📱 Push notification sent: "System Alert"
+◇ injected env (9) from ../.env // tip: ◈ secrets for agents [www.dotenvx.com]
+◇ injected env (0) from ../.env // tip: ⌘ override existing { override: true }
+◇ injected env (0) from ../.env // tip: ⌘ enable debugging { debug: true }
+[21.8.2026, 15:45:02] [TradingBot] ==================================================
+[21.8.2026, 15:45:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[21.8.2026, 15:45:02] [TradingBot] ==================================================
+[21.8.2026, 15:45:02] [TradingBot] System Initializing in [CONSTRUCTION] Mode.
+[21.8.2026, 15:45:02] [TradingBot] Trading is DISABLED in Construction Mode. Standing down.
+[Notifier] 📱 Push notification sent: "System Alert"
+◇ injected env (9) from ../.env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+◇ injected env (0) from ../.env // tip: ⌁ auth for agents [www.vestauth.com]
+◇ injected env (0) from ../.env // tip: ⌘ enable debugging { debug: true }
+[21.8.2026, 16:00:01] [TradingBot] ==================================================
+[21.8.2026, 16:00:01] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[21.8.2026, 16:00:01] [TradingBot] ==================================================
+[21.8.2026, 16:00:01] [TradingBot] System Initializing in [CONSTRUCTION] Mode.
+[21.8.2026, 16:00:02] [TradingBot] Trading is DISABLED in Construction Mode. Standing down.
+[Notifier] 📱 Push notification sent: "System Alert"
+◇ injected env (9) from ../.env // tip: ⌘ enable debugging { debug: true }
+◇ injected env (0) from ../.env // tip: ◈ secrets for agents [www.dotenvx.com]
+◇ injected env (0) from ../.env // tip: ⌘ override existing { override: true }
+[21.8.2026, 16:15:02] [TradingBot] ==================================================
+[21.8.2026, 16:15:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[21.8.2026, 16:15:02] [TradingBot] ==================================================
+[21.8.2026, 16:15:02] [TradingBot] System Initializing in [CONSTRUCTION] Mode.
+[21.8.2026, 16:15:02] [TradingBot] Trading is DISABLED in Construction Mode. Standing down.
+[Notifier] 📱 Push notification sent: "System Alert"
+◇ injected env (9) from ../.env // tip: ⌁ auth for agents [www.vestauth.com]
+◇ injected env (0) from ../.env // tip: ⌘ suppress logs { quiet: true }
+◇ injected env (0) from ../.env // tip: ◈ secrets for agents [www.dotenvx.com]
+[21.8.2026, 16:30:01] [TradingBot] ==================================================
+[21.8.2026, 16:30:01] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[21.8.2026, 16:30:01] [TradingBot] ==================================================
+[21.8.2026, 16:30:01] [TradingBot] System Initializing in [CONSTRUCTION] Mode.
+[21.8.2026, 16:30:01] [TradingBot] Trading is DISABLED in Construction Mode. Standing down.
+[Notifier] 📱 Push notification sent: "System Alert"
+◇ injected env (9) from ../.env // tip: ◈ secrets for agents [www.dotenvx.com]
+◇ injected env (0) from ../.env // tip: ⌘ suppress logs { quiet: true }
+◇ injected env (0) from ../.env // tip: ⌘ enable debugging { debug: true }
+[21.8.2026, 16:45:02] [TradingBot] ==================================================
+[21.8.2026, 16:45:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[21.8.2026, 16:45:02] [TradingBot] ==================================================
+[21.8.2026, 16:45:02] [TradingBot] System Initializing in [CONSTRUCTION] Mode.
+[21.8.2026, 16:45:02] [TradingBot] Trading is DISABLED in Construction Mode. Standing down.
+[Notifier] 📱 Push notification sent: "System Alert"
+◇ injected env (9) from ../.env // tip: ⌘ suppress logs { quiet: true }
+◇ injected env (0) from ../.env // tip: ⌁ auth for agents [www.vestauth.com]
+◇ injected env (0) from ../.env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+[21.8.2026, 17:00:01] [TradingBot] ==================================================
+[21.8.2026, 17:00:01] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[21.8.2026, 17:00:01] [TradingBot] ==================================================
+[21.8.2026, 17:00:01] [TradingBot] System Initializing in [CONSTRUCTION] Mode.
+[21.8.2026, 17:00:01] [TradingBot] Trading is DISABLED in Construction Mode. Standing down.
+[Notifier] 📱 Push notification sent: "System Alert"
+◇ injected env (9) from ../.env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+◇ injected env (0) from ../.env // tip: ◈ encrypted .env [www.dotenvx.com]
+◇ injected env (0) from ../.env // tip: ⌘ enable debugging { debug: true }
+[21.8.2026, 17:15:01] [TradingBot] ==================================================
+[21.8.2026, 17:15:01] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[21.8.2026, 17:15:01] [TradingBot] ==================================================
+[21.8.2026, 17:15:01] [TradingBot] System Initializing in [CONSTRUCTION] Mode.
+[21.8.2026, 17:15:01] [TradingBot] Trading is DISABLED in Construction Mode. Standing down.
+[Notifier] 📱 Push notification sent: "System Alert"
+◇ injected env (9) from ../.env // tip: ⌘ enable debugging { debug: true }
+◇ injected env (0) from ../.env // tip: ⌘ override existing { override: true }
+◇ injected env (0) from ../.env // tip: ⌁ auth for agents [www.vestauth.com]
+[21.8.2026, 17:30:02] [TradingBot] ==================================================
+[21.8.2026, 17:30:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[21.8.2026, 17:30:02] [TradingBot] ==================================================
+[21.8.2026, 17:30:02] [TradingBot] System Initializing in [CONSTRUCTION] Mode.
+[21.8.2026, 17:30:02] [TradingBot] Trading is DISABLED in Construction Mode. Standing down.
+[Notifier] 📱 Push notification sent: "System Alert"
+◇ injected env (9) from ../.env // tip: ⌘ suppress logs { quiet: true }
+◇ injected env (0) from ../.env // tip: ⌘ enable debugging { debug: true }
+◇ injected env (0) from ../.env // tip: ⌘ suppress logs { quiet: true }
+[21.8.2026, 17:45:01] [TradingBot] ==================================================
+[21.8.2026, 17:45:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[21.8.2026, 17:45:02] [TradingBot] ==================================================
+[21.8.2026, 17:45:02] [TradingBot] System Initializing in [CONSTRUCTION] Mode.
+[21.8.2026, 17:45:02] [TradingBot] Trading is DISABLED in Construction Mode. Standing down.
+[Notifier] 📱 Push notification sent: "System Alert"
+◇ injected env (9) from ../.env // tip: ⌘ override existing { override: true }
+◇ injected env (0) from ../.env // tip: ⌘ suppress logs { quiet: true }
+◇ injected env (0) from ../.env // tip: ◈ encrypted .env [www.dotenvx.com]
+[21.8.2026, 18:00:02] [TradingBot] ==================================================
+[21.8.2026, 18:00:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[21.8.2026, 18:00:02] [TradingBot] ==================================================
+[21.8.2026, 18:00:02] [TradingBot] System Initializing in [CONSTRUCTION] Mode.
+[21.8.2026, 18:00:02] [TradingBot] Trading is DISABLED in Construction Mode. Standing down.
+[Notifier] 📱 Push notification sent: "System Alert"
+◇ injected env (9) from ../.env // tip: ◈ encrypted .env [www.dotenvx.com]
+◇ injected env (0) from ../.env // tip: ◈ secrets for agents [www.dotenvx.com]
+◇ injected env (0) from ../.env // tip: ⌘ suppress logs { quiet: true }
+[21.8.2026, 18:15:01] [TradingBot] ==================================================
+[21.8.2026, 18:15:01] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[21.8.2026, 18:15:01] [TradingBot] ==================================================
+[21.8.2026, 18:15:01] [TradingBot] System Initializing in [CONSTRUCTION] Mode.
+[21.8.2026, 18:15:01] [TradingBot] Trading is DISABLED in Construction Mode. Standing down.
+[Notifier] 📱 Push notification sent: "System Alert"
+◇ injected env (9) from ../.env // tip: ⌁ auth for agents [www.vestauth.com]
+◇ injected env (0) from ../.env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+◇ injected env (0) from ../.env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+[21.8.2026, 18:30:02] [TradingBot] ==================================================
+[21.8.2026, 18:30:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[21.8.2026, 18:30:02] [TradingBot] ==================================================
+[21.8.2026, 18:30:02] [TradingBot] System Initializing in [CONSTRUCTION] Mode.
+[21.8.2026, 18:30:02] [TradingBot] Trading is DISABLED in Construction Mode. Standing down.
+[Notifier] 📱 Push notification sent: "System Alert"
+◇ injected env (9) from ../.env // tip: ⌘ suppress logs { quiet: true }
+◇ injected env (0) from ../.env // tip: ⌁ auth for agents [www.vestauth.com]
+◇ injected env (0) from ../.env // tip: ⌘ suppress logs { quiet: true }
+[21.8.2026, 18:45:01] [TradingBot] ==================================================
+[21.8.2026, 18:45:01] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[21.8.2026, 18:45:01] [TradingBot] ==================================================
+[21.8.2026, 18:45:01] [TradingBot] System Initializing in [CONSTRUCTION] Mode.
+[21.8.2026, 18:45:02] [TradingBot] Trading is DISABLED in Construction Mode. Standing down.
+[Notifier] 📱 Push notification sent: "System Alert"
+◇ injected env (9) from ../.env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+◇ injected env (0) from ../.env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+◇ injected env (0) from ../.env // tip: ⌘ enable debugging { debug: true }
+[21.8.2026, 19:00:02] [TradingBot] ==================================================
+[21.8.2026, 19:00:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[21.8.2026, 19:00:02] [TradingBot] ==================================================
+[21.8.2026, 19:00:02] [TradingBot] System Initializing in [CONSTRUCTION] Mode.
+[21.8.2026, 19:00:02] [TradingBot] Trading is DISABLED in Construction Mode. Standing down.
+[Notifier] 📱 Push notification sent: "System Alert"
+◇ injected env (9) from ../.env // tip: ⌁ auth for agents [www.vestauth.com]
+◇ injected env (0) from ../.env // tip: ◈ secrets for agents [www.dotenvx.com]
+◇ injected env (0) from ../.env // tip: ⌘ suppress logs { quiet: true }
+[21.8.2026, 19:15:01] [TradingBot] ==================================================
+[21.8.2026, 19:15:01] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[21.8.2026, 19:15:01] [TradingBot] ==================================================
+[21.8.2026, 19:15:01] [TradingBot] System Initializing in [CONSTRUCTION] Mode.
+[21.8.2026, 19:15:01] [TradingBot] Trading is DISABLED in Construction Mode. Standing down.
+[Notifier] 📱 Push notification sent: "System Alert"
+◇ injected env (9) from ../.env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+◇ injected env (0) from ../.env // tip: ◈ secrets for agents [www.dotenvx.com]
+◇ injected env (0) from ../.env // tip: ⌘ suppress logs { quiet: true }
+[21.8.2026, 19:30:02] [TradingBot] ==================================================
+[21.8.2026, 19:30:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[21.8.2026, 19:30:02] [TradingBot] ==================================================
+[21.8.2026, 19:30:02] [TradingBot] System Initializing in [CONSTRUCTION] Mode.
+[21.8.2026, 19:30:02] [TradingBot] Trading is DISABLED in Construction Mode. Standing down.
+[Notifier] 📱 Push notification sent: "System Alert"
+◇ injected env (9) from ../.env // tip: ⌁ auth for agents [www.vestauth.com]
+◇ injected env (0) from ../.env // tip: ◈ encrypted .env [www.dotenvx.com]
+◇ injected env (0) from ../.env // tip: ◈ encrypted .env [www.dotenvx.com]
+[21.8.2026, 19:45:02] [TradingBot] ==================================================
+[21.8.2026, 19:45:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[21.8.2026, 19:45:02] [TradingBot] ==================================================
+[21.8.2026, 19:45:02] [TradingBot] System Initializing in [CONSTRUCTION] Mode.
+[21.8.2026, 19:45:02] [TradingBot] Trading is DISABLED in Construction Mode. Standing down.
+[Notifier] 📱 Push notification sent: "System Alert"
+◇ injected env (9) from ../.env // tip: ◈ secrets for agents [www.dotenvx.com]
+◇ injected env (0) from ../.env // tip: ⌘ enable debugging { debug: true }
+◇ injected env (0) from ../.env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+[21.8.2026, 20:00:01] [TradingBot] ==================================================
+[21.8.2026, 20:00:01] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[21.8.2026, 20:00:01] [TradingBot] ==================================================
+[21.8.2026, 20:00:01] [TradingBot] System Initializing in [CONSTRUCTION] Mode.
+[21.8.2026, 20:00:02] [TradingBot] Trading is DISABLED in Construction Mode. Standing down.
+[Notifier] 📱 Push notification sent: "System Alert"
+◇ injected env (9) from ../.env // tip: ⌁ auth for agents [www.vestauth.com]
+◇ injected env (0) from ../.env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+◇ injected env (0) from ../.env // tip: ⌁ auth for agents [www.vestauth.com]
+[21.8.2026, 20:15:01] [TradingBot] ==================================================
+[21.8.2026, 20:15:01] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[21.8.2026, 20:15:01] [TradingBot] ==================================================
+[21.8.2026, 20:15:01] [TradingBot] System Initializing in [CONSTRUCTION] Mode.
+[21.8.2026, 20:15:01] [TradingBot] Trading is DISABLED in Construction Mode. Standing down.
+[Notifier] 📱 Push notification sent: "System Alert"
+◇ injected env (9) from ../.env // tip: ◈ secrets for agents [www.dotenvx.com]
+◇ injected env (0) from ../.env // tip: ⌘ override existing { override: true }
+◇ injected env (0) from ../.env // tip: ⌘ enable debugging { debug: true }
+[21.8.2026, 20:30:02] [TradingBot] ==================================================
+[21.8.2026, 20:30:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[21.8.2026, 20:30:02] [TradingBot] ==================================================
+[21.8.2026, 20:30:02] [TradingBot] System Initializing in [CONSTRUCTION] Mode.
+[21.8.2026, 20:30:02] [TradingBot] Trading is DISABLED in Construction Mode. Standing down.
+[Notifier] 📱 Push notification sent: "System Alert"
+◇ injected env (9) from ../.env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+◇ injected env (0) from ../.env // tip: ◈ encrypted .env [www.dotenvx.com]
+◇ injected env (0) from ../.env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+[21.8.2026, 20:45:01] [TradingBot] ==================================================
+[21.8.2026, 20:45:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[21.8.2026, 20:45:02] [TradingBot] ==================================================
+[21.8.2026, 20:45:02] [TradingBot] System Initializing in [CONSTRUCTION] Mode.
+[21.8.2026, 20:45:02] [TradingBot] Trading is DISABLED in Construction Mode. Standing down.
+[Notifier] 📱 Push notification sent: "System Alert"
+◇ injected env (9) from ../.env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+◇ injected env (0) from ../.env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+◇ injected env (0) from ../.env // tip: ⌘ suppress logs { quiet: true }
+[21.8.2026, 21:00:02] [TradingBot] ==================================================
+[21.8.2026, 21:00:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[21.8.2026, 21:00:02] [TradingBot] ==================================================
+[21.8.2026, 21:00:02] [TradingBot] System Initializing in [CONSTRUCTION] Mode.
+[21.8.2026, 21:00:02] [TradingBot] Trading is DISABLED in Construction Mode. Standing down.
+[Notifier] 📱 Push notification sent: "System Alert"
+◇ injected env (9) from ../.env // tip: ⌁ auth for agents [www.vestauth.com]
+◇ injected env (0) from ../.env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+◇ injected env (0) from ../.env // tip: ⌘ suppress logs { quiet: true }
+[21.8.2026, 21:15:01] [TradingBot] ==================================================
+[21.8.2026, 21:15:01] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[21.8.2026, 21:15:01] [TradingBot] ==================================================
+[21.8.2026, 21:15:01] [TradingBot] System Initializing in [CONSTRUCTION] Mode.
+[21.8.2026, 21:15:01] [TradingBot] Trading is DISABLED in Construction Mode. Standing down.
+[Notifier] 📱 Push notification sent: "System Alert"
+◇ injected env (9) from ../.env // tip: ◈ secrets for agents [www.dotenvx.com]
+◇ injected env (0) from ../.env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+◇ injected env (0) from ../.env // tip: ◈ encrypted .env [www.dotenvx.com]
+[21.8.2026, 21:30:02] [TradingBot] ==================================================
+[21.8.2026, 21:30:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[21.8.2026, 21:30:02] [TradingBot] ==================================================
+[21.8.2026, 21:30:02] [TradingBot] System Initializing in [CONSTRUCTION] Mode.
+[21.8.2026, 21:30:02] [TradingBot] Trading is DISABLED in Construction Mode. Standing down.
+[Notifier] 📱 Push notification sent: "System Alert"
+◇ injected env (9) from ../.env // tip: ⌘ override existing { override: true }
+◇ injected env (0) from ../.env // tip: ⌘ enable debugging { debug: true }
+◇ injected env (0) from ../.env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+[21.8.2026, 21:45:02] [TradingBot] ==================================================
+[21.8.2026, 21:45:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[21.8.2026, 21:45:02] [TradingBot] ==================================================
+[21.8.2026, 21:45:02] [TradingBot] System Initializing in [CONSTRUCTION] Mode.
+[21.8.2026, 21:45:02] [TradingBot] Trading is DISABLED in Construction Mode. Standing down.
+[Notifier] 📱 Push notification sent: "System Alert"
+◇ injected env (9) from ../.env // tip: ◈ secrets for agents [www.dotenvx.com]
+[21.8.2026, 22:15:01] [Settlement] ==================================================
+[21.8.2026, 22:15:01] [Settlement] 🏦 INITIATING DAILY BATCH SETTLEMENT
+[21.8.2026, 22:15:01] [Settlement] ==================================================
+[21.8.2026, 22:15:01] [Settlement] No trades were closed today. No settlement required.
+[Notifier] 📱 Push notification sent: "Daily Settlement Report"
