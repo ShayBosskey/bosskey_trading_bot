@@ -1,118 +1,35 @@
-# Bosskey Trading Bot 🤖
-
-An autonomous, quantitative day trading algorithm powered by Node.js, the Alpaca V3 API, and Gemini AI. This system features multi-threaded market scanning, dynamic risk allocation via the Kelly Criterion, bidirectional trading (Long/Short), and automated PostgreSQL capital settlement.
-
----
-
-## 📊 System Architecture & Data Flow
-
-The system is fully modular and wrapped in a global error-catching net.
-
-[Cron Job Trigger] 
-       │
-       ▼
- ┌──────────────┐      [Tickers.js] (Universe of 40+ AI/Tech Stocks)
- │ TradingBot.js│───────────┐
- └──────────────┘           ▼
-       │              ┌──────────────┐
-       │              │ BrokerClient │──> Multi-threaded Alpaca API Scan
-       │              └──────────────┘    (Finds #1 Market Mover)
-       ▼                    │
- ┌──────────────┐           │
- │ AIEngine.js  │<──────────┘
- └──────────────┘
- (Calculates 20 SMA & 14 RSI -> Gemini AI generates BUY, SELL_SHORT, or HOLD)
-       │
-       ▼
- [Risk Manager] -> Applies Kelly Criterion for Position Sizing
-       │
-       ▼
- [BrokerClient] -> Executes Trade via Alpaca
-       │
-       ▼
- [PostgreSQL]   -> Logs entry into 'trade_analytics' table
-       │
-       ▼
- [Notifier.js]  -> Pushes native Android alert via ntfy.sh
-
----
-
-## 🧠 Advanced Algorithmic Logic
-
-### 1. Multi-Threaded Ticker Scanning
-Instead of sequentially checking stocks, the bot queries the Alpaca API for snapshots of the entire TICKER_UNIVERSE simultaneously. It filters the data to find the single asset with the highest absolute intraday momentum (positive or negative) and feeds it to the AI.
-
-### 2. Bidirectional Trading (Short Selling)
-The bot profits in both bull and bear markets. 
-* BUY: Executed when the SMA is trending up and RSI is favorable. 
-* SELL_SHORT: Executed when the SMA shows a strong downtrend and RSI is overbought. The bot borrows shares to sell high, and the liquidator buys them back at the end of the day.
-
-### 3. Dynamic Position Sizing (The Kelly Criterion)
-The bot abandons flat-rate risk. It scales the capital it risks based on the AI's confidence score (p) using a modified Kelly formula:
-f* = 2p - 1
-If the AI is 80% confident (0.8), f* = 0.6. The bot will allocate 60% of its maximum allowable risk to that specific trade.
-
----
-
-## ⏱️ The Automation Schedule (Crontab)
-
-The bot operates strictly via Linux Cron Jobs, mapped to standard US Market hours (translated to CEST).
-
-* 15:35 | TradingBot.js : Market Entry. Runs 5 minutes after NY opening bell.
-* 21:55 | Liquidator.js : Hard Close. Forcefully closes all open Long and Short positions.
-* 21:58 | Settlement.js : Capital Distribution. Updates PostgreSQL database pots.
-
-Crontab Configuration:
-
-    # Execute Trade Evaluation (Monday-Friday at 15:35)
-    35 15 * * 1-5 cd /home/adminbosskey/bosskey_trading_bot && /usr/bin/node TradingBot.js >> /home/adminbosskey/bosskey_trading_bot/execution.log 2>&1
-
-    # Execute Hard Close Liquidation (Monday-Friday at 21:55)
-    55 21 * * 1-5 cd /home/adminbosskey/bosskey_trading_bot && /usr/bin/node src/Liquidator.js >> /home/adminbosskey/bosskey_trading_bot/execution.log 2>&1
-
-    # Execute Capital Settlement (Monday-Friday at 21:58)
-    58 21 * * 1-5 cd /home/adminbosskey/bosskey_trading_bot && /usr/bin/node src/Settlement.js >> /home/adminbosskey/bosskey_trading_bot/execution.log 2>&1
-
----
-
-## 💰 The 60/20/10/10 Settlement Rule
-Profits are mathematically distributed nightly to ensure compounding growth and tax safety:
-* 60% Active Capital: Reinvested into the algorithm.
-* 20% Emergency Reserve: Drawdown protection.
-* 10% Tax Vault: Reserved for potential Swiss ESTV liabilities.
-* 10% Personal Payout: Liquid profit to be wired to a checking account.
-*(Losses are absorbed 100% by Active Capital to shield the vaults).*
-
----
-
-# Bosskey Trading Bot (v1.2 Dynamic Multi-Fill Architecture)
+# Bosskey Trading Bot (v1.3 OCO Bracket Architecture)
 
 An autonomous, multi-position quantitative trading system built for Bosskey Industries. Powered by Node.js, PostgreSQL, Alpaca API, and Google Gemini AI.
 
 ## Core Architecture
 
-The system operates on a 5-Slot Horizontal Scaling model, executing trades based on Momentum Breakouts and managing risk via continuous background monitoring. It is designed for dynamic capital allocation, filling multiple available slots within a single execution cycle.
+The system operates on a Dynamic Multi-Fill model, executing trades based on Momentum Breakouts. Risk is managed entirely broker-side using One-Cancels-Other (OCO) Bracket Orders calculated via historical volatility.
 
-* **TradingBot.js**: Runs every 15 minutes during market hours. Checks available portfolio slots, scans the Alpaca Top 50 Movers, filters out currently held assets and penny stocks (Current Price and 20-Day SMA < $5.00). Evaluates remaining setups sequentially using Gemini AI and allocates 15% of the *remaining* active capital per approved slot.
-* **Liquidator.js**: Runs every 15 minutes during market hours. Continuously evaluates open positions against strict risk parameters:
-  * Take-Profit: +10%
-  * Stop-Loss: -5%
-  * Time-Stop: 3 Days
-* **Settlement.js**: Runs daily after market close. Sweeps all closed trades for the day, calculates net P&L, and distributes profits into Capital Pots (50% Active, 20% Emergency, 20% Tax, 10% Personal).
-* **Logger.js**: Centralized logging system that writes timestamped events directly to the `system_logs` PostgreSQL table.
+* **TradingBot.js**: Runs every 15 minutes during market hours. Scans the Alpaca Top 50 Movers, filters out currently held assets and penny stocks. Evaluates setups using Gemini AI.
+* **RiskEngine.js**: Calculates the 14-day Average True Range (ATR) to measure exact asset volatility. Dynamically sets Stop-Loss (2x ATR) and Take-Profit (3x ATR) to ensure mathematical risk-to-reward ratios regardless of asset class.
+* **BrokerClient.js**: Submits execution commands directly to Alpaca via HTTP Fetch. Wraps the BUY, TAKE-PROFIT, and STOP-LOSS orders into a single Bracket Order, eliminating local execution latency and internet dropout risk.
+* **Config.js**: Manages environmental safety. Controls Operational Modes (CONSTRUCTION, PAPER, PRODUCTION) to prevent unauthorized live trading.
+* **Settlement.js**: Runs daily after market close to sweep closed trades and distribute profits into Capital Pots.
 
-## Database Schema (PostgreSQL)
+## Operational Modes
 
-* `trade_analytics`: Tracks symbol, action, buy/sell prices, margins, status (OPEN/CLOSED), and timestamps (`opened_at`, `closed_at`).
-* `capital_pots`: Manages the dynamic distribution of trading capital and profits.
-* `system_logs`: Immutable ledger of all system events, errors, and logic decisions.
+Controlled via the `.env` file (`SYSTEM_MODE`):
+* `CONSTRUCTION`: All trading is hard-locked. Used for development and testing.
+* `PAPER`: Executes trades against the Alpaca Paper API.
+* `PRODUCTION`: Executes live capital trades.
+
+## Testing Architecture (Systest)
+
+The project utilizes `Jest` for automated testing and API mocking.
+* Run tests via: `npm test`
+* Validates configuration safety, broker payload formatting, and risk mathematics.
 
 ## CronJob Schedule (CEST - Swiss Local Time)
 
 \`\`\`bash
-# Dynamic Multi-Fill Bot & Liquidator (15-min intervals during market hours)
+# Dynamic Multi-Fill Bot (15-min intervals during market hours)
 45,00,15,30 15-21 * * 1-5 cd /home/adminbosskey/bosskey_trading_bot && /usr/bin/node TradingBot.js >> execution.log 2>&1
-45,00,15,30 15-21 * * 1-5 cd /home/adminbosskey/bosskey_trading_bot && /usr/bin/node src/Liquidator.js >> execution.log 2>&1
 
 # Daily Batch Settlement (After market close)
 15 22 * * 1-5 cd /home/adminbosskey/bosskey_trading_bot && /usr/bin/node src/Settlement.js >> execution.log 2>&1

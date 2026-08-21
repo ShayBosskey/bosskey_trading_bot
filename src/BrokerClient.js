@@ -99,7 +99,8 @@ class BrokerClient {
                             dailyChange: mover.percent_change.toFixed(2),
                             volume: mover.volume,
                             sma_20: sma_20,
-                            rsi_14: this.calculateRSI(closePrices, 14)
+                            rsi_14: this.calculateRSI(closePrices, 14),
+			    rawBars: bars
                         });
                         console.log(`[Broker] Valid target added: ${mover.symbol}`);
                     }
@@ -161,15 +162,15 @@ class BrokerClient {
         }
     }
 	
-    async executeBuyOrder(symbol, allocateAmount, currentPrice) {
-        // Calculate maximum whole shares we can buy with our allocated Kelly capital
+    async executeBuyOrder(symbol, allocateAmount, currentPrice, takeProfitPrice, stopLossPrice) {
+        // Calculate maximum whole shares
         const qty = Math.floor(allocateAmount / currentPrice);
         
         if (qty < 1) {
             throw new Error(`Allocated capital ($${allocateAmount.toFixed(2)}) is insufficient to buy 1 share of ${symbol} at $${currentPrice}.`);
         }
 
-        console.log(`[Broker] Formatting MARKET BUY order for ${qty} shares of ${symbol}...`);
+        console.log(`[Broker] Formatting BRACKET BUY order for ${qty} shares of ${symbol}...`);
 
         const orderUrl = 'https://paper-api.alpaca.markets/v2/orders';
         const response = await fetch(orderUrl, {
@@ -182,10 +183,17 @@ class BrokerClient {
             },
             body: JSON.stringify({
                 symbol: symbol,
-                qty: String(qty), // Alpaca expects qty as a string
+                qty: String(qty),
                 side: 'buy',
                 type: 'market',
-                time_in_force: 'day'
+                time_in_force: 'day',
+                order_class: 'bracket',
+                take_profit: {
+                    limit_price: takeProfitPrice.toFixed(2)
+                },
+                stop_loss: {
+                    stop_price: stopLossPrice.toFixed(2)
+                }
             })
         });
 
@@ -194,7 +202,6 @@ class BrokerClient {
             throw new Error(`Alpaca Order API Error: ${errorData.message}`);
         }
 
-        // Return the exact execution data back to the TradingBot
         return {
             qty: qty,
             filled_avg_price: currentPrice

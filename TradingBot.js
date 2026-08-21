@@ -4,6 +4,8 @@ const AIEngine = require('./src/AIEngine');
 const DatabaseClient = require('./src/DatabaseClient');
 const Logger = require('./src/Logger');
 const Notifier = require('./src/Notifier');
+const Config = require('./src/Config');
+const RiskEngine = require('./src/RiskEngine');
 
 async function runTradingCycle() {
     const logger = new Logger('TradingBot');
@@ -11,13 +13,21 @@ async function runTradingCycle() {
     const notifier = new Notifier();
     
     await logger.log('==================================================');
-    await logger.log('🚀 INITIATING OOP TRADING BOT (DYNAMIC MULTI-FILL)');
+    await logger.log('🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)');
     await logger.log('==================================================');
+
+    const systemMode = Config.getMode();
+    await logger.log(`System Initializing in [${systemMode}] Mode.`);
+    
+    if (!Config.isTradingAllowed()) {
+        await logger.log('Trading is DISABLED in Construction Mode. Standing down.');
+        await notifier.push("System Alert", "Bot attempted to run but is locked in Construction Mode.", "shield");
+        return;
+    }
 
     try {
         await db.connect();
 
-        // 1. Check Portfolio Capacity and extract currently held symbols
         const res = await db.client.query("SELECT symbol FROM trade_analytics WHERE status = 'OPEN'");
         const heldSymbols = res.rows.map(row => row.symbol);
         const openPositions = heldSymbols.length;
@@ -31,11 +41,9 @@ async function runTradingCycle() {
             return;
         }
 
-        // 2. Fetch Active Capital
         let activeCapital = parseFloat(await db.getActiveCapital());
         await logger.log(`Active Capital Available: $${activeCapital.toFixed(2)}`);
 
-        // 3. Scan the Market for multiple setups
         const broker = new BrokerClient();
         const marketDataArray = await broker.scanMarketMovers(heldSymbols, neededSlots);
 
@@ -44,7 +52,6 @@ async function runTradingCycle() {
             return;
         }
 
-        // 4. Evaluate and Execute in a loop
         const aiEngine = new AIEngine();
 
         for (const marketData of marketDataArray) {
@@ -56,12 +63,23 @@ async function runTradingCycle() {
 
             if (decision.action === 'BUY' && decision.target_symbol !== 'NONE') {
                 const baseFraction = decision.confidence_score / 100;
-                // Risk 15% of the REMAINING active capital per slot
                 const tradeAllocation = activeCapital * (baseFraction * 0.15); 
                 
+                // === DYNAMIC RISK CALCULATION ===
+                const atr = RiskEngine.calculateATR(marketData.rawBars, 14);
+                const stops = RiskEngine.calculateDynamicStops(marketData.price, atr);
+
                 await logger.log(`[Risk Manager] Allocating $${tradeAllocation.toFixed(2)} to ${decision.target_symbol}.`);
+                await logger.log(`[Risk Manager] ATR = $${atr.toFixed(2)}. Setting dynamic bracket -> SL: $${stops.stopLossPrice.toFixed(2)} | TP: $${stops.takeProfitPrice.toFixed(2)}`);
                 
-                const orderResult = await broker.executeBuyOrder(decision.target_symbol, tradeAllocation, marketData.price);
+                // Pass the absolute stop prices directly to the broker
+                const orderResult = await broker.executeBuyOrder(
+                    decision.target_symbol, 
+                    tradeAllocation, 
+                    marketData.price, 
+                    stops.takeProfitPrice, 
+                    stops.stopLossPrice
+                );
                 
                 await db.client.query(
                     `INSERT INTO trade_analytics (symbol, action, qty, buy_price, status) 
@@ -69,13 +87,12 @@ async function runTradingCycle() {
                     [decision.target_symbol, decision.action, orderResult.qty, orderResult.filled_avg_price]
                 );
 
-                // Deduct from local tracking variable so the next loop has accurate capital math
                 activeCapital -= (orderResult.qty * orderResult.filled_avg_price);
 
                 await logger.log(`Trade successfully executed and logged for ${decision.target_symbol}.`);
                 await notifier.push(
                     "Bot Executing Trade", 
-                    `Purchased ${orderResult.qty} shares of ${decision.target_symbol} at $${orderResult.filled_avg_price}`, 
+                    `Purchased ${orderResult.qty} shares of ${decision.target_symbol} at $${orderResult.filled_avg_price}\nTarget: $${stops.takeProfitPrice.toFixed(2)}\nStop: $${stops.stopLossPrice.toFixed(2)}`, 
                     "buy"
                 );
             } else {
