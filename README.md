@@ -12,7 +12,7 @@ The system operates on a Dynamic Multi-Fill model, executing trades based on Mom
 * **FundamentalClient.js**: Integrates with the Finnhub API to filter out Event Risk. Rejects any technical momentum setup if the underlying company is scheduled to report earnings within the next 5 days.
 * **Config.js**: Manages environmental safety. Controls Operational Modes (CONSTRUCTION, PAPER, PRODUCTION) to prevent unauthorized live trading.
 * **Settlement.js**: Runs daily after market close to sweep closed trades and distribute profits into Capital Pots.
-* **Frontend Dashboard**: A React/Vite application (port 5173). Provides a high-density UI to monitor Capital Pots, view execution logs, and securely toggle operational modes via the Express API.
+* **Frontend Dashboard**: A responsive React/Vite application (port 5173). Features Recharts data visualization for Capital Pots, a live system log feed polling every 10 seconds, and a secure UI modal to seamlessly toggle the backend between CONSTRUCTION, PAPER, and PRODUCTION modes.
 * **DashboardAPI.js**: A persistent Express.js REST API daemonized via PM2. Exposes system health, portfolio metrics, and logs over port 3000 to serve the frontend web dashboard.
 
 ## Services & Daemons

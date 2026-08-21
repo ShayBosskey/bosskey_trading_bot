@@ -1,4 +1,6 @@
 require('dotenv').config({ path: '../.env' });
+const fs = require('fs');
+const path = require('path');
 const express = require('express');
 const cors = require('cors');
 const DatabaseClient = require('./DatabaseClient');
@@ -54,6 +56,29 @@ app.get('/api/v1/logs', async (req, res) => {
         res.status(500).json({ error: 'Internal Server Error fetching logs.' });
     } finally {
         await db.disconnect();
+    }
+});
+
+// Endpoint 4: System Mode Toggle
+app.post('/api/v1/system/mode', (req, res) => {
+    const { targetMode } = req.body;
+    const validModes = ['CONSTRUCTION', 'PAPER', 'PRODUCTION'];
+
+    if (!validModes.includes(targetMode)) {
+        return res.status(400).json({ error: 'Invalid mode requested.' });
+    }
+
+    try {
+        const envPath = path.resolve(__dirname, '../.env');
+        let envContent = fs.readFileSync(envPath, 'utf8');
+        
+        envContent = envContent.replace(/SYSTEM_MODE=.*/g, `SYSTEM_MODE=${targetMode}`);
+        fs.writeFileSync(envPath, envContent);
+
+        res.json({ message: `System successfully transitioned to ${targetMode} mode.` });
+    } catch (error) {
+        console.error(`[API Error]: Failed to update environment state: ${error.message}`);
+        res.status(500).json({ error: 'Internal Server Error modifying system state.' });
     }
 });
 
