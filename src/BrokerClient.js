@@ -1,5 +1,6 @@
 require('dotenv').config({ path: '../.env' });
 const { Alpaca } = require('@alpacahq/alpaca-trade-api');
+const FundamentalClient = require('./FundamentalClient');
 
 class BrokerClient {
     constructor() {
@@ -93,6 +94,15 @@ class BrokerClient {
                     const sma_20 = this.calculateSMA(closePrices, 20);
                     
                     if (sma_20 >= 5.00) {
+
+			const fundamentalClient = new FundamentalClient();
+                        const earningsRisk = await fundamentalClient.hasUpcomingEarnings(mover.symbol);
+                        
+                        if (earningsRisk) {
+                            console.log(`[Broker] Discarding ${mover.symbol} due to impending earnings report.`);
+                            continue; // Skip this stock and move to the next one
+                        }
+
                         validSetups.push({
                             symbol: mover.symbol,
                             price: mover.price,

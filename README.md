@@ -9,6 +9,7 @@ The system operates on a Dynamic Multi-Fill model, executing trades based on Mom
 * **TradingBot.js**: Runs every 15 minutes during market hours. Scans the Alpaca Top 50 Movers, filters out currently held assets and penny stocks. Evaluates setups using Gemini AI.
 * **RiskEngine.js**: Calculates the 14-day Average True Range (ATR) to measure exact asset volatility. Dynamically sets Stop-Loss (2x ATR) and Take-Profit (3x ATR) to ensure mathematical risk-to-reward ratios regardless of asset class.
 * **BrokerClient.js**: Submits execution commands directly to Alpaca via HTTP Fetch. Wraps the BUY, TAKE-PROFIT, and STOP-LOSS orders into a single Bracket Order, eliminating local execution latency and internet dropout risk.
+* **FundamentalClient.js**: Integrates with the Finnhub API to filter out Event Risk. Rejects any technical momentum setup if the underlying company is scheduled to report earnings within the next 5 days.
 * **Config.js**: Manages environmental safety. Controls Operational Modes (CONSTRUCTION, PAPER, PRODUCTION) to prevent unauthorized live trading.
 * **Settlement.js**: Runs daily after market close to sweep closed trades and distribute profits into Capital Pots.
 
