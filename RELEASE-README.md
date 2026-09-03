@@ -13,10 +13,14 @@ Schema: `Date (Timestamp) | Title | Description | New Features`
 
 ---
 
-## ⚠️ Flagged before PRODUCTION cutover — NOT resolved in this release
+**2026-09-03 (16:41:00 CEST)** | Capital Ledger Repair & Settlement Hardening | Root-caused and repaired a live data corruption incident in `capital_pots`, then closed the code-level gap that caused it. |
+- **Data repair (live DB, approved and executed 2026-09-03)**: `capital_pots.active_capital` had been `NaN` since the 2026-09-02 20:15 settlement run. Reconstructed the correct value ($63,237.00) from 13 corroborating `TradingBot` log entries logged in the hours immediately before the corrupting settlement, and confirmed no real trades closed that day (only 5 manually-cleared "ghost position" rows with `net_profit = NULL`). Restored `active_capital = 63237.00` and set those 5 rows' `net_profit = 0.00` in a single transaction.
+- **Root-cause fix (`src/Settlement.js`)**: A closed trade with a missing/non-finite `net_profit` (NULL, or Postgres's literal numeric `NaN`) is now skipped from the daily sum and logged as a warning, instead of propagating `NaN` into `dailyNetProfit`. Added a final guard that refuses to write a non-finite figure to `capital_pots` under any circumstance.
+- **Testing**: Added `Systest/Settlement.test.js` (3 tests) reproducing the exact historical bug — a NULL or literal-`NaN` `net_profit` row alongside real profit — and asserting the ledger update always receives finite values. Full suite: 6 suites / 17 tests passing.
+- **Capacity lock note**: confirmed 3/5 slots are actually held (ISRL, RDAC, RIBBU), not 0/5 as assumed going into this session — worth reconciling against the live Alpaca broker state before launch.
 
-Discovered while implementing the above; these are launch blockers, not code-review nitpicks, and were intentionally left untouched pending a decision from the project owner:
+---
 
-- **`capital_pots.active_capital` is corrupted to `NaN` in the live database.** Root cause: five `trade_analytics` rows closed on 2026-09-02 with `net_profit = NULL`; `Settlement.js` summed them with `parseFloat(null)` → `NaN`, then persisted `active_capital = active_capital + NaN`, which poisons the column permanently since every future settlement adds to it. Until this is manually repaired, `TradingBot.js` will compute `NaN` position sizes on every cycle.
-- **Capacity lock is actually 3/5 (ISRL, RDAC, RIBBU currently OPEN), not 0/5.** Worth reconciling against the Alpaca broker state before assuming 5 free slots at launch.
-- **`BrokerClient.executeBuyOrder` posts to a hardcoded paper endpoint** (`https://paper-api.alpaca.markets/v2/orders`), and the SDK client is constructed with `paper: true`. Switching `SYSTEM_MODE` to `PRODUCTION` via the dashboard does **not** change where bracket orders are sent — they will still fill on the paper account.
+## ⚠️ Flagged before PRODUCTION cutover — NOT resolved, explicitly deferred
+
+- **`BrokerClient.executeBuyOrder` posts to a hardcoded paper endpoint** (`https://paper-api.alpaca.markets/v2/orders`), and the SDK client is constructed with `paper: true`. Switching `SYSTEM_MODE` to `PRODUCTION` via the dashboard does **not** change where bracket orders are sent — they will still fill on the paper account. Fixing this requires a separate live-trading Alpaca API key pair (the current `.env` only holds paper keys) and a mode-based routing change in `BrokerClient.js`. Discussed 2026-09-03: explicitly deferred at the project owner's request — do not treat `SYSTEM_MODE=PRODUCTION` as executing real capital until this is revisited.

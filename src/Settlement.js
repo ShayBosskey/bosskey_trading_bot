@@ -31,20 +31,37 @@ class Settlement {
             if (closedTrades.length === 0) {
                 await this.logger.log('No trades were closed today. No settlement required.');
                 await this.notifier.push(
-                    "Daily Settlement Report", 
-                    "No positions were closed today. Portfolio holding steady.", 
+                    "Daily Settlement Report",
+                    "No positions were closed today. Portfolio holding steady.",
                     "bank"
                 );
                 return;
             }
 
-            // 2. Tally up the total profit/loss for the day
+            // 2. Tally up the total profit/loss for the day.
+            // A row with a missing net_profit (e.g. a manually-cleared ghost position)
+            // must NOT be allowed to poison the whole day's math with NaN.
             let dailyNetProfit = 0;
+            const skippedTrades = [];
             for (const trade of closedTrades) {
-                dailyNetProfit += parseFloat(trade.net_profit);
+                const profit = parseFloat(trade.net_profit);
+                if (Number.isFinite(profit)) {
+                    dailyNetProfit += profit;
+                } else {
+                    skippedTrades.push(trade.symbol || trade.id);
+                }
             }
 
-            await this.logger.log(`Batch processed ${closedTrades.length} closed trades. Daily Net: $${dailyNetProfit.toFixed(2)}`);
+            if (skippedTrades.length > 0) {
+                await this.logger.log(`⚠️ Skipped ${skippedTrades.length} closed trade(s) with a missing/invalid net_profit (treated as $0): ${skippedTrades.join(', ')}`);
+            }
+
+            await this.logger.log(`Batch processed ${closedTrades.length} closed trades (${skippedTrades.length} skipped). Daily Net: $${dailyNetProfit.toFixed(2)}`);
+
+            // Final guard: never let a non-finite figure reach the ledger.
+            if (!Number.isFinite(dailyNetProfit)) {
+                throw new Error(`Computed dailyNetProfit is not finite (${dailyNetProfit}). Aborting settlement without touching capital_pots.`);
+            }
 
             // 3. Pot Distribution Logic
             if (dailyNetProfit > 0) {
