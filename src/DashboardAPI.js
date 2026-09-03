@@ -1,4 +1,4 @@
-require('dotenv').config({ path: '../.env' });
+require('dotenv').config({ path: require('path').resolve(__dirname, '../.env')});
 const fs = require('fs');
 const path = require('path');
 const express = require('express');
@@ -30,10 +30,12 @@ app.get('/api/v1/portfolio', async (req, res) => {
         
         const capitalRes = await db.client.query("SELECT * FROM capital_pots WHERE id = 1");
         const positionsRes = await db.client.query("SELECT * FROM trade_analytics WHERE status = 'OPEN'");
+        const historyQuery = await db.client.query("SELECT opened_at, closed_at, net_profit FROM trade_analytics WHERE status = 'CLOSED' ORDER BY closed_at ASC");
         
         res.json({
             capital: capitalRes.rows[0],
             openPositions: positionsRes.rows,
+            tradeHistory: historyQuery.rows,
             activeSlotCount: positionsRes.rows.length,
             maxSlots: 5
         });
@@ -74,6 +76,7 @@ app.post('/api/v1/system/mode', (req, res) => {
         
         envContent = envContent.replace(/SYSTEM_MODE=.*/g, `SYSTEM_MODE=${targetMode}`);
         fs.writeFileSync(envPath, envContent);
+        process.env.SYSTEM_MODE = targetMode;
 
         res.json({ message: `System successfully transitioned to ${targetMode} mode.` });
     } catch (error) {

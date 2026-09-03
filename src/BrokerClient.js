@@ -1,6 +1,7 @@
 require('dotenv').config({ path: '../.env' });
 const { Alpaca } = require('@alpacahq/alpaca-trade-api');
 const FundamentalClient = require('./FundamentalClient');
+const yahooFinance = require('yahoo-finance2').default;
 
 class BrokerClient {
     constructor() {
@@ -125,6 +126,22 @@ class BrokerClient {
         }
     }
 
+    async fetchFundamentals(symbol) {
+        try {
+            const response = await fetch(`https://finnhub.io/api/v1/quote?symbol=${symbol}&token=${process.env.FINNHUB_API_KEY}`);
+            if (!response.ok) throw new Error('Finnhub fetch failed.');
+            return await response.json();
+        } catch (error) {
+            console.log(`[Fundamental Warning] Finnhub unavailable for ${symbol}. Routing to Yahoo Finance fallback...`);
+            const quote = await yahooFinance.quote(symbol);
+            return {
+                c: quote.regularMarketPrice,
+                d: quote.regularMarketChange,
+                dp: quote.regularMarketChangePercent
+            };
+        }
+    }
+
     async executeTrade(decision, marketData, dynamicRiskAmount) {
         // Abort if the AI said HOLD
         if ((decision.action !== 'BUY' && decision.action !== 'SELL_SHORT') || decision.target_symbol === 'NONE') return;
@@ -175,9 +192,11 @@ class BrokerClient {
     async executeBuyOrder(symbol, allocateAmount, currentPrice, takeProfitPrice, stopLossPrice) {
         // Calculate maximum whole shares
         const qty = Math.floor(allocateAmount / currentPrice);
-        
-        if (qty < 1) {
-            throw new Error(`Allocated capital ($${allocateAmount.toFixed(2)}) is insufficient to buy 1 share of ${symbol} at $${currentPrice}.`);
+
+        // NaN fails every `< 1` comparison, so it must be checked explicitly or a
+        // corrupted capital figure would silently pass through as a malformed order.
+        if (!Number.isFinite(qty) || qty < 1) {
+            throw new Error(`Allocated capital ($${allocateAmount}) is insufficient or invalid to buy 1 share of ${symbol} at $${currentPrice}.`);
         }
 
         console.log(`[Broker] Formatting BRACKET BUY order for ${qty} shares of ${symbol}...`);

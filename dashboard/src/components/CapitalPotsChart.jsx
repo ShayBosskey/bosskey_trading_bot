@@ -1,13 +1,6 @@
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts';
 
-// Validated against the bosskey-panel dark surface (#161D22) with
-// scripts/validate_palette.js from the dataviz skill — all checks pass.
-const POT_COLORS = {
-  'Active Capital': '#3987e5',
-  'Emergency Reserve': '#d95926',
-  'Tax Vault': '#199e70',
-  'Personal Payout': '#c98500',
-};
+import { POT_COLORS } from './chartPalette';
 
 function CustomTooltip({ active, payload }) {
   if (!active || !payload?.length) return null;

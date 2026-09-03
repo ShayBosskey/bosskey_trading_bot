@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { LayoutDashboard, Wallet, Activity, ArrowUpRight, Terminal } from 'lucide-react';
 import CapitalPotsChart from './components/CapitalPotsChart';
+import PerformanceMetrics from './components/PerformanceMetrics';
 import SystemModeToggle from './components/SystemModeToggle';
 
 function App() {
@@ -99,6 +100,9 @@ function App() {
             </div>
           </div>
         </div>
+
+        {/* Performance Charts */}
+        <PerformanceMetrics capital={portfolio.capital} history={portfolio.tradeHistory} />
 
         {/* Capital Pots Breakdown */}
         <div className="bg-bosskey-panel rounded-2xl p-4 md:p-6 shadow-lg border border-gray-800 mb-6 md:mb-8">

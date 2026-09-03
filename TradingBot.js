@@ -1,4 +1,4 @@
-require('dotenv').config({ path: '../.env' });
+require('dotenv').config({ path: __dirname + '/.env'});
 const BrokerClient = require('./src/BrokerClient');
 const AIEngine = require('./src/AIEngine');
 const DatabaseClient = require('./src/DatabaseClient');
@@ -60,8 +60,12 @@ async function runTradingCycle() {
             await logger.log(`--- AI TRADE DECISION FOR ${marketData.symbol} ---`);
             await logger.log(`Action: ${decision.action} | Confidence: ${decision.confidence_score}`);
             await logger.log(`Reasoning: ${decision.reasoning}`);
+            if (decision.debate?.audit) {
+                await logger.log(`[Risk Auditor] Approved: ${decision.riskApproved} | Risk Score: ${decision.debate.audit.risk_score} | Notes: ${decision.debate.audit.audit_notes}`);
+            }
 
-            if (decision.action === 'BUY' && decision.target_symbol !== 'NONE') {
+            // Agent B (Risk Auditor) must explicitly approve before any capital is deployed.
+            if (decision.action === 'BUY' && decision.target_symbol !== 'NONE' && decision.riskApproved) {
                 const baseFraction = decision.confidence_score / 100;
                 const tradeAllocation = activeCapital * (baseFraction * 0.15); 
                 
@@ -95,6 +99,8 @@ async function runTradingCycle() {
                     `Purchased ${orderResult.qty} shares of ${decision.target_symbol} at $${orderResult.filled_avg_price}\nTarget: $${stops.takeProfitPrice.toFixed(2)}\nStop: $${stops.stopLossPrice.toFixed(2)}`, 
                     "buy"
                 );
+            } else if (decision.action === 'BUY' && decision.target_symbol !== 'NONE' && !decision.riskApproved) {
+                await logger.log(`Trade blocked: Risk Auditor did not approve ${marketData.symbol}.`);
             } else {
                 await logger.log(`Executing HOLD strategy for ${marketData.symbol}.`);
             }

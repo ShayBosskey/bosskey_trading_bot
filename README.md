@@ -6,9 +6,10 @@ An autonomous, multi-position quantitative trading system built for Bosskey Indu
 
 The system operates on a Dynamic Multi-Fill model, executing trades based on Momentum Breakouts. Risk is managed entirely broker-side using One-Cancels-Other (OCO) Bracket Orders calculated via historical volatility.
 
-* **TradingBot.js**: Runs every 15 minutes during market hours. Scans the Alpaca Top 50 Movers, filters out currently held assets and penny stocks. Evaluates setups using Gemini AI.
+* **TradingBot.js**: Runs every 15 minutes during market hours. Scans the Alpaca Top 50 Movers, filters out currently held assets and penny stocks. Evaluates setups via the AIEngine Agent Debate, and only submits a bracket order when the Risk Auditor agent explicitly approves.
+* **AIEngine.js**: Two-agent debate pipeline (HKUDS/AI-Trader pattern) powered by Gemini. Agent A (Trader) analyzes technicals and proposes a setup with a confidence score; Agent B (Risk Auditor) critiques the proposal for slippage, volume, and false-breakout risk. A trade is only marked `riskApproved` when Agent B signs off; any Agent B rejection or API error fails closed to HOLD.
 * **RiskEngine.js**: Calculates the 14-day Average True Range (ATR) to measure exact asset volatility. Dynamically sets Stop-Loss (2x ATR) and Take-Profit (3x ATR) to ensure mathematical risk-to-reward ratios regardless of asset class.
-* **BrokerClient.js**: Submits execution commands directly to Alpaca via HTTP Fetch. Wraps the BUY, TAKE-PROFIT, and STOP-LOSS orders into a single Bracket Order, eliminating local execution latency and internet dropout risk.
+* **BrokerClient.js**: Submits execution commands directly to Alpaca via HTTP Fetch. Wraps the BUY, TAKE-PROFIT, and STOP-LOSS orders into a single Bracket Order, eliminating local execution latency and internet dropout risk. Also fetches fundamentals from Finnhub with an automatic `yahoo-finance2` fallback (mapped to the same `{c, d, dp}` shape) if Finnhub is unreachable.
 * **FundamentalClient.js**: Integrates with the Finnhub API to filter out Event Risk. Rejects any technical momentum setup if the underlying company is scheduled to report earnings within the next 5 days.
 * **Config.js**: Manages environmental safety. Controls Operational Modes (CONSTRUCTION, PAPER, PRODUCTION) to prevent unauthorized live trading.
 * **Settlement.js**: Runs daily after market close to sweep closed trades and distribute profits into Capital Pots.
@@ -32,7 +33,7 @@ Controlled via the `.env` file (`SYSTEM_MODE`):
 
 The project utilizes `Jest` for automated testing and API mocking.
 * Run tests via: `npm test`
-* Validates configuration safety, broker payload formatting, and risk mathematics.
+* Validates configuration safety, broker payload formatting, risk mathematics, fundamental data fallback, and the Agent Debate risk-approval gate.
 
 ## CronJob Schedule (CEST - Swiss Local Time)
 
