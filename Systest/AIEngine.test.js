@@ -85,3 +85,108 @@ describe('Agent Debate Engine (Trader vs Risk Auditor)', () => {
         expect(decision.riskApproved).toBe(false);
     });
 });
+
+describe('OpenRouter fallback routing', () => {
+    let engine;
+    let generateContentMock;
+    const originalFetch = global.fetch;
+    const originalApiKey = process.env.OPENROUTER_API_KEY;
+
+    const marketData = {
+        symbol: 'TEST',
+        price: 10,
+        dailyChange: '5.00',
+        volume: 1000000,
+        sma_20: 9,
+        rsi_14: 65
+    };
+
+    beforeEach(() => {
+        process.env.OPENROUTER_API_KEY = 'test_openrouter_key';
+        engine = new AIEngine();
+        generateContentMock = engine.ai.models.generateContent;
+        generateContentMock.mockReset();
+    });
+
+    afterEach(() => {
+        global.fetch = originalFetch;
+        process.env.OPENROUTER_API_KEY = originalApiKey;
+    });
+
+    test('reroutes to OpenRouter on a 429 and normalizes its response into the same shape', async () => {
+        const rateLimitError = new Error('Quota exceeded');
+        rateLimitError.status = 429;
+        generateContentMock.mockRejectedValueOnce(rateLimitError);
+
+        global.fetch = jest.fn().mockResolvedValueOnce({
+            ok: true,
+            json: async () => ({
+                choices: [{ message: { content: '```json\n{"action":"BUY","target_symbol":"TEST","confidence_score":77,"reasoning":"Fallback breakout."}\n```' } }]
+            })
+        });
+
+        const proposal = await engine.proposeTradeSetup(marketData);
+
+        expect(global.fetch).toHaveBeenCalledWith(
+            'https://openrouter.ai/api/v1/chat/completions',
+            expect.objectContaining({
+                method: 'POST',
+                headers: expect.objectContaining({
+                    Authorization: 'Bearer test_openrouter_key',
+                    'HTTP-Referer': 'https://github.com/ShayBosskey',
+                    'X-Title': 'Bosskey Trading Bot'
+                })
+            })
+        );
+        const requestBody = JSON.parse(global.fetch.mock.calls[0][1].body);
+        expect(requestBody.model).toBe('meta-llama/llama-3.1-8b-instruct:free');
+
+        expect(proposal).toEqual({
+            action: 'BUY',
+            target_symbol: 'TEST',
+            confidence_score: 77,
+            reasoning: 'Fallback breakout.'
+        });
+    });
+
+    test('reroutes to OpenRouter on a 503 as well', async () => {
+        const unavailableError = new Error('Service Unavailable');
+        unavailableError.status = 503;
+        generateContentMock.mockRejectedValueOnce(unavailableError);
+
+        global.fetch = jest.fn().mockResolvedValueOnce({
+            ok: true,
+            json: async () => ({
+                choices: [{ message: { content: JSON.stringify({ action: 'HOLD', target_symbol: 'NONE', confidence_score: 10, reasoning: 'Fallback hold.' }) } }]
+            })
+        });
+
+        const proposal = await engine.proposeTradeSetup(marketData);
+
+        expect(global.fetch).toHaveBeenCalledTimes(1);
+        expect(proposal.action).toBe('HOLD');
+    });
+
+    test('does not reroute non-rate-limit errors, and fails closed as before', async () => {
+        generateContentMock.mockRejectedValueOnce(new Error('Some other Gemini failure'));
+        global.fetch = jest.fn();
+
+        const proposal = await engine.proposeTradeSetup(marketData);
+
+        expect(global.fetch).not.toHaveBeenCalled();
+        expect(proposal.action).toBe('HOLD');
+        expect(proposal.reasoning).toContain('Fallback due to AI error');
+    });
+
+    test('fails closed if OpenRouter itself is unreachable', async () => {
+        const rateLimitError = new Error('Quota exceeded');
+        rateLimitError.status = 429;
+        generateContentMock.mockRejectedValueOnce(rateLimitError);
+        global.fetch = jest.fn().mockResolvedValueOnce({ ok: false, status: 503 });
+
+        const proposal = await engine.proposeTradeSetup(marketData);
+
+        expect(proposal.action).toBe('HOLD');
+        expect(proposal.reasoning).toContain('Fallback due to AI error');
+    });
+});
