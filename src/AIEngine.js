@@ -1,7 +1,7 @@
 const { GoogleGenAI } = require('@google/genai');
 
 const OPENROUTER_ENDPOINT = 'https://openrouter.ai/api/v1/chat/completions';
-const OPENROUTER_FALLBACK_MODEL = process.env.OPENROUTER_FALLBACK_MODEL || 'meta-llama/llama-3.1-8b-instruct:free';
+const OPENROUTER_FALLBACK_MODEL = process.env.OPENROUTER_FALLBACK_MODEL || 'meta-llama/llama-3.1-8b-instruct';
 
 // Gemini errors that mean "the model is temporarily unusable", not "the request was bad".
 // Only these should trigger a reroute to OpenRouter - anything else (auth, bad request, parse
@@ -123,8 +123,12 @@ Output strictly in JSON format. Do NOT use quotation marks inside the reasoning 
         try {
             return await this.#generateJSON(prompt);
         } catch (error) {
-            console.error(`[Agent A Error]: ${error.message}`);
-            return { action: 'HOLD', target_symbol: 'NONE', confidence_score: 100, reasoning: 'Fallback due to AI error (Agent A: Trader).' };
+            // Both Gemini and the OpenRouter fallback are unavailable - this is an API
+            // outage, not a trading decision. Do NOT mask it as a HOLD proposal (that
+            // would let downstream logic treat "AI is down" as "no setup found" and
+            // bypass Agent B entirely). Log it as critical and let it halt the cycle.
+            console.error(`[Agent A CRITICAL]: AI evaluation unavailable for ${marketData.symbol} - ${error.message}`);
+            throw new Error(`Agent A (Trader) unavailable for ${marketData.symbol}: ${error.message}`);
         }
     }
 

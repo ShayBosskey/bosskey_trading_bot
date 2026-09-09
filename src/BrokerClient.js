@@ -2,13 +2,14 @@ require('dotenv').config({ path: '../.env' });
 const { Alpaca } = require('@alpacahq/alpaca-trade-api');
 const FundamentalClient = require('./FundamentalClient');
 const yahooFinance = require('yahoo-finance2').default;
+const Config = require('./Config');
 
 class BrokerClient {
     constructor() {
         this.alpaca = new Alpaca({
             keyId: process.env.ALPACA_API_KEY,
             secret: process.env.ALPACA_SECRET_KEY,
-            paper: true
+            paper: Config.getMode() !== 'PRODUCTION'
         });
     }
 
@@ -201,7 +202,9 @@ class BrokerClient {
 
         console.log(`[Broker] Formatting BRACKET BUY order for ${qty} shares of ${symbol}...`);
 
-        const orderUrl = 'https://paper-api.alpaca.markets/v2/orders';
+        const orderUrl = Config.getMode() === 'PRODUCTION'
+            ? 'https://api.alpaca.markets/v2/orders'
+            : 'https://paper-api.alpaca.markets/v2/orders';
         const response = await fetch(orderUrl, {
             method: 'POST',
             headers: {

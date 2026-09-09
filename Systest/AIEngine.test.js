@@ -75,14 +75,11 @@ describe('Agent Debate Engine (Trader vs Risk Auditor)', () => {
         expect(decision.riskApproved).toBe(false);
     });
 
-    test('fails closed when the Trader call errors', async () => {
+    test('halts (throws) instead of masking a Trader API failure as HOLD', async () => {
         generateContentMock.mockRejectedValueOnce(new Error('Gemini timeout'));
 
-        const decision = await engine.evaluateBatch(marketData);
-
+        await expect(engine.evaluateBatch(marketData)).rejects.toThrow('Agent A (Trader) unavailable');
         expect(generateContentMock).toHaveBeenCalledTimes(1);
-        expect(decision.action).toBe('HOLD');
-        expect(decision.riskApproved).toBe(false);
     });
 });
 
@@ -139,7 +136,7 @@ describe('OpenRouter fallback routing', () => {
             })
         );
         const requestBody = JSON.parse(global.fetch.mock.calls[0][1].body);
-        expect(requestBody.model).toBe('meta-llama/llama-3.1-8b-instruct:free');
+        expect(requestBody.model).toBe('meta-llama/llama-3.1-8b-instruct');
 
         expect(proposal).toEqual({
             action: 'BUY',
@@ -167,26 +164,20 @@ describe('OpenRouter fallback routing', () => {
         expect(proposal.action).toBe('HOLD');
     });
 
-    test('does not reroute non-rate-limit errors, and fails closed as before', async () => {
+    test('does not reroute non-rate-limit errors, and still halts rather than masking as HOLD', async () => {
         generateContentMock.mockRejectedValueOnce(new Error('Some other Gemini failure'));
         global.fetch = jest.fn();
 
-        const proposal = await engine.proposeTradeSetup(marketData);
-
+        await expect(engine.proposeTradeSetup(marketData)).rejects.toThrow('Agent A (Trader) unavailable');
         expect(global.fetch).not.toHaveBeenCalled();
-        expect(proposal.action).toBe('HOLD');
-        expect(proposal.reasoning).toContain('Fallback due to AI error');
     });
 
-    test('fails closed if OpenRouter itself is unreachable', async () => {
+    test('halts if OpenRouter itself is unreachable after a Gemini failure', async () => {
         const rateLimitError = new Error('Quota exceeded');
         rateLimitError.status = 429;
         generateContentMock.mockRejectedValueOnce(rateLimitError);
         global.fetch = jest.fn().mockResolvedValueOnce({ ok: false, status: 503 });
 
-        const proposal = await engine.proposeTradeSetup(marketData);
-
-        expect(proposal.action).toBe('HOLD');
-        expect(proposal.reasoning).toContain('Fallback due to AI error');
+        await expect(engine.proposeTradeSetup(marketData)).rejects.toThrow('Agent A (Trader) unavailable');
     });
 });
