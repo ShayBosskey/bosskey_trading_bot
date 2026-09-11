@@ -21,6 +21,14 @@ Schema: `Date (Timestamp) | Title | Description | New Features`
 
 ---
 
+**2026-09-11 (04:53:06 CEST)** | OpenRouter Fallback JSON Hardening | The OpenRouter fallback (`meta-llama/llama-3.1-8b-instruct`) was connecting successfully but occasionally returning conversational text (e.g. "The stock...") instead of raw JSON, which crashed `JSON.parse()` with `Unexpected token 'T'... is not valid JSON` and took down Agent A mid-debate. |
+- **Prompt hardening (`src/AIEngine.js`)**: Added a strict `STRICT_JSON_DIRECTIVE` to both the Agent A (Trader) and Agent B (Risk Auditor) prompts, explicitly forbidding conversational text, greetings, explanations, or markdown code fences, and requiring the response to begin with `{` and end with `}`.
+- **Regex JSON extractor (`src/AIEngine.js`)**: `#generateJSON` now runs every model response through a `extractJSONBlock` regex pass (`/\{[\s\S]*\}/`) after the existing markdown-fence strip, pulling the JSON object out of any remaining conversational filler before `JSON.parse` runs. Applies uniformly to both the Gemini and OpenRouter response paths.
+- **Notification/logging strings (`src/AIEngine.js`)**: Added a `console.warn` when extraction actually had to strip non-JSON filler (surfaces flaky-model behavior without failing the call), and reworked the parse-failure path to log a truncated snippet of the raw response and throw a clearer `AIEngine received a non-JSON response from the model` error instead of letting the raw `JSON.parse` `SyntaxError` propagate.
+- **Docs**: Updated `README.md`'s `AIEngine.js` description to document the OpenRouter fallback model and the strict-JSON/regex-extraction safety net.
+
+---
+
 ## ⚠️ Flagged before PRODUCTION cutover — NOT resolved, explicitly deferred
 
 - **`BrokerClient.executeBuyOrder` posts to a hardcoded paper endpoint** (`https://paper-api.alpaca.markets/v2/orders`), and the SDK client is constructed with `paper: true`. Switching `SYSTEM_MODE` to `PRODUCTION` via the dashboard does **not** change where bracket orders are sent — they will still fill on the paper account. Fixing this requires a separate live-trading Alpaca API key pair (the current `.env` only holds paper keys) and a mode-based routing change in `BrokerClient.js`. Discussed 2026-09-03: explicitly deferred at the project owner's request — do not treat `SYSTEM_MODE=PRODUCTION` as executing real capital until this is revisited.

@@ -18,6 +18,17 @@ function stripJSONFence(rawText) {
     return rawText.replace(/```json/gi, '').replace(/```/g, '').trim();
 }
 
+// Some models (notably smaller OpenRouter fallbacks like llama-3.1-8b-instruct) ignore the
+// "output only JSON" instruction and wrap the object in conversational filler (e.g. "The
+// stock..."). Extract the first {...} block so JSON.parse still succeeds instead of throwing
+// "Unexpected token" and crashing Agent A/B.
+function extractJSONBlock(rawText) {
+    const jsonMatch = rawText.match(/\{[\s\S]*\}/);
+    return jsonMatch ? jsonMatch[0] : rawText;
+}
+
+const STRICT_JSON_DIRECTIVE = 'You must output ONLY raw, valid JSON. Do not include any conversational text, greetings, explanations, or markdown code blocks (such as ```json). Your response must begin exactly with the { character and end with the } character.';
+
 class AIEngine {
     constructor() {
         this.ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
@@ -85,9 +96,23 @@ class AIEngine {
             console.log(`[AIEngine] OpenRouter fallback succeeded.`);
         }
 
-        // Normalize output shape: strip any markdown fencing so both providers' responses
-        // parse into the same JSON structure the Agent Debate logic expects downstream.
-        return JSON.parse(stripJSONFence(rawText));
+        // Normalize output shape: strip any markdown fencing, then extract the {...} block in
+        // case the model still prefaced/suffixed the JSON with conversational text. Both
+        // providers' responses end up parsing into the same JSON structure the Agent Debate
+        // logic expects downstream.
+        const fenceStripped = stripJSONFence(rawText);
+        const jsonCandidate = extractJSONBlock(fenceStripped);
+
+        if (jsonCandidate !== fenceStripped.trim()) {
+            console.warn(`[AIEngine] Model response included non-JSON filler text; extracted JSON block via regex before parsing.`);
+        }
+
+        try {
+            return JSON.parse(jsonCandidate);
+        } catch (parseError) {
+            console.error(`[AIEngine] Failed to parse model response as JSON even after extraction. Raw response (truncated): ${rawText.slice(0, 200)}`);
+            throw new Error(`AIEngine received a non-JSON response from the model: ${parseError.message}`);
+        }
     }
 
     // Agent A: proposes a trade setup from technicals.
@@ -97,6 +122,8 @@ class AIEngine {
         const prompt = `
 You are a ruthless, highly disciplined quantitative trading AI for Bosskey Industries.
 Analyze the following market data for a potential momentum breakout trade.
+
+${STRICT_JSON_DIRECTIVE}
 
 Data:
 - Symbol: ${marketData.symbol}
@@ -139,6 +166,8 @@ Output strictly in JSON format. Do NOT use quotation marks inside the reasoning 
 
         const prompt = `
 You are a skeptical risk auditor for Bosskey Industries. Your job is to CHALLENGE, not rubber-stamp, trade proposals submitted by the trading agent. Assume the trader is overconfident until the evidence proves otherwise.
+
+${STRICT_JSON_DIRECTIVE}
 
 Trader's Proposal:
 - Action: ${proposal.action}
