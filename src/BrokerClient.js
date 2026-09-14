@@ -1,4 +1,5 @@
-require('dotenv').config({ path: '../.env' });
+const path = require('path');
+require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
 const { Alpaca } = require('@alpacahq/alpaca-trade-api');
 const FundamentalClient = require('./FundamentalClient');
 const yahooFinance = require('yahoo-finance2').default;
@@ -109,7 +110,7 @@ class BrokerClient {
                             symbol: mover.symbol,
                             price: mover.price,
                             dailyChange: mover.percent_change.toFixed(2),
-                            volume: mover.volume,
+                            volume: bars[bars.length - 1].v,
                             sma_20: sma_20,
                             rsi_14: this.calculateRSI(closePrices, 14),
 			    rawBars: bars
@@ -218,7 +219,7 @@ class BrokerClient {
                 qty: String(qty),
                 side: 'buy',
                 type: 'market',
-                time_in_force: 'day',
+                time_in_force: 'gtc',
                 order_class: 'bracket',
                 take_profit: {
                     limit_price: takeProfitPrice.toFixed(2)
@@ -238,6 +239,54 @@ class BrokerClient {
             qty: qty,
             filled_avg_price: currentPrice
         };
+    }
+
+    #getBaseUrl() {
+        return Config.getMode() === 'PRODUCTION'
+            ? 'https://api.alpaca.markets'
+            : 'https://paper-api.alpaca.markets';
+    }
+
+    #authHeaders() {
+        return {
+            'APCA-API-KEY-ID': process.env.ALPACA_API_KEY,
+            'APCA-API-SECRET-KEY': process.env.ALPACA_SECRET_KEY,
+            'accept': 'application/json'
+        };
+    }
+
+    // Ground truth for what the broker actually holds right now. Used by the
+    // reconciliation routine to detect drift against `trade_analytics`.
+    async getPositions() {
+        const response = await fetch(`${this.#getBaseUrl()}/v2/positions`, {
+            headers: this.#authHeaders()
+        });
+
+        if (!response.ok) throw new Error(`Alpaca Positions API Error: ${response.status}`);
+        return await response.json();
+    }
+
+    // Finds the most recent filled order on the given side for a symbol, so a
+    // reconciled trade can be closed with a real fill price/time instead of a guess.
+    async getLastFilledOrder(symbol, side) {
+        const url = `${this.#getBaseUrl()}/v2/orders?status=closed&symbols=${symbol}&direction=desc&limit=50`;
+        const response = await fetch(url, { headers: this.#authHeaders() });
+
+        if (!response.ok) throw new Error(`Alpaca Orders API Error: ${response.status}`);
+        const orders = await response.json();
+
+        return orders.find(o => o.side === side && o.status === 'filled' && o.filled_avg_price) || null;
+    }
+
+    // Full order history (every status, all time) for one symbol. Used to fully
+    // reconstruct what actually happened to a position before repairing a row -
+    // never inferred from just the most recent order.
+    async getOrderHistory(symbol) {
+        const url = `${this.#getBaseUrl()}/v2/orders?status=all&symbols=${symbol}&limit=500&direction=asc`;
+        const response = await fetch(url, { headers: this.#authHeaders() });
+
+        if (!response.ok) throw new Error(`Alpaca Orders API Error: ${response.status}`);
+        return await response.json();
     }
 }
 

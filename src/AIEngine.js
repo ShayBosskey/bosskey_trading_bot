@@ -2,6 +2,10 @@ const { GoogleGenAI } = require('@google/genai');
 
 const OPENROUTER_ENDPOINT = 'https://openrouter.ai/api/v1/chat/completions';
 const OPENROUTER_FALLBACK_MODEL = process.env.OPENROUTER_FALLBACK_MODEL || 'meta-llama/llama-3.1-8b-instruct';
+// Last-resort model for a malformed-JSON response, tried only after a same-model
+// re-prompt has already failed once. Larger/more instruction-following than the
+// primary OpenRouter fallback, since by this point two prior attempts already broke.
+const JSON_REPAIR_FALLBACK_MODEL = 'meta-llama/llama-3.3-70b-instruct';
 
 // Gemini errors that mean "the model is temporarily unusable", not "the request was bad".
 // Only these should trigger a reroute to OpenRouter - anything else (auth, bad request, parse
@@ -49,7 +53,7 @@ class AIEngine {
 
     // Fallback path: same prompt, same "return strict JSON" instructions already baked into
     // the prompt text, just routed through OpenRouter's OpenAI-compatible chat endpoint.
-    async #generateWithOpenRouter(prompt) {
+    async #generateWithOpenRouter(prompt, model = OPENROUTER_FALLBACK_MODEL) {
         if (!this.openRouterApiKey) {
             throw new Error('OpenRouter fallback unavailable: OPENROUTER_API_KEY is not configured.');
         }
@@ -63,7 +67,7 @@ class AIEngine {
                 'X-Title': 'Bosskey Trading Bot'
             },
             body: JSON.stringify({
-                model: OPENROUTER_FALLBACK_MODEL,
+                model: model,
                 messages: [{ role: 'user', content: prompt }]
             })
         });
@@ -96,10 +100,15 @@ class AIEngine {
             console.log(`[AIEngine] OpenRouter fallback succeeded.`);
         }
 
-        // Normalize output shape: strip any markdown fencing, then extract the {...} block in
-        // case the model still prefaced/suffixed the JSON with conversational text. Both
-        // providers' responses end up parsing into the same JSON structure the Agent Debate
-        // logic expects downstream.
+        return await this.#parseJSONWithRepair(rawText, prompt);
+    }
+
+    // Normalizes output shape (strips markdown fencing, extracts the {...} block in case the
+    // model prefaced/suffixed the JSON with conversational text) and parses it. If parsing
+    // still fails, this does NOT give up immediately: it re-prompts with the malformed text
+    // and the exact parse error, asking the model to correct it, and if that also fails it
+    // escalates once more to a stronger dedicated JSON-repair model before finally throwing.
+    async #parseJSONWithRepair(rawText, originalPrompt, attempt = 0) {
         const fenceStripped = stripJSONFence(rawText);
         const jsonCandidate = extractJSONBlock(fenceStripped);
 
@@ -111,7 +120,35 @@ class AIEngine {
             return JSON.parse(jsonCandidate);
         } catch (parseError) {
             console.error(`[AIEngine] Failed to parse model response as JSON even after extraction. Raw response (truncated): ${rawText.slice(0, 200)}`);
-            throw new Error(`AIEngine received a non-JSON response from the model: ${parseError.message}`);
+
+            if (!this.openRouterApiKey) {
+                throw new Error(`AIEngine received a non-JSON response from the model: ${parseError.message}`);
+            }
+
+            // Attempt 0 -> repair re-prompt on the standard fallback model.
+            // Attempt 1 -> one more try on a stronger dedicated repair model.
+            const repairModel = attempt === 0 ? OPENROUTER_FALLBACK_MODEL : JSON_REPAIR_FALLBACK_MODEL;
+            if (attempt >= 2) {
+                throw new Error(`AIEngine received a non-JSON response from the model after repair attempts: ${parseError.message}`);
+            }
+
+            console.warn(`[AIEngine] Re-prompting ${repairModel} to repair invalid JSON (attempt ${attempt + 1})...`);
+            const repairPrompt = `${originalPrompt}
+
+Your previous response could not be parsed as JSON. It failed with this error: "${parseError.message}".
+Your previous (invalid) response was:
+${rawText}
+
+Re-output ONLY the corrected, valid JSON object matching the required shape above. Do not include any explanation, markdown, or commentary - your entire response must be valid JSON.`;
+
+            let repairedText;
+            try {
+                repairedText = await this.#generateWithOpenRouter(repairPrompt, repairModel);
+            } catch (repairError) {
+                throw new Error(`AIEngine JSON repair via ${repairModel} failed: ${repairError.message}`);
+            }
+
+            return await this.#parseJSONWithRepair(repairedText, originalPrompt, attempt + 1);
         }
     }
 

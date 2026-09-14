@@ -44,6 +44,114 @@ describe('BrokerClient Execution Architecture', () => {
         expect(requestBody.qty).toBe('100');
         expect(requestBody.take_profit.limit_price).toBe('11.00');
         expect(requestBody.stop_loss.stop_price).toBe('9.50');
+        // Brackets must stay protected across sessions, not expire after one day (P0 fix).
+        expect(requestBody.time_in_force).toBe('gtc');
+    });
+});
+
+describe('BrokerClient Market Scanner', () => {
+    let broker;
+    const originalFetch = global.fetch;
+
+    beforeEach(() => {
+        broker = new BrokerClient();
+    });
+
+    afterEach(() => {
+        global.fetch = originalFetch;
+    });
+
+    test('scanMarketMovers reads volume from the latest fetched bar, not the nonexistent mover.volume field', async () => {
+        global.fetch = jest.fn((url) => {
+            if (url.includes('/screener/')) {
+                return Promise.resolve({
+                    ok: true,
+                    json: () => Promise.resolve({
+                        gainers: [{ symbol: 'TEST', price: 10, percent_change: 5 }], // no `volume` field
+                        losers: []
+                    })
+                });
+            }
+            if (url.includes('/bars')) {
+                const bars = Array.from({ length: 20 }, (_, i) => ({ c: 10, h: 11, l: 9, v: 1000 + i }));
+                return Promise.resolve({
+                    ok: true,
+                    json: () => Promise.resolve({ bars: { TEST: bars } })
+                });
+            }
+            if (url.includes('finnhub')) {
+                return Promise.resolve({ ok: true, json: () => Promise.resolve({ earningsCalendar: [] }) });
+            }
+            return Promise.resolve({ ok: true, json: () => Promise.resolve({}) });
+        });
+
+        const setups = await broker.scanMarketMovers([], 1);
+
+        expect(setups).toHaveLength(1);
+        expect(setups[0].volume).toBe(1019); // the last bar's `v`, not `mover.volume` (undefined)
+    });
+});
+
+describe('BrokerClient Position Reconciliation Support', () => {
+    let broker;
+    const originalFetch = global.fetch;
+
+    beforeEach(() => {
+        broker = new BrokerClient();
+    });
+
+    afterEach(() => {
+        global.fetch = originalFetch;
+    });
+
+    test('getPositions fetches live positions from Alpaca', async () => {
+        global.fetch = jest.fn(() => Promise.resolve({
+            ok: true,
+            json: () => Promise.resolve([{ symbol: 'AAPL', qty: '1' }])
+        }));
+
+        const positions = await broker.getPositions();
+
+        expect(global.fetch).toHaveBeenCalledWith(
+            expect.stringContaining('/v2/positions'),
+            expect.any(Object)
+        );
+        expect(positions).toEqual([{ symbol: 'AAPL', qty: '1' }]);
+    });
+
+    test('getLastFilledOrder returns the most recent filled order on the given side', async () => {
+        global.fetch = jest.fn(() => Promise.resolve({
+            ok: true,
+            json: () => Promise.resolve([
+                { side: 'sell', status: 'filled', filled_avg_price: '10.07', filled_at: '2026-09-02T14:01:18Z' },
+                { side: 'buy', status: 'filled', filled_avg_price: '13.01', filled_at: '2026-09-02T13:32:37Z' }
+            ])
+        }));
+
+        const order = await broker.getLastFilledOrder('RIBBU', 'sell');
+
+        expect(order.filled_avg_price).toBe('10.07');
+    });
+
+    test('getLastFilledOrder returns null when there is no verifiable closing fill', async () => {
+        global.fetch = jest.fn(() => Promise.resolve({ ok: true, json: () => Promise.resolve([]) }));
+
+        const order = await broker.getLastFilledOrder('UNKNOWN', 'sell');
+
+        expect(order).toBeNull();
+    });
+
+    test('getOrderHistory fetches the full all-time, all-status order history for a symbol', async () => {
+        const orders = [{ side: 'buy', status: 'filled' }, { side: 'sell', status: 'canceled' }];
+        global.fetch = jest.fn(() => Promise.resolve({ ok: true, json: () => Promise.resolve(orders) }));
+
+        const result = await broker.getOrderHistory('WETO');
+
+        expect(global.fetch).toHaveBeenCalledWith(
+            expect.stringContaining('status=all&symbols=WETO'),
+            expect.any(Object)
+        );
+        expect(result).toEqual(orders);
     });
 });
 

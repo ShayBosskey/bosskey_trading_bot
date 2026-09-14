@@ -181,3 +181,85 @@ describe('OpenRouter fallback routing', () => {
         await expect(engine.proposeTradeSetup(marketData)).rejects.toThrow('Agent A (Trader) unavailable');
     });
 });
+
+describe('Malformed JSON repair', () => {
+    let engine;
+    let generateContentMock;
+    const originalFetch = global.fetch;
+    const originalApiKey = process.env.OPENROUTER_API_KEY;
+
+    const marketData = {
+        symbol: 'TEST',
+        price: 10,
+        dailyChange: '5.00',
+        volume: 1000000,
+        sma_20: 9,
+        rsi_14: 65
+    };
+
+    beforeEach(() => {
+        process.env.OPENROUTER_API_KEY = 'test_openrouter_key';
+        engine = new AIEngine();
+        generateContentMock = engine.ai.models.generateContent;
+        generateContentMock.mockReset();
+    });
+
+    afterEach(() => {
+        global.fetch = originalFetch;
+        process.env.OPENROUTER_API_KEY = originalApiKey;
+    });
+
+    test('re-prompts the model with the parse error when Gemini returns unparseable JSON, and succeeds on the repair reply', async () => {
+        generateContentMock.mockResolvedValueOnce({ text: 'The stock looks great but here is no JSON at all.' });
+
+        global.fetch = jest.fn().mockResolvedValueOnce({
+            ok: true,
+            json: async () => ({
+                choices: [{ message: { content: JSON.stringify({ action: 'HOLD', target_symbol: 'NONE', confidence_score: 10, reasoning: 'Repaired.' }) } }]
+            })
+        });
+
+        const proposal = await engine.proposeTradeSetup(marketData);
+
+        expect(global.fetch).toHaveBeenCalledTimes(1);
+        const requestBody = JSON.parse(global.fetch.mock.calls[0][1].body);
+        expect(requestBody.model).toBe('meta-llama/llama-3.1-8b-instruct');
+        expect(requestBody.messages[0].content).toContain('could not be parsed as JSON');
+        expect(proposal.action).toBe('HOLD');
+        expect(proposal.reasoning).toBe('Repaired.');
+    });
+
+    test('escalates to the dedicated JSON-repair model when the first repair attempt is also unparseable', async () => {
+        generateContentMock.mockResolvedValueOnce({ text: 'not json' });
+
+        global.fetch = jest.fn()
+            .mockResolvedValueOnce({
+                ok: true,
+                json: async () => ({ choices: [{ message: { content: 'still not json' } }] })
+            })
+            .mockResolvedValueOnce({
+                ok: true,
+                json: async () => ({
+                    choices: [{ message: { content: JSON.stringify({ action: 'HOLD', target_symbol: 'NONE', confidence_score: 5, reasoning: 'Fixed by big model.' }) } }]
+                })
+            });
+
+        const proposal = await engine.proposeTradeSetup(marketData);
+
+        expect(global.fetch).toHaveBeenCalledTimes(2);
+        const secondRequestBody = JSON.parse(global.fetch.mock.calls[1][1].body);
+        expect(secondRequestBody.model).toBe('meta-llama/llama-3.3-70b-instruct');
+        expect(proposal.reasoning).toBe('Fixed by big model.');
+    });
+
+    test('throws after exhausting repair attempts on the escalation model', async () => {
+        generateContentMock.mockResolvedValueOnce({ text: 'not json' });
+
+        global.fetch = jest.fn()
+            .mockResolvedValueOnce({ ok: true, json: async () => ({ choices: [{ message: { content: 'still not json' } }] }) })
+            .mockResolvedValueOnce({ ok: true, json: async () => ({ choices: [{ message: { content: 'still still not json' } }] }) });
+
+        await expect(engine.proposeTradeSetup(marketData)).rejects.toThrow('Agent A (Trader) unavailable');
+        expect(global.fetch).toHaveBeenCalledTimes(2);
+    });
+});
