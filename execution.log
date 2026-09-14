@@ -9078,3 +9078,1634 @@ Next Action: HOLD | Target: NONE | Confidence Score: 100 | Reasoning: Fallback d
 [10.9.2026, 22:15:01] [Settlement] ==================================================
 [10.9.2026, 22:15:01] [Settlement] No trades were closed today. No settlement required.
 [Notifier] 📱 Push notification sent: "Daily Settlement Report"
+◇ injected env (12) from .env // tip: ⌁ auth for agents [www.vestauth.com]
+◇ injected env (6) from ../.env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+◇ injected env (0) from ../.env // tip: ◈ secrets for agents [www.dotenvx.com]
+[11.9.2026, 15:00:01] [TradingBot] ==================================================
+[11.9.2026, 15:00:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[11.9.2026, 15:00:02] [TradingBot] ==================================================
+[11.9.2026, 15:00:02] [TradingBot] System Initializing in [PAPER] Mode.
+[11.9.2026, 15:00:02] [TradingBot] System currently holding 3/5 active positions.
+[11.9.2026, 15:00:02] [TradingBot] Active Capital Available: $63237.00
+[Broker] Pinging Screener API. Looking for 2 valid setups...
+[Broker] Valid target added: TNON
+[Broker] Valid target added: DBGI
+[Agent A: Trader] Routing evaluation through gemini-3.5-flash...
+[Agent A: Trader] Proposal for TNON: HOLD (confidence 95)
+[11.9.2026, 15:00:12] [TradingBot] --- AI TRADE DECISION FOR TNON ---
+[11.9.2026, 15:00:12] [TradingBot] Action: HOLD | Confidence: 95
+[11.9.2026, 15:00:12] [TradingBot] Reasoning: The setup requires a HOLD action due to missing volume data and the current price failing to strictly exceed the 20-Day SMA.
+[11.9.2026, 15:00:12] [TradingBot] Executing HOLD strategy for TNON.
+[Agent A: Trader] Routing evaluation through gemini-3.5-flash...
+[AIEngine] Gemini primary call failed (503). Rerouting through OpenRouter fallback (meta-llama/llama-3.1-8b-instruct)...
+[AIEngine] OpenRouter fallback succeeded.
+[Agent A: Trader] Proposal for DBGI: BUY (confidence 78)
+[Agent B: Risk Auditor] Reviewing proposal for DBGI...
+[Agent B: Risk Auditor] REJECTED DBGI: The trader erroneously claimed the price of 6.79 is above the 20-Day SMA of 8.02 while crucial volume data is missing.
+[11.9.2026, 15:00:30] [TradingBot] --- AI TRADE DECISION FOR DBGI ---
+[11.9.2026, 15:00:30] [TradingBot] Action: HOLD | Confidence: 78
+[11.9.2026, 15:00:30] [TradingBot] Reasoning: Vetoed by Risk Auditor: The trader erroneously claimed the price of 6.79 is above the 20-Day SMA of 8.02 while crucial volume data is missing.
+[11.9.2026, 15:00:30] [TradingBot] [Risk Auditor] Approved: false | Risk Score: 90 | Notes: The proposal is rejected due to inaccurate technical analysis by the trader and significant execution risks from undefined volume.
+[11.9.2026, 15:00:30] [TradingBot] Executing HOLD strategy for DBGI.
+◇ injected env (12) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+◇ injected env (6) from ../.env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+◇ injected env (0) from ../.env // tip: ⌘ enable debugging { debug: true }
+[11.9.2026, 15:15:02] [TradingBot] ==================================================
+[11.9.2026, 15:15:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[11.9.2026, 15:15:02] [TradingBot] ==================================================
+[11.9.2026, 15:15:02] [TradingBot] System Initializing in [PAPER] Mode.
+[11.9.2026, 15:15:02] [TradingBot] System currently holding 3/5 active positions.
+[11.9.2026, 15:15:02] [TradingBot] Active Capital Available: $63237.00
+[Broker] Pinging Screener API. Looking for 2 valid setups...
+[Broker] Valid target added: TNON
+[Broker] Valid target added: DBGI
+[Agent A: Trader] Routing evaluation through gemini-3.5-flash...
+[Agent A: Trader] Proposal for TNON: HOLD (confidence 95)
+[11.9.2026, 15:15:17] [TradingBot] --- AI TRADE DECISION FOR TNON ---
+[11.9.2026, 15:15:17] [TradingBot] Action: HOLD | Confidence: 95
+[11.9.2026, 15:15:17] [TradingBot] Reasoning: Missing volume data and a chaotic RSI of 38.51 despite a 117.21 percent daily change require a HOLD under our strict risk management rules.
+[11.9.2026, 15:15:17] [TradingBot] Executing HOLD strategy for TNON.
+[Agent A: Trader] Routing evaluation through gemini-3.5-flash...
+[Agent A: Trader] Proposal for DBGI: HOLD (confidence 95)
+[11.9.2026, 15:15:32] [TradingBot] --- AI TRADE DECISION FOR DBGI ---
+[11.9.2026, 15:15:32] [TradingBot] Action: HOLD | Confidence: 95
+[11.9.2026, 15:15:32] [TradingBot] Reasoning: The setup fails the momentum breakout criteria because the current price of 6.79 remains below the 20-day SMA of 8.02 and volume data is undefined.
+[11.9.2026, 15:15:32] [TradingBot] Executing HOLD strategy for DBGI.
+◇ injected env (12) from .env // tip: ⌘ enable debugging { debug: true }
+◇ injected env (6) from ../.env // tip: ⌁ auth for agents [www.vestauth.com]
+◇ injected env (0) from ../.env // tip: ◈ encrypted .env [www.dotenvx.com]
+[11.9.2026, 15:30:02] [TradingBot] ==================================================
+[11.9.2026, 15:30:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[11.9.2026, 15:30:02] [TradingBot] ==================================================
+[11.9.2026, 15:30:02] [TradingBot] System Initializing in [PAPER] Mode.
+[11.9.2026, 15:30:02] [TradingBot] System currently holding 3/5 active positions.
+[11.9.2026, 15:30:02] [TradingBot] Active Capital Available: $63237.00
+[Broker] Pinging Screener API. Looking for 2 valid setups...
+[Broker] Valid target added: TNON
+[Broker] Valid target added: DBGI
+[Agent A: Trader] Routing evaluation through gemini-3.5-flash...
+[Agent A: Trader] Proposal for TNON: HOLD (confidence 95)
+[11.9.2026, 15:30:07] [TradingBot] --- AI TRADE DECISION FOR TNON ---
+[11.9.2026, 15:30:07] [TradingBot] Action: HOLD | Confidence: 95
+[11.9.2026, 15:30:07] [TradingBot] Reasoning: The trade setup contains undefined volume data and the current price is equal to but not strictly greater than the 20-Day SMA.
+[11.9.2026, 15:30:07] [TradingBot] Executing HOLD strategy for TNON.
+[Agent A: Trader] Routing evaluation through gemini-3.5-flash...
+[Agent A: Trader] Proposal for DBGI: HOLD (confidence 95)
+[11.9.2026, 15:30:12] [TradingBot] --- AI TRADE DECISION FOR DBGI ---
+[11.9.2026, 15:30:12] [TradingBot] Action: HOLD | Confidence: 95
+[11.9.2026, 15:30:12] [TradingBot] Reasoning: Action is HOLD due to missing volume data and the current price trading below the 20-Day SMA.
+[11.9.2026, 15:30:12] [TradingBot] Executing HOLD strategy for DBGI.
+◇ injected env (12) from .env // tip: ⌘ enable debugging { debug: true }
+◇ injected env (6) from ../.env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+◇ injected env (0) from ../.env // tip: ⌘ suppress logs { quiet: true }
+[11.9.2026, 15:45:02] [TradingBot] ==================================================
+[11.9.2026, 15:45:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[11.9.2026, 15:45:02] [TradingBot] ==================================================
+[11.9.2026, 15:45:02] [TradingBot] System Initializing in [PAPER] Mode.
+[11.9.2026, 15:45:02] [TradingBot] System currently holding 3/5 active positions.
+[11.9.2026, 15:45:02] [TradingBot] Active Capital Available: $63237.00
+[Broker] Pinging Screener API. Looking for 2 valid setups...
+[Broker] Valid target added: TNON
+[Broker] Valid target added: ACVA
+[Agent A: Trader] Routing evaluation through gemini-3.5-flash...
+[Agent A: Trader] Proposal for TNON: HOLD (confidence 95)
+[11.9.2026, 15:45:07] [TradingBot] --- AI TRADE DECISION FOR TNON ---
+[11.9.2026, 15:45:07] [TradingBot] Action: HOLD | Confidence: 95
+[11.9.2026, 15:45:07] [TradingBot] Reasoning: The setup requires a HOLD action because critical volume data is undefined and missing despite the strong price breakout above SMA.
+[11.9.2026, 15:45:07] [TradingBot] Executing HOLD strategy for TNON.
+[Agent A: Trader] Routing evaluation through gemini-3.5-flash...
+[Agent A: Trader] Proposal for ACVA: HOLD (confidence 95)
+[11.9.2026, 15:45:12] [TradingBot] --- AI TRADE DECISION FOR ACVA ---
+[11.9.2026, 15:45:12] [TradingBot] Action: HOLD | Confidence: 95
+[11.9.2026, 15:45:12] [TradingBot] Reasoning: Undefined volume data constitutes missing critical metrics triggering a mandatory hold under strict discipline guidelines
+[11.9.2026, 15:45:12] [TradingBot] Executing HOLD strategy for ACVA.
+◇ injected env (12) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+◇ injected env (6) from ../.env // tip: ⌘ enable debugging { debug: true }
+◇ injected env (0) from ../.env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+[11.9.2026, 16:00:02] [TradingBot] ==================================================
+[11.9.2026, 16:00:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[11.9.2026, 16:00:02] [TradingBot] ==================================================
+[11.9.2026, 16:00:02] [TradingBot] System Initializing in [PAPER] Mode.
+[11.9.2026, 16:00:02] [TradingBot] System currently holding 3/5 active positions.
+[11.9.2026, 16:00:02] [TradingBot] Active Capital Available: $63237.00
+[Broker] Pinging Screener API. Looking for 2 valid setups...
+[Broker] Valid target added: ACVA
+[Broker] Valid target added: TNON
+[Agent A: Trader] Routing evaluation through gemini-3.5-flash...
+[Agent A: Trader] Proposal for ACVA: HOLD (confidence 95)
+[11.9.2026, 16:00:09] [TradingBot] --- AI TRADE DECISION FOR ACVA ---
+[11.9.2026, 16:00:09] [TradingBot] Action: HOLD | Confidence: 95
+[11.9.2026, 16:00:09] [TradingBot] Reasoning: The trade is placed on hold because the critical volume data is missing which prevents confirmation of the momentum breakout.
+[11.9.2026, 16:00:09] [TradingBot] Executing HOLD strategy for ACVA.
+[Agent A: Trader] Routing evaluation through gemini-3.5-flash...
+[Agent A: Trader] Proposal for TNON: HOLD (confidence 95)
+[11.9.2026, 16:00:14] [TradingBot] --- AI TRADE DECISION FOR TNON ---
+[11.9.2026, 16:00:14] [TradingBot] Action: HOLD | Confidence: 95
+[11.9.2026, 16:00:14] [TradingBot] Reasoning: The momentum breakout setup cannot be validated because the volume data is missing.
+[11.9.2026, 16:00:14] [TradingBot] Executing HOLD strategy for TNON.
+◇ injected env (12) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+◇ injected env (6) from ../.env // tip: ⌘ override existing { override: true }
+◇ injected env (0) from ../.env // tip: ⌘ override existing { override: true }
+[11.9.2026, 16:15:02] [TradingBot] ==================================================
+[11.9.2026, 16:15:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[11.9.2026, 16:15:02] [TradingBot] ==================================================
+[11.9.2026, 16:15:02] [TradingBot] System Initializing in [PAPER] Mode.
+[11.9.2026, 16:15:02] [TradingBot] System currently holding 3/5 active positions.
+[11.9.2026, 16:15:02] [TradingBot] Active Capital Available: $63237.00
+[Broker] Pinging Screener API. Looking for 2 valid setups...
+[Broker] Valid target added: PCLA
+[Broker] Valid target added: TNON
+[Agent A: Trader] Routing evaluation through gemini-3.5-flash...
+[Agent A: Trader] Proposal for PCLA: HOLD (confidence 95)
+[11.9.2026, 16:15:09] [TradingBot] --- AI TRADE DECISION FOR PCLA ---
+[11.9.2026, 16:15:09] [TradingBot] Action: HOLD | Confidence: 95
+[11.9.2026, 16:15:10] [TradingBot] Reasoning: The trade setup is rejected and placed on HOLD due to missing volume data which is critical for confirming a high-momentum breakout.
+[11.9.2026, 16:15:10] [TradingBot] Executing HOLD strategy for PCLA.
+[Agent A: Trader] Routing evaluation through gemini-3.5-flash...
+[Agent A: Trader] Proposal for TNON: HOLD (confidence 95)
+[11.9.2026, 16:15:14] [TradingBot] --- AI TRADE DECISION FOR TNON ---
+[11.9.2026, 16:15:14] [TradingBot] Action: HOLD | Confidence: 95
+[11.9.2026, 16:15:14] [TradingBot] Reasoning: The trade is on hold because volume data is undefined and Rule 4 mandates holding when critical data is missing.
+[11.9.2026, 16:15:14] [TradingBot] Executing HOLD strategy for TNON.
+◇ injected env (12) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+◇ injected env (6) from ../.env // tip: ◈ encrypted .env [www.dotenvx.com]
+◇ injected env (0) from ../.env // tip: ◈ encrypted .env [www.dotenvx.com]
+[11.9.2026, 16:30:02] [TradingBot] ==================================================
+[11.9.2026, 16:30:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[11.9.2026, 16:30:02] [TradingBot] ==================================================
+[11.9.2026, 16:30:02] [TradingBot] System Initializing in [PAPER] Mode.
+[11.9.2026, 16:30:02] [TradingBot] System currently holding 3/5 active positions.
+[11.9.2026, 16:30:02] [TradingBot] Active Capital Available: $63237.00
+[Broker] Pinging Screener API. Looking for 2 valid setups...
+[Broker] Valid target added: TNON
+[Broker] Valid target added: PCLA
+[Agent A: Trader] Routing evaluation through gemini-3.5-flash...
+[Agent A: Trader] Proposal for TNON: HOLD (confidence 90)
+[11.9.2026, 16:30:08] [TradingBot] --- AI TRADE DECISION FOR TNON ---
+[11.9.2026, 16:30:08] [TradingBot] Action: HOLD | Confidence: 90
+[11.9.2026, 16:30:08] [TradingBot] Reasoning: Position is on hold because critical volume data is undefined despite strong positive price momentum.
+[11.9.2026, 16:30:08] [TradingBot] Executing HOLD strategy for TNON.
+[Agent A: Trader] Routing evaluation through gemini-3.5-flash...
+[Agent A: Trader] Proposal for PCLA: HOLD (confidence 95)
+[11.9.2026, 16:30:14] [TradingBot] --- AI TRADE DECISION FOR PCLA ---
+[11.9.2026, 16:30:14] [TradingBot] Action: HOLD | Confidence: 95
+[11.9.2026, 16:30:15] [TradingBot] Reasoning: Trade is held because critical volume data is undefined which violates our strict quantitative data integrity rules.
+[11.9.2026, 16:30:15] [TradingBot] Executing HOLD strategy for PCLA.
+◇ injected env (12) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+◇ injected env (6) from ../.env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+◇ injected env (0) from ../.env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+[11.9.2026, 16:45:01] [TradingBot] ==================================================
+[11.9.2026, 16:45:01] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[11.9.2026, 16:45:01] [TradingBot] ==================================================
+[11.9.2026, 16:45:01] [TradingBot] System Initializing in [PAPER] Mode.
+[11.9.2026, 16:45:02] [TradingBot] System currently holding 3/5 active positions.
+[11.9.2026, 16:45:02] [TradingBot] Active Capital Available: $63237.00
+[Broker] Pinging Screener API. Looking for 2 valid setups...
+[Broker] Valid target added: TNON
+[Broker] Valid target added: ACVA
+[Agent A: Trader] Routing evaluation through gemini-3.5-flash...
+[Agent A: Trader] Proposal for TNON: HOLD (confidence 95)
+[11.9.2026, 16:45:08] [TradingBot] --- AI TRADE DECISION FOR TNON ---
+[11.9.2026, 16:45:08] [TradingBot] Action: HOLD | Confidence: 95
+[11.9.2026, 16:45:08] [TradingBot] Reasoning: The setup requires a HOLD action because key volume data is undefined and trading without liquidity verification violates our strict risk parameters.
+[11.9.2026, 16:45:08] [TradingBot] Executing HOLD strategy for TNON.
+[Agent A: Trader] Routing evaluation through gemini-3.5-flash...
+[Agent A: Trader] Proposal for ACVA: HOLD (confidence 95)
+[11.9.2026, 16:45:13] [TradingBot] --- AI TRADE DECISION FOR ACVA ---
+[11.9.2026, 16:45:13] [TradingBot] Action: HOLD | Confidence: 95
+[11.9.2026, 16:45:13] [TradingBot] Reasoning: The trade is placed on HOLD because critical volume data is missing from the setup.
+[11.9.2026, 16:45:13] [TradingBot] Executing HOLD strategy for ACVA.
+◇ injected env (12) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+◇ injected env (6) from ../.env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+◇ injected env (0) from ../.env // tip: ◈ encrypted .env [www.dotenvx.com]
+[11.9.2026, 17:00:02] [TradingBot] ==================================================
+[11.9.2026, 17:00:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[11.9.2026, 17:00:02] [TradingBot] ==================================================
+[11.9.2026, 17:00:02] [TradingBot] System Initializing in [PAPER] Mode.
+[11.9.2026, 17:00:02] [TradingBot] System currently holding 3/5 active positions.
+[11.9.2026, 17:00:02] [TradingBot] Active Capital Available: $63237.00
+[Broker] Pinging Screener API. Looking for 2 valid setups...
+[Broker] Valid target added: TNON
+[Broker] Valid target added: ACVA
+[Agent A: Trader] Routing evaluation through gemini-3.5-flash...
+[Agent A: Trader] Proposal for TNON: HOLD (confidence 95)
+[11.9.2026, 17:00:09] [TradingBot] --- AI TRADE DECISION FOR TNON ---
+[11.9.2026, 17:00:10] [TradingBot] Action: HOLD | Confidence: 95
+[11.9.2026, 17:00:10] [TradingBot] Reasoning: Trade aborted and placed on hold due to missing volume data preventing validation of the breakout strength.
+[11.9.2026, 17:00:10] [TradingBot] Executing HOLD strategy for TNON.
+[Agent A: Trader] Routing evaluation through gemini-3.5-flash...
+[Agent A: Trader] Proposal for ACVA: HOLD (confidence 90)
+[11.9.2026, 17:00:14] [TradingBot] --- AI TRADE DECISION FOR ACVA ---
+[11.9.2026, 17:00:14] [TradingBot] Action: HOLD | Confidence: 90
+[11.9.2026, 17:00:14] [TradingBot] Reasoning: Position is on hold due to missing volume data which is a critical metric for validating momentum breakouts.
+[11.9.2026, 17:00:14] [TradingBot] Executing HOLD strategy for ACVA.
+◇ injected env (12) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+◇ injected env (6) from ../.env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+◇ injected env (0) from ../.env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+[11.9.2026, 17:15:02] [TradingBot] ==================================================
+[11.9.2026, 17:15:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[11.9.2026, 17:15:02] [TradingBot] ==================================================
+[11.9.2026, 17:15:02] [TradingBot] System Initializing in [PAPER] Mode.
+[11.9.2026, 17:15:02] [TradingBot] System currently holding 3/5 active positions.
+[11.9.2026, 17:15:02] [TradingBot] Active Capital Available: $63237.00
+[Broker] Pinging Screener API. Looking for 2 valid setups...
+[Broker] Valid target added: TNON
+[Broker] Valid target added: ACVA
+[Agent A: Trader] Routing evaluation through gemini-3.5-flash...
+[Agent A: Trader] Proposal for TNON: HOLD (confidence 95)
+[11.9.2026, 17:15:08] [TradingBot] --- AI TRADE DECISION FOR TNON ---
+[11.9.2026, 17:15:08] [TradingBot] Action: HOLD | Confidence: 95
+[11.9.2026, 17:15:08] [TradingBot] Reasoning: The trade is held because critical volume data is undefined which constitutes missing data and violates safety parameters for momentum confirmation.
+[11.9.2026, 17:15:08] [TradingBot] Executing HOLD strategy for TNON.
+[Agent A: Trader] Routing evaluation through gemini-3.5-flash...
+[AIEngine] Gemini primary call failed (429). Rerouting through OpenRouter fallback (meta-llama/llama-3.1-8b-instruct)...
+[AIEngine] OpenRouter fallback succeeded.
+[AIEngine] Failed to parse model response as JSON even after extraction. Raw response (truncated): {
+  "action": "BUY",
+  "target_symbol": "ACVA",
+  "confidence_score": 95,
+  "reasoning": The stock price of ACVA is above SMA and has a highly positive daily change
+}
+[Agent A CRITICAL]: AI evaluation unavailable for ACVA - AIEngine received a non-JSON response from the model: Unexpected token 'T', ..."asoning": The stock "... is not valid JSON
+[11.9.2026, 17:15:09] [TradingBot] [System Error]: Error: Agent A (Trader) unavailable for ACVA: AIEngine received a non-JSON response from the model: Unexpected token 'T', ..."asoning": The stock "... is not valid JSON
+    at AIEngine.proposeTradeSetup (/home/adminbosskey/bosskey_trading_bot/src/AIEngine.js:158:19)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async AIEngine.evaluateBatch (/home/adminbosskey/bosskey_trading_bot/src/AIEngine.js:213:26)
+    at async runTradingCycle (/home/adminbosskey/bosskey_trading_bot/TradingBot.js:58:30)
+[Notifier] 📱 Push notification sent: "Trading Bot Error"
+◇ injected env (12) from .env // tip: ⌘ suppress logs { quiet: true }
+◇ injected env (6) from ../.env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+◇ injected env (0) from ../.env // tip: ⌁ auth for agents [www.vestauth.com]
+[11.9.2026, 17:30:02] [TradingBot] ==================================================
+[11.9.2026, 17:30:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[11.9.2026, 17:30:02] [TradingBot] ==================================================
+[11.9.2026, 17:30:02] [TradingBot] System Initializing in [PAPER] Mode.
+[11.9.2026, 17:30:02] [TradingBot] System currently holding 3/5 active positions.
+[11.9.2026, 17:30:02] [TradingBot] Active Capital Available: $63237.00
+[Broker] Pinging Screener API. Looking for 2 valid setups...
+[Broker] Valid target added: TNON
+[Broker] Valid target added: ACVA
+[Agent A: Trader] Routing evaluation through gemini-3.5-flash...
+[AIEngine] Gemini primary call failed (429). Rerouting through OpenRouter fallback (meta-llama/llama-3.1-8b-instruct)...
+[AIEngine] OpenRouter fallback succeeded.
+[Agent A: Trader] Proposal for TNON: HOLD (confidence 100)
+[11.9.2026, 17:30:06] [TradingBot] --- AI TRADE DECISION FOR TNON ---
+[11.9.2026, 17:30:06] [TradingBot] Action: HOLD | Confidence: 100
+[11.9.2026, 17:30:06] [TradingBot] Reasoning: Current Price 8.81 or 20-Day SMA 5.44 not under 5.00, but there's missing volume data which makes the setup chaotic.
+[11.9.2026, 17:30:06] [TradingBot] Executing HOLD strategy for TNON.
+[Agent A: Trader] Routing evaluation through gemini-3.5-flash...
+[AIEngine] Gemini primary call failed (429). Rerouting through OpenRouter fallback (meta-llama/llama-3.1-8b-instruct)...
+[AIEngine] OpenRouter fallback succeeded.
+[Agent A: Trader] Proposal for ACVA: BUY (confidence 90)
+[Agent B: Risk Auditor] Reviewing proposal for ACVA...
+[AIEngine] Gemini primary call failed (429). Rerouting through OpenRouter fallback (meta-llama/llama-3.1-8b-instruct)...
+[AIEngine] OpenRouter fallback succeeded.
+[Agent B: Risk Auditor] REJECTED ACVA: Thin volume on a large percentage move is a red flag for excessive slippage risk
+[11.9.2026, 17:30:13] [TradingBot] --- AI TRADE DECISION FOR ACVA ---
+[11.9.2026, 17:30:13] [TradingBot] Action: HOLD | Confidence: 90
+[11.9.2026, 17:30:13] [TradingBot] Reasoning: Vetoed by Risk Auditor: Thin volume on a large percentage move is a red flag for excessive slippage risk
+[11.9.2026, 17:30:13] [TradingBot] [Risk Auditor] Approved: false | Risk Score: 30 | Notes: Volume undefined, cannot assess slippage risk, and RSI reading of 80.36 suggests potential mean-reversion
+[11.9.2026, 17:30:13] [TradingBot] Executing HOLD strategy for ACVA.
+◇ injected env (12) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+◇ injected env (6) from ../.env // tip: ⌘ override existing { override: true }
+◇ injected env (0) from ../.env // tip: ◈ encrypted .env [www.dotenvx.com]
+[11.9.2026, 17:45:02] [TradingBot] ==================================================
+[11.9.2026, 17:45:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[11.9.2026, 17:45:02] [TradingBot] ==================================================
+[11.9.2026, 17:45:02] [TradingBot] System Initializing in [PAPER] Mode.
+[11.9.2026, 17:45:02] [TradingBot] System currently holding 3/5 active positions.
+[11.9.2026, 17:45:02] [TradingBot] Active Capital Available: $63237.00
+[Broker] Pinging Screener API. Looking for 2 valid setups...
+[Broker] Valid target added: TNON
+[Broker] Valid target added: ACVA
+[Agent A: Trader] Routing evaluation through gemini-3.5-flash...
+[Agent A: Trader] Proposal for TNON: HOLD (confidence 95)
+[11.9.2026, 17:45:10] [TradingBot] --- AI TRADE DECISION FOR TNON ---
+[11.9.2026, 17:45:10] [TradingBot] Action: HOLD | Confidence: 95
+[11.9.2026, 17:45:10] [TradingBot] Reasoning: The trade setup is on hold because critical volume data is undefined and trading without it violates risk parameters.
+[11.9.2026, 17:45:10] [TradingBot] Executing HOLD strategy for TNON.
+[Agent A: Trader] Routing evaluation through gemini-3.5-flash...
+[Agent A: Trader] Proposal for ACVA: HOLD (confidence 95)
+[11.9.2026, 17:45:16] [TradingBot] --- AI TRADE DECISION FOR ACVA ---
+[11.9.2026, 17:45:16] [TradingBot] Action: HOLD | Confidence: 95
+[11.9.2026, 17:45:16] [TradingBot] Reasoning: The trade is placed on hold because critical volume data is undefined and missing, which violates our strict risk management protocols regarding incomplete data.
+[11.9.2026, 17:45:16] [TradingBot] Executing HOLD strategy for ACVA.
+◇ injected env (12) from .env // tip: ⌘ suppress logs { quiet: true }
+◇ injected env (6) from ../.env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+◇ injected env (0) from ../.env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+[11.9.2026, 18:00:02] [TradingBot] ==================================================
+[11.9.2026, 18:00:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[11.9.2026, 18:00:02] [TradingBot] ==================================================
+[11.9.2026, 18:00:02] [TradingBot] System Initializing in [PAPER] Mode.
+[11.9.2026, 18:00:02] [TradingBot] System currently holding 3/5 active positions.
+[11.9.2026, 18:00:02] [TradingBot] Active Capital Available: $63237.00
+[Broker] Pinging Screener API. Looking for 2 valid setups...
+[Broker] Valid target added: TNON
+[Broker] Valid target added: ACVA
+[Agent A: Trader] Routing evaluation through gemini-3.5-flash...
+[AIEngine] Gemini primary call failed (429). Rerouting through OpenRouter fallback (meta-llama/llama-3.1-8b-instruct)...
+[AIEngine] OpenRouter fallback succeeded.
+[Agent A: Trader] Proposal for TNON: BUY (confidence 85)
+[Agent B: Risk Auditor] Reviewing proposal for TNON...
+[AIEngine] Gemini primary call failed (429). Rerouting through OpenRouter fallback (meta-llama/llama-3.1-8b-instruct)...
+[AIEngine] OpenRouter fallback succeeded.
+[Agent B: Risk Auditor] REJECTED TNON: Thin volume on a large percentage move is a red flag for slippage risk.
+[11.9.2026, 18:00:11] [TradingBot] --- AI TRADE DECISION FOR TNON ---
+[11.9.2026, 18:00:11] [TradingBot] Action: HOLD | Confidence: 85
+[11.9.2026, 18:00:11] [TradingBot] Reasoning: Vetoed by Risk Auditor: Thin volume on a large percentage move is a red flag for slippage risk.
+[11.9.2026, 18:00:11] [TradingBot] [Risk Auditor] Approved: false | Risk Score: 80 | Notes: The trader's confidence score is high, but the setup's reliance on a single indicator (daily change) and lack of volume data raise concerns about false breakout risk and slippage risk.
+[11.9.2026, 18:00:11] [TradingBot] Executing HOLD strategy for TNON.
+[Agent A: Trader] Routing evaluation through gemini-3.5-flash...
+[AIEngine] Gemini primary call failed (429). Rerouting through OpenRouter fallback (meta-llama/llama-3.1-8b-instruct)...
+[AIEngine] OpenRouter fallback succeeded.
+[Agent A: Trader] Proposal for ACVA: HOLD (confidence 0)
+[11.9.2026, 18:00:14] [TradingBot] --- AI TRADE DECISION FOR ACVA ---
+[11.9.2026, 18:00:14] [TradingBot] Action: HOLD | Confidence: 0
+[11.9.2026, 18:00:14] [TradingBot] Reasoning: Current Price 10.43 is above 5.00, but Daily Change 44.46% is highly positive and Price 10.43 is not greater than SMA 7.44.
+[11.9.2026, 18:00:14] [TradingBot] Executing HOLD strategy for ACVA.
+◇ injected env (12) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+◇ injected env (6) from ../.env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+◇ injected env (0) from ../.env // tip: ⌘ enable debugging { debug: true }
+[11.9.2026, 18:15:02] [TradingBot] ==================================================
+[11.9.2026, 18:15:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[11.9.2026, 18:15:02] [TradingBot] ==================================================
+[11.9.2026, 18:15:02] [TradingBot] System Initializing in [PAPER] Mode.
+[11.9.2026, 18:15:02] [TradingBot] System currently holding 3/5 active positions.
+[11.9.2026, 18:15:02] [TradingBot] Active Capital Available: $63237.00
+[Broker] Pinging Screener API. Looking for 2 valid setups...
+[Broker] Valid target added: TNON
+[Broker] Valid target added: ACVA
+[Agent A: Trader] Routing evaluation through gemini-3.5-flash...
+[AIEngine] Gemini primary call failed (429). Rerouting through OpenRouter fallback (meta-llama/llama-3.1-8b-instruct)...
+[AIEngine] OpenRouter fallback succeeded.
+[Agent A: Trader] Proposal for TNON: BUY (confidence 90)
+[Agent B: Risk Auditor] Reviewing proposal for TNON...
+[AIEngine] Gemini primary call failed (429). Rerouting through OpenRouter fallback (meta-llama/llama-3.1-8b-instruct)...
+[AIEngine] OpenRouter fallback succeeded.
+[Agent B: Risk Auditor] REJECTED TNON: Thin volume on a large percentage move is a red flag for slippage risk.
+[11.9.2026, 18:15:08] [TradingBot] --- AI TRADE DECISION FOR TNON ---
+[11.9.2026, 18:15:08] [TradingBot] Action: HOLD | Confidence: 90
+[11.9.2026, 18:15:08] [TradingBot] Reasoning: Vetoed by Risk Auditor: Thin volume on a large percentage move is a red flag for slippage risk.
+[11.9.2026, 18:15:08] [TradingBot] [Risk Auditor] Approved: false | Risk Score: 73 | Notes: Volume is undefined, indicating potential issues with liquidity, and the 14-Day RSI is high at 61.63, suggesting a false breakout risk.
+[11.9.2026, 18:15:08] [TradingBot] Executing HOLD strategy for TNON.
+[Agent A: Trader] Routing evaluation through gemini-3.5-flash...
+[AIEngine] Gemini primary call failed (429). Rerouting through OpenRouter fallback (meta-llama/llama-3.1-8b-instruct)...
+[AIEngine] OpenRouter fallback succeeded.
+[Agent A: Trader] Proposal for ACVA: BUY (confidence 95)
+[Agent B: Risk Auditor] Reviewing proposal for ACVA...
+[AIEngine] Gemini primary call failed (429). Rerouting through OpenRouter fallback (meta-llama/llama-3.1-8b-instruct)...
+[AIEngine] OpenRouter fallback succeeded.
+[Agent B: Risk Auditor] REJECTED ACVA: Thin volume on a large percentage move raises slippage risk.
+[11.9.2026, 18:15:12] [TradingBot] --- AI TRADE DECISION FOR ACVA ---
+[11.9.2026, 18:15:12] [TradingBot] Action: HOLD | Confidence: 95
+[11.9.2026, 18:15:12] [TradingBot] Reasoning: Vetoed by Risk Auditor: Thin volume on a large percentage move raises slippage risk.
+[11.9.2026, 18:15:13] [TradingBot] [Risk Auditor] Approved: false | Risk Score: 60 | Notes: High daily change and RSI with undefined volume warrant caution on slippage and false breakout risks.
+[11.9.2026, 18:15:13] [TradingBot] Executing HOLD strategy for ACVA.
+◇ injected env (12) from .env // tip: ⌁ auth for agents [www.vestauth.com]
+◇ injected env (6) from ../.env // tip: ⌘ enable debugging { debug: true }
+◇ injected env (0) from ../.env // tip: ◈ secrets for agents [www.dotenvx.com]
+[11.9.2026, 18:30:01] [TradingBot] ==================================================
+[11.9.2026, 18:30:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[11.9.2026, 18:30:02] [TradingBot] ==================================================
+[11.9.2026, 18:30:02] [TradingBot] System Initializing in [PAPER] Mode.
+[11.9.2026, 18:30:02] [TradingBot] System currently holding 3/5 active positions.
+[11.9.2026, 18:30:02] [TradingBot] Active Capital Available: $63237.00
+[Broker] Pinging Screener API. Looking for 2 valid setups...
+[Broker Error]: Alpaca API Error: 504
+[11.9.2026, 18:30:05] [TradingBot] [System Error]: Error: Alpaca API Error: 504
+    at BrokerClient.scanMarketMovers (/home/adminbosskey/bosskey_trading_bot/src/BrokerClient.js:58:37)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async runTradingCycle (/home/adminbosskey/bosskey_trading_bot/TradingBot.js:48:33)
+[Notifier] 📱 Push notification sent: "Trading Bot Error"
+◇ injected env (12) from .env // tip: ⌘ enable debugging { debug: true }
+◇ injected env (6) from ../.env // tip: ⌘ override existing { override: true }
+◇ injected env (0) from ../.env // tip: ◈ encrypted .env [www.dotenvx.com]
+[11.9.2026, 18:45:01] [TradingBot] ==================================================
+[11.9.2026, 18:45:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[11.9.2026, 18:45:02] [TradingBot] ==================================================
+[11.9.2026, 18:45:02] [TradingBot] System Initializing in [PAPER] Mode.
+[11.9.2026, 18:45:02] [TradingBot] System currently holding 3/5 active positions.
+[11.9.2026, 18:45:02] [TradingBot] Active Capital Available: $63237.00
+[Broker] Pinging Screener API. Looking for 2 valid setups...
+[Broker Error]: Alpaca API Error: 504
+[11.9.2026, 18:45:05] [TradingBot] [System Error]: Error: Alpaca API Error: 504
+    at BrokerClient.scanMarketMovers (/home/adminbosskey/bosskey_trading_bot/src/BrokerClient.js:58:37)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async runTradingCycle (/home/adminbosskey/bosskey_trading_bot/TradingBot.js:48:33)
+[Notifier] 📱 Push notification sent: "Trading Bot Error"
+◇ injected env (12) from .env // tip: ⌁ auth for agents [www.vestauth.com]
+◇ injected env (6) from ../.env // tip: ⌘ override existing { override: true }
+◇ injected env (0) from ../.env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+[11.9.2026, 19:00:02] [TradingBot] ==================================================
+[11.9.2026, 19:00:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[11.9.2026, 19:00:02] [TradingBot] ==================================================
+[11.9.2026, 19:00:02] [TradingBot] System Initializing in [PAPER] Mode.
+[11.9.2026, 19:00:02] [TradingBot] System currently holding 3/5 active positions.
+[11.9.2026, 19:00:02] [TradingBot] Active Capital Available: $63237.00
+[Broker] Pinging Screener API. Looking for 2 valid setups...
+[Broker Error]: Alpaca API Error: 504
+[11.9.2026, 19:00:06] [TradingBot] [System Error]: Error: Alpaca API Error: 504
+    at BrokerClient.scanMarketMovers (/home/adminbosskey/bosskey_trading_bot/src/BrokerClient.js:58:37)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async runTradingCycle (/home/adminbosskey/bosskey_trading_bot/TradingBot.js:48:33)
+[Notifier] 📱 Push notification sent: "Trading Bot Error"
+◇ injected env (12) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+◇ injected env (6) from ../.env // tip: ◈ secrets for agents [www.dotenvx.com]
+◇ injected env (0) from ../.env // tip: ⌘ override existing { override: true }
+[11.9.2026, 19:15:02] [TradingBot] ==================================================
+[11.9.2026, 19:15:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[11.9.2026, 19:15:02] [TradingBot] ==================================================
+[11.9.2026, 19:15:02] [TradingBot] System Initializing in [PAPER] Mode.
+[11.9.2026, 19:15:02] [TradingBot] System currently holding 3/5 active positions.
+[11.9.2026, 19:15:02] [TradingBot] Active Capital Available: $63237.00
+[Broker] Pinging Screener API. Looking for 2 valid setups...
+[Broker] Valid target added: TNON
+[Broker] Valid target added: ACVA
+[Agent A: Trader] Routing evaluation through gemini-3.5-flash...
+[Agent A: Trader] Proposal for TNON: HOLD (confidence 95)
+[11.9.2026, 19:15:09] [TradingBot] --- AI TRADE DECISION FOR TNON ---
+[11.9.2026, 19:15:09] [TradingBot] Action: HOLD | Confidence: 95
+[11.9.2026, 19:15:09] [TradingBot] Reasoning: The setup requires a HOLD action because key volume data is undefined which constitutes missing data under our trading rules.
+[11.9.2026, 19:15:09] [TradingBot] Executing HOLD strategy for TNON.
+[Agent A: Trader] Routing evaluation through gemini-3.5-flash...
+[AIEngine] Gemini primary call failed (429). Rerouting through OpenRouter fallback (meta-llama/llama-3.1-8b-instruct)...
+[AIEngine] OpenRouter fallback succeeded.
+[AIEngine] Failed to parse model response as JSON even after extraction. Raw response (truncated): {
+  "action": "SELL_SHORT",
+  "target_symbol": "ACVA",
+  "confidence_score": 80,
+  "reasoning": Price is above 5.00, daily change is highly positive at 44.46%, and price is above SMA at 7.44 consisten
+[Agent A CRITICAL]: AI evaluation unavailable for ACVA - AIEngine received a non-JSON response from the model: Unexpected token 'P', ..."asoning": Price is a"... is not valid JSON
+[11.9.2026, 19:15:10] [TradingBot] [System Error]: Error: Agent A (Trader) unavailable for ACVA: AIEngine received a non-JSON response from the model: Unexpected token 'P', ..."asoning": Price is a"... is not valid JSON
+    at AIEngine.proposeTradeSetup (/home/adminbosskey/bosskey_trading_bot/src/AIEngine.js:158:19)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async AIEngine.evaluateBatch (/home/adminbosskey/bosskey_trading_bot/src/AIEngine.js:213:26)
+    at async runTradingCycle (/home/adminbosskey/bosskey_trading_bot/TradingBot.js:58:30)
+[Notifier] 📱 Push notification sent: "Trading Bot Error"
+◇ injected env (12) from .env // tip: ⌘ override existing { override: true }
+◇ injected env (6) from ../.env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+◇ injected env (0) from ../.env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+[11.9.2026, 19:30:01] [TradingBot] ==================================================
+[11.9.2026, 19:30:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[11.9.2026, 19:30:02] [TradingBot] ==================================================
+[11.9.2026, 19:30:02] [TradingBot] System Initializing in [PAPER] Mode.
+[11.9.2026, 19:30:02] [TradingBot] System currently holding 3/5 active positions.
+[11.9.2026, 19:30:02] [TradingBot] Active Capital Available: $63237.00
+[Broker] Pinging Screener API. Looking for 2 valid setups...
+[Broker] Valid target added: TNON
+[Broker] Valid target added: ACVA
+[Agent A: Trader] Routing evaluation through gemini-3.5-flash...
+[Agent A: Trader] Proposal for TNON: HOLD (confidence 95)
+[11.9.2026, 19:30:08] [TradingBot] --- AI TRADE DECISION FOR TNON ---
+[11.9.2026, 19:30:08] [TradingBot] Action: HOLD | Confidence: 95
+[11.9.2026, 19:30:08] [TradingBot] Reasoning: The momentum breakout setup cannot be confirmed because vital volume data is undefined and missing.
+[11.9.2026, 19:30:08] [TradingBot] Executing HOLD strategy for TNON.
+[Agent A: Trader] Routing evaluation through gemini-3.5-flash...
+[AIEngine] Gemini primary call failed (429). Rerouting through OpenRouter fallback (meta-llama/llama-3.1-8b-instruct)...
+[AIEngine] OpenRouter fallback succeeded.
+[Agent A: Trader] Proposal for ACVA: BUY (confidence 95)
+[Agent B: Risk Auditor] Reviewing proposal for ACVA...
+[AIEngine] Gemini primary call failed (429). Rerouting through OpenRouter fallback (meta-llama/llama-3.1-8b-instruct)...
+[AIEngine] OpenRouter fallback succeeded.
+[Agent B: Risk Auditor] REJECTED ACVA: Thin volume and extremely high daily change raise concerns about slippage risk.
+[11.9.2026, 19:30:11] [TradingBot] --- AI TRADE DECISION FOR ACVA ---
+[11.9.2026, 19:30:11] [TradingBot] Action: HOLD | Confidence: 95
+[11.9.2026, 19:30:11] [TradingBot] Reasoning: Vetoed by Risk Auditor: Thin volume and extremely high daily change raise concerns about slippage risk.
+[11.9.2026, 19:30:11] [TradingBot] [Risk Auditor] Approved: false | Risk Score: 74 | Notes: Proposal failed to pass slippage and volume risk checks, despite strong momentum indicators.
+[11.9.2026, 19:30:11] [TradingBot] Executing HOLD strategy for ACVA.
+◇ injected env (12) from .env // tip: ⌘ override existing { override: true }
+◇ injected env (6) from ../.env // tip: ⌘ enable debugging { debug: true }
+◇ injected env (0) from ../.env // tip: ⌁ auth for agents [www.vestauth.com]
+[11.9.2026, 19:45:02] [TradingBot] ==================================================
+[11.9.2026, 19:45:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[11.9.2026, 19:45:02] [TradingBot] ==================================================
+[11.9.2026, 19:45:02] [TradingBot] System Initializing in [PAPER] Mode.
+[11.9.2026, 19:45:02] [TradingBot] System currently holding 3/5 active positions.
+[11.9.2026, 19:45:02] [TradingBot] Active Capital Available: $63237.00
+[Broker] Pinging Screener API. Looking for 2 valid setups...
+[Broker] Valid target added: ACVA
+[Broker] Valid target added: FEIM
+[Agent A: Trader] Routing evaluation through gemini-3.5-flash...
+[AIEngine] Gemini primary call failed (429). Rerouting through OpenRouter fallback (meta-llama/llama-3.1-8b-instruct)...
+[AIEngine] OpenRouter fallback succeeded.
+[AIEngine] Failed to parse model response as JSON even after extraction. Raw response (truncated): { 
+  "action": "HOLD", 
+  "target_symbol": "ACVA", 
+  "confidence_score": 60, 
+  "reasoning": The strategy cannot trade ACVA due to missing volume data, which is required for accurate analysis.
+[Agent A CRITICAL]: AI evaluation unavailable for ACVA - AIEngine received a non-JSON response from the model: Unexpected token 'T', ..."asoning": The strate"... is not valid JSON
+[11.9.2026, 19:45:05] [TradingBot] [System Error]: Error: Agent A (Trader) unavailable for ACVA: AIEngine received a non-JSON response from the model: Unexpected token 'T', ..."asoning": The strate"... is not valid JSON
+    at AIEngine.proposeTradeSetup (/home/adminbosskey/bosskey_trading_bot/src/AIEngine.js:158:19)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async AIEngine.evaluateBatch (/home/adminbosskey/bosskey_trading_bot/src/AIEngine.js:213:26)
+    at async runTradingCycle (/home/adminbosskey/bosskey_trading_bot/TradingBot.js:58:30)
+[Notifier] 📱 Push notification sent: "Trading Bot Error"
+◇ injected env (12) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+◇ injected env (6) from ../.env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+◇ injected env (0) from ../.env // tip: ⌘ enable debugging { debug: true }
+[11.9.2026, 20:00:02] [TradingBot] ==================================================
+[11.9.2026, 20:00:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[11.9.2026, 20:00:02] [TradingBot] ==================================================
+[11.9.2026, 20:00:02] [TradingBot] System Initializing in [PAPER] Mode.
+[11.9.2026, 20:00:02] [TradingBot] System currently holding 3/5 active positions.
+[11.9.2026, 20:00:02] [TradingBot] Active Capital Available: $63237.00
+[Broker] Pinging Screener API. Looking for 2 valid setups...
+[Broker] Valid target added: ACVA
+[Broker] Valid target added: FEIM
+[Agent A: Trader] Routing evaluation through gemini-3.5-flash...
+[AIEngine] Gemini primary call failed (429). Rerouting through OpenRouter fallback (meta-llama/llama-3.1-8b-instruct)...
+[AIEngine] OpenRouter fallback succeeded.
+[Agent A: Trader] Proposal for ACVA: BUY (confidence 85)
+[Agent B: Risk Auditor] Reviewing proposal for ACVA...
+[AIEngine] Gemini primary call failed (429). Rerouting through OpenRouter fallback (meta-llama/llama-3.1-8b-instruct)...
+[AIEngine] OpenRouter fallback succeeded.
+[Agent B: Risk Auditor] REJECTED ACVA: Thin volume and high daily change percentage indicate excessive slippage risk.
+[11.9.2026, 20:00:11] [TradingBot] --- AI TRADE DECISION FOR ACVA ---
+[11.9.2026, 20:00:11] [TradingBot] Action: HOLD | Confidence: 85
+[11.9.2026, 20:00:11] [TradingBot] Reasoning: Vetoed by Risk Auditor: Thin volume and high daily change percentage indicate excessive slippage risk.
+[11.9.2026, 20:00:11] [TradingBot] [Risk Auditor] Approved: false | Risk Score: 34 | Notes: Volume is undefined, making it impossible to assess slippage risk, and the daily change is extremely high, raising concerns about a false breakout.
+[11.9.2026, 20:00:11] [TradingBot] Executing HOLD strategy for ACVA.
+[Agent A: Trader] Routing evaluation through gemini-3.5-flash...
+[AIEngine] Gemini primary call failed (429). Rerouting through OpenRouter fallback (meta-llama/llama-3.1-8b-instruct)...
+[AIEngine] OpenRouter fallback succeeded.
+[Agent A: Trader] Proposal for FEIM: BUY (confidence 92)
+[Agent B: Risk Auditor] Reviewing proposal for FEIM...
+[AIEngine] Gemini primary call failed (429). Rerouting through OpenRouter fallback (meta-llama/llama-3.1-8b-instruct)...
+[AIEngine] OpenRouter fallback succeeded.
+[Agent B: Risk Auditor] REJECTED FEIM: Thin volume and high daily change raise concerns about slippage risk and potential for false breakout.
+[11.9.2026, 20:00:18] [TradingBot] --- AI TRADE DECISION FOR FEIM ---
+[11.9.2026, 20:00:18] [TradingBot] Action: HOLD | Confidence: 92
+[11.9.2026, 20:00:18] [TradingBot] Reasoning: Vetoed by Risk Auditor: Thin volume and high daily change raise concerns about slippage risk and potential for false breakout.
+[11.9.2026, 20:00:18] [TradingBot] [Risk Auditor] Approved: false | Risk Score: 50 | Notes: Trader's confidence score is high, but underlying market data shows a potentially overextended trade with no clear indication of genuine breakout confirmation.
+[11.9.2026, 20:00:18] [TradingBot] Executing HOLD strategy for FEIM.
+◇ injected env (12) from .env // tip: ⌘ override existing { override: true }
+◇ injected env (6) from ../.env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+◇ injected env (0) from ../.env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+[11.9.2026, 20:15:02] [TradingBot] ==================================================
+[11.9.2026, 20:15:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[11.9.2026, 20:15:02] [TradingBot] ==================================================
+[11.9.2026, 20:15:02] [TradingBot] System Initializing in [PAPER] Mode.
+[11.9.2026, 20:15:02] [TradingBot] System currently holding 3/5 active positions.
+[11.9.2026, 20:15:02] [TradingBot] Active Capital Available: $63237.00
+[Broker] Pinging Screener API. Looking for 2 valid setups...
+[Broker] Valid target added: ACVA
+[Broker] Valid target added: FEIM
+[Agent A: Trader] Routing evaluation through gemini-3.5-flash...
+[AIEngine] Gemini primary call failed (429). Rerouting through OpenRouter fallback (meta-llama/llama-3.1-8b-instruct)...
+[AIEngine] OpenRouter fallback succeeded.
+[Agent A: Trader] Proposal for ACVA: BUY (confidence 95)
+[Agent B: Risk Auditor] Reviewing proposal for ACVA...
+[AIEngine] Gemini primary call failed (429). Rerouting through OpenRouter fallback (meta-llama/llama-3.1-8b-instruct)...
+[AIEngine] OpenRouter fallback succeeded.
+[Agent B: Risk Auditor] REJECTED ACVA: Thin volume on a large percentage move is a red flag for excessive slippage risk.
+[11.9.2026, 20:15:12] [TradingBot] --- AI TRADE DECISION FOR ACVA ---
+[11.9.2026, 20:15:12] [TradingBot] Action: HOLD | Confidence: 95
+[11.9.2026, 20:15:13] [TradingBot] Reasoning: Vetoed by Risk Auditor: Thin volume on a large percentage move is a red flag for excessive slippage risk.
+[11.9.2026, 20:15:13] [TradingBot] [Risk Auditor] Approved: false | Risk Score: 20 | Notes: Volume is undefined, making it difficult to assess slippage risk and raising concerns about false breakout risk due to lack of volume confirmation.
+[11.9.2026, 20:15:13] [TradingBot] Executing HOLD strategy for ACVA.
+[Agent A: Trader] Routing evaluation through gemini-3.5-flash...
+[AIEngine] Gemini primary call failed (429). Rerouting through OpenRouter fallback (meta-llama/llama-3.1-8b-instruct)...
+[AIEngine] OpenRouter fallback succeeded.
+[AIEngine] Failed to parse model response as JSON even after extraction. Raw response (truncated): {
+  "action": "BUY",
+  "target_symbol": "FEIM",
+  "confidence_score": 85,
+  "reasoning": The stock price is significantly higher than its 20-Day SMA and has a highly positive daily change, indicating 
+[Agent A CRITICAL]: AI evaluation unavailable for FEIM - AIEngine received a non-JSON response from the model: Unexpected token 'T', ..."asoning": The stock "... is not valid JSON
+[11.9.2026, 20:15:16] [TradingBot] [System Error]: Error: Agent A (Trader) unavailable for FEIM: AIEngine received a non-JSON response from the model: Unexpected token 'T', ..."asoning": The stock "... is not valid JSON
+    at AIEngine.proposeTradeSetup (/home/adminbosskey/bosskey_trading_bot/src/AIEngine.js:158:19)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async AIEngine.evaluateBatch (/home/adminbosskey/bosskey_trading_bot/src/AIEngine.js:213:26)
+    at async runTradingCycle (/home/adminbosskey/bosskey_trading_bot/TradingBot.js:58:30)
+[Notifier] 📱 Push notification sent: "Trading Bot Error"
+◇ injected env (12) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+◇ injected env (6) from ../.env // tip: ⌘ enable debugging { debug: true }
+◇ injected env (0) from ../.env // tip: ⌘ enable debugging { debug: true }
+[11.9.2026, 20:30:01] [TradingBot] ==================================================
+[11.9.2026, 20:30:01] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[11.9.2026, 20:30:01] [TradingBot] ==================================================
+[11.9.2026, 20:30:01] [TradingBot] System Initializing in [PAPER] Mode.
+[11.9.2026, 20:30:01] [TradingBot] System currently holding 3/5 active positions.
+[11.9.2026, 20:30:01] [TradingBot] Active Capital Available: $63237.00
+[Broker] Pinging Screener API. Looking for 2 valid setups...
+[Broker] Valid target added: ACVA
+[Broker] Valid target added: FEIM
+[Agent A: Trader] Routing evaluation through gemini-3.5-flash...
+[AIEngine] Gemini primary call failed (429). Rerouting through OpenRouter fallback (meta-llama/llama-3.1-8b-instruct)...
+[AIEngine] OpenRouter fallback succeeded.
+[AIEngine] Failed to parse model response as JSON even after extraction. Raw response (truncated): { 
+  "action": "BUY", 
+  "target_symbol": "ACVA", 
+  "confidence_score": 80, 
+  "reasoning": "High daily 44.60% change supports price break above 20-Day SMA of 7.44, accompanied by overbought RSI of 8
+[Agent A CRITICAL]: AI evaluation unavailable for ACVA - AIEngine received a non-JSON response from the model: Expected ',' or '}' after property value in JSON at position 248 (line 5 column 171)
+[11.9.2026, 20:30:05] [TradingBot] [System Error]: Error: Agent A (Trader) unavailable for ACVA: AIEngine received a non-JSON response from the model: Expected ',' or '}' after property value in JSON at position 248 (line 5 column 171)
+    at AIEngine.proposeTradeSetup (/home/adminbosskey/bosskey_trading_bot/src/AIEngine.js:158:19)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async AIEngine.evaluateBatch (/home/adminbosskey/bosskey_trading_bot/src/AIEngine.js:213:26)
+    at async runTradingCycle (/home/adminbosskey/bosskey_trading_bot/TradingBot.js:58:30)
+[Notifier] 📱 Push notification sent: "Trading Bot Error"
+◇ injected env (12) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+◇ injected env (6) from ../.env // tip: ⌘ enable debugging { debug: true }
+◇ injected env (0) from ../.env // tip: ◈ encrypted .env [www.dotenvx.com]
+[11.9.2026, 20:45:02] [TradingBot] ==================================================
+[11.9.2026, 20:45:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[11.9.2026, 20:45:02] [TradingBot] ==================================================
+[11.9.2026, 20:45:02] [TradingBot] System Initializing in [PAPER] Mode.
+[11.9.2026, 20:45:02] [TradingBot] System currently holding 3/5 active positions.
+[11.9.2026, 20:45:02] [TradingBot] Active Capital Available: $63237.00
+[Broker] Pinging Screener API. Looking for 2 valid setups...
+[Broker] Valid target added: ACVA
+[Broker] Valid target added: MKDW
+[Agent A: Trader] Routing evaluation through gemini-3.5-flash...
+[AIEngine] Gemini primary call failed (429). Rerouting through OpenRouter fallback (meta-llama/llama-3.1-8b-instruct)...
+[AIEngine] OpenRouter fallback succeeded.
+[AIEngine] Failed to parse model response as JSON even after extraction. Raw response (truncated): {
+  "action": "HOLD",
+  "target_symbol": "ACVA",
+  "confidence_score": 0,
+  "reasoning": The price of ACVA is 10.435 and its daily change is 44.53, but it also has an RSI of 80.38, which indicates vol
+[Agent A CRITICAL]: AI evaluation unavailable for ACVA - AIEngine received a non-JSON response from the model: Unexpected token 'T', ..."asoning": The price "... is not valid JSON
+[11.9.2026, 20:45:05] [TradingBot] [System Error]: Error: Agent A (Trader) unavailable for ACVA: AIEngine received a non-JSON response from the model: Unexpected token 'T', ..."asoning": The price "... is not valid JSON
+    at AIEngine.proposeTradeSetup (/home/adminbosskey/bosskey_trading_bot/src/AIEngine.js:158:19)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async AIEngine.evaluateBatch (/home/adminbosskey/bosskey_trading_bot/src/AIEngine.js:213:26)
+    at async runTradingCycle (/home/adminbosskey/bosskey_trading_bot/TradingBot.js:58:30)
+[Notifier] 📱 Push notification sent: "Trading Bot Error"
+◇ injected env (12) from .env // tip: ⌘ override existing { override: true }
+◇ injected env (6) from ../.env // tip: ◈ secrets for agents [www.dotenvx.com]
+◇ injected env (0) from ../.env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+[11.9.2026, 21:00:01] [TradingBot] ==================================================
+[11.9.2026, 21:00:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[11.9.2026, 21:00:02] [TradingBot] ==================================================
+[11.9.2026, 21:00:02] [TradingBot] System Initializing in [PAPER] Mode.
+[11.9.2026, 21:00:02] [TradingBot] System currently holding 3/5 active positions.
+[11.9.2026, 21:00:02] [TradingBot] Active Capital Available: $63237.00
+[Broker] Pinging Screener API. Looking for 2 valid setups...
+[Broker] Valid target added: ACVA
+[Broker] Valid target added: MKDW
+[Agent A: Trader] Routing evaluation through gemini-3.5-flash...
+[Agent A: Trader] Proposal for ACVA: HOLD (confidence 95)
+[11.9.2026, 21:00:09] [TradingBot] --- AI TRADE DECISION FOR ACVA ---
+[11.9.2026, 21:00:09] [TradingBot] Action: HOLD | Confidence: 95
+[11.9.2026, 21:00:09] [TradingBot] Reasoning: Trading is suspended to a HOLD status due to missing volume data which is a critical metric for momentum breakout confirmation.
+[11.9.2026, 21:00:09] [TradingBot] Executing HOLD strategy for ACVA.
+[Agent A: Trader] Routing evaluation through gemini-3.5-flash...
+[AIEngine] Gemini primary call failed (429). Rerouting through OpenRouter fallback (meta-llama/llama-3.1-8b-instruct)...
+[AIEngine] OpenRouter fallback succeeded.
+[Agent A: Trader] Proposal for MKDW: BUY (confidence 95)
+[Agent B: Risk Auditor] Reviewing proposal for MKDW...
+[AIEngine] Gemini primary call failed (429). Rerouting through OpenRouter fallback (meta-llama/llama-3.1-8b-instruct)...
+[AIEngine] OpenRouter fallback succeeded.
+[Agent B: Risk Auditor] REJECTED MKDW: Thin volume and extremely high daily change raise concerns about slippage risk and false breakout risk.
+[11.9.2026, 21:00:15] [TradingBot] --- AI TRADE DECISION FOR MKDW ---
+[11.9.2026, 21:00:15] [TradingBot] Action: HOLD | Confidence: 95
+[11.9.2026, 21:00:15] [TradingBot] Reasoning: Vetoed by Risk Auditor: Thin volume and extremely high daily change raise concerns about slippage risk and false breakout risk.
+[11.9.2026, 21:00:15] [TradingBot] [Risk Auditor] Approved: false | Risk Score: 40 | Notes: Volume and RSI indicators suggest a high-risk setup that may not hold up to scrutiny.
+[11.9.2026, 21:00:15] [TradingBot] Executing HOLD strategy for MKDW.
+◇ injected env (12) from .env // tip: ⌘ enable debugging { debug: true }
+◇ injected env (6) from ../.env // tip: ⌘ enable debugging { debug: true }
+◇ injected env (0) from ../.env // tip: ◈ encrypted .env [www.dotenvx.com]
+[11.9.2026, 21:15:02] [TradingBot] ==================================================
+[11.9.2026, 21:15:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[11.9.2026, 21:15:02] [TradingBot] ==================================================
+[11.9.2026, 21:15:02] [TradingBot] System Initializing in [PAPER] Mode.
+[11.9.2026, 21:15:02] [TradingBot] System currently holding 3/5 active positions.
+[11.9.2026, 21:15:02] [TradingBot] Active Capital Available: $63237.00
+[Broker] Pinging Screener API. Looking for 2 valid setups...
+[Broker] Valid target added: MKDW
+[Broker] Valid target added: ACVA
+[Agent A: Trader] Routing evaluation through gemini-3.5-flash...
+[AIEngine] Gemini primary call failed (429). Rerouting through OpenRouter fallback (meta-llama/llama-3.1-8b-instruct)...
+[AIEngine] OpenRouter fallback succeeded.
+[Agent A: Trader] Proposal for MKDW: BUY (confidence 85)
+[Agent B: Risk Auditor] Reviewing proposal for MKDW...
+[AIEngine] Gemini primary call failed (429). Rerouting through OpenRouter fallback (meta-llama/llama-3.1-8b-instruct)...
+[AIEngine] OpenRouter fallback succeeded.
+[Agent B: Risk Auditor] REJECTED MKDW: Thin volume and high daily change raise concerns about slippage risk.
+[11.9.2026, 21:15:10] [TradingBot] --- AI TRADE DECISION FOR MKDW ---
+[11.9.2026, 21:15:10] [TradingBot] Action: HOLD | Confidence: 85
+[11.9.2026, 21:15:10] [TradingBot] Reasoning: Vetoed by Risk Auditor: Thin volume and high daily change raise concerns about slippage risk.
+[11.9.2026, 21:15:10] [TradingBot] [Risk Auditor] Approved: false | Risk Score: 80 | Notes: Slippage risk and false breakout risk flags raised due to high daily change and low volume.
+[11.9.2026, 21:15:10] [TradingBot] Executing HOLD strategy for MKDW.
+[Agent A: Trader] Routing evaluation through gemini-3.5-flash...
+[AIEngine] Gemini primary call failed (429). Rerouting through OpenRouter fallback (meta-llama/llama-3.1-8b-instruct)...
+[AIEngine] OpenRouter fallback succeeded.
+[AIEngine] Failed to parse model response as JSON even after extraction. Raw response (truncated): {
+  "action": "HOLD",
+  "target_symbol": "ACVA",
+  "confidence_score": 25,
+  "reasoning": Current Price 10.415 is below the 5.00 micro-cap threshold triggering the penny stock filter due to undefined 
+[Agent A CRITICAL]: AI evaluation unavailable for ACVA - AIEngine received a non-JSON response from the model: Unexpected token 'C', ..."asoning": Current Pr"... is not valid JSON
+[11.9.2026, 21:15:11] [TradingBot] [System Error]: Error: Agent A (Trader) unavailable for ACVA: AIEngine received a non-JSON response from the model: Unexpected token 'C', ..."asoning": Current Pr"... is not valid JSON
+    at AIEngine.proposeTradeSetup (/home/adminbosskey/bosskey_trading_bot/src/AIEngine.js:158:19)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async AIEngine.evaluateBatch (/home/adminbosskey/bosskey_trading_bot/src/AIEngine.js:213:26)
+    at async runTradingCycle (/home/adminbosskey/bosskey_trading_bot/TradingBot.js:58:30)
+[Notifier] 📱 Push notification sent: "Trading Bot Error"
+◇ injected env (12) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+◇ injected env (6) from ../.env // tip: ⌁ auth for agents [www.vestauth.com]
+◇ injected env (0) from ../.env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+[11.9.2026, 21:30:02] [TradingBot] ==================================================
+[11.9.2026, 21:30:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[11.9.2026, 21:30:02] [TradingBot] ==================================================
+[11.9.2026, 21:30:02] [TradingBot] System Initializing in [PAPER] Mode.
+[11.9.2026, 21:30:02] [TradingBot] System currently holding 3/5 active positions.
+[11.9.2026, 21:30:02] [TradingBot] Active Capital Available: $63237.00
+[Broker] Pinging Screener API. Looking for 2 valid setups...
+[Broker] Valid target added: MKDW
+[Broker] Valid target added: ACVA
+[Agent A: Trader] Routing evaluation through gemini-3.5-flash...
+[AIEngine] Gemini primary call failed (429). Rerouting through OpenRouter fallback (meta-llama/llama-3.1-8b-instruct)...
+[AIEngine] OpenRouter fallback succeeded.
+[AIEngine] Failed to parse model response as JSON even after extraction. Raw response (truncated): {
+  "action": "BUY",
+  "target_symbol": "MKDW",
+  "confidence_score": 85,
+  "reasoning": Current Price (7.78) is above 5.00, daily change is highly positive (52.55%), and current price (7.78) is above
+[Agent A CRITICAL]: AI evaluation unavailable for MKDW - AIEngine received a non-JSON response from the model: Unexpected token 'C', ..."asoning": Current Pr"... is not valid JSON
+[11.9.2026, 21:30:04] [TradingBot] [System Error]: Error: Agent A (Trader) unavailable for MKDW: AIEngine received a non-JSON response from the model: Unexpected token 'C', ..."asoning": Current Pr"... is not valid JSON
+    at AIEngine.proposeTradeSetup (/home/adminbosskey/bosskey_trading_bot/src/AIEngine.js:158:19)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async AIEngine.evaluateBatch (/home/adminbosskey/bosskey_trading_bot/src/AIEngine.js:213:26)
+    at async runTradingCycle (/home/adminbosskey/bosskey_trading_bot/TradingBot.js:58:30)
+[Notifier] 📱 Push notification sent: "Trading Bot Error"
+◇ injected env (12) from .env // tip: ⌘ enable debugging { debug: true }
+◇ injected env (6) from ../.env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+◇ injected env (0) from ../.env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+[11.9.2026, 21:45:01] [TradingBot] ==================================================
+[11.9.2026, 21:45:01] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[11.9.2026, 21:45:01] [TradingBot] ==================================================
+[11.9.2026, 21:45:01] [TradingBot] System Initializing in [PAPER] Mode.
+[11.9.2026, 21:45:02] [TradingBot] System currently holding 3/5 active positions.
+[11.9.2026, 21:45:02] [TradingBot] Active Capital Available: $63237.00
+[Broker] Pinging Screener API. Looking for 2 valid setups...
+[Broker] Valid target added: MKDW
+[Broker] Valid target added: ACVA
+[Agent A: Trader] Routing evaluation through gemini-3.5-flash...
+[AIEngine] Gemini primary call failed (429). Rerouting through OpenRouter fallback (meta-llama/llama-3.1-8b-instruct)...
+[AIEngine] OpenRouter fallback succeeded.
+[Agent A: Trader] Proposal for MKDW: BUY (confidence 80)
+[Agent B: Risk Auditor] Reviewing proposal for MKDW...
+[AIEngine] Gemini primary call failed (429). Rerouting through OpenRouter fallback (meta-llama/llama-3.1-8b-instruct)...
+[AIEngine] OpenRouter fallback succeeded.
+[Agent B: Risk Auditor] REJECTED MKDW: Thin volume and high daily change raise slippage risk and false breakout risk.
+[11.9.2026, 21:45:11] [TradingBot] --- AI TRADE DECISION FOR MKDW ---
+[11.9.2026, 21:45:11] [TradingBot] Action: HOLD | Confidence: 80
+[11.9.2026, 21:45:11] [TradingBot] Reasoning: Vetoed by Risk Auditor: Thin volume and high daily change raise slippage risk and false breakout risk.
+[11.9.2026, 21:45:11] [TradingBot] [Risk Auditor] Approved: false | Risk Score: 60 | Notes: Volume is undefined, which is a red flag, and daily change is very high, increasing the likelihood of false breakout and slippage risk.
+[11.9.2026, 21:45:11] [TradingBot] Executing HOLD strategy for MKDW.
+[Agent A: Trader] Routing evaluation through gemini-3.5-flash...
+[AIEngine] Gemini primary call failed (429). Rerouting through OpenRouter fallback (meta-llama/llama-3.1-8b-instruct)...
+[AIEngine] OpenRouter fallback succeeded.
+[Agent A: Trader] Proposal for ACVA: BUY (confidence 85)
+[Agent B: Risk Auditor] Reviewing proposal for ACVA...
+[AIEngine] Gemini primary call failed (429). Rerouting through OpenRouter fallback (meta-llama/llama-3.1-8b-instruct)...
+[AIEngine] OpenRouter fallback succeeded.
+[Agent B: Risk Auditor] REJECTED ACVA: Thin volume and high daily change raise slippage risk, and extreme RSI suggests potential false breakout.
+[11.9.2026, 21:45:20] [TradingBot] --- AI TRADE DECISION FOR ACVA ---
+[11.9.2026, 21:45:20] [TradingBot] Action: HOLD | Confidence: 85
+[11.9.2026, 21:45:20] [TradingBot] Reasoning: Vetoed by Risk Auditor: Thin volume and high daily change raise slippage risk, and extreme RSI suggests potential false breakout.
+[11.9.2026, 21:45:20] [TradingBot] [Risk Auditor] Approved: false | Risk Score: 80 | Notes: Volume is undefined, which is a material concern, and RSI is highly elevated, increasing the likelihood of a false breakout.
+[11.9.2026, 21:45:20] [TradingBot] Executing HOLD strategy for ACVA.
+◇ injected env (9) from ../.env // tip: ⌁ auth for agents [www.vestauth.com]
+[11.9.2026, 22:15:01] [Settlement] ==================================================
+[11.9.2026, 22:15:01] [Settlement] 🏦 INITIATING DAILY BATCH SETTLEMENT
+[11.9.2026, 22:15:01] [Settlement] ==================================================
+[11.9.2026, 22:15:01] [Settlement] No trades were closed today. No settlement required.
+[Notifier] 📱 Push notification sent: "Daily Settlement Report"
+◇ injected env (12) from .env // tip: ⌘ suppress logs { quiet: true }
+◇ injected env (6) from ../.env // tip: ◈ secrets for agents [www.dotenvx.com]
+◇ injected env (0) from ../.env // tip: ⌘ suppress logs { quiet: true }
+[14.9.2026, 15:00:01] [TradingBot] ==================================================
+[14.9.2026, 15:00:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[14.9.2026, 15:00:02] [TradingBot] ==================================================
+[14.9.2026, 15:00:02] [TradingBot] System Initializing in [PAPER] Mode.
+[14.9.2026, 15:00:02] [TradingBot] System currently holding 3/5 active positions.
+[14.9.2026, 15:00:02] [TradingBot] Active Capital Available: $63237.00
+[Broker] Pinging Screener API. Looking for 2 valid setups...
+[Broker] Valid target added: MKDW
+[Broker] Valid target added: ACVA
+[Agent A: Trader] Routing evaluation through gemini-3.5-flash...
+[Agent A: Trader] Proposal for MKDW: HOLD (confidence 95)
+[14.9.2026, 15:00:12] [TradingBot] --- AI TRADE DECISION FOR MKDW ---
+[14.9.2026, 15:00:12] [TradingBot] Action: HOLD | Confidence: 95
+[14.9.2026, 15:00:12] [TradingBot] Reasoning: The asset fails the momentum breakout criteria because the current price remains below the 20-Day SMA and crucial volume data is undefined.
+[14.9.2026, 15:00:12] [TradingBot] Executing HOLD strategy for MKDW.
+[Agent A: Trader] Routing evaluation through gemini-3.5-flash...
+[Agent A: Trader] Proposal for ACVA: BUY (confidence 85)
+[Agent B: Risk Auditor] Reviewing proposal for ACVA...
+[Agent B: Risk Auditor] REJECTED ACVA: The trade must be rejected because vital volume data is undefined and the extremely overbought RSI of 80.28 signals high false breakout risk.
+[14.9.2026, 15:00:23] [TradingBot] --- AI TRADE DECISION FOR ACVA ---
+[14.9.2026, 15:00:23] [TradingBot] Action: HOLD | Confidence: 85
+[14.9.2026, 15:00:23] [TradingBot] Reasoning: Vetoed by Risk Auditor: The trade must be rejected because vital volume data is undefined and the extremely overbought RSI of 80.28 signals high false breakout risk.
+[14.9.2026, 15:00:23] [TradingBot] [Risk Auditor] Approved: false | Risk Score: 85 | Notes: A critical lack of volume data combined with an overbought RSI makes the trader's eighty-five percent confidence rating highly irresponsible.
+[14.9.2026, 15:00:23] [TradingBot] Executing HOLD strategy for ACVA.
+◇ injected env (12) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+◇ injected env (6) from ../.env // tip: ◈ secrets for agents [www.dotenvx.com]
+◇ injected env (0) from ../.env // tip: ⌘ suppress logs { quiet: true }
+[14.9.2026, 15:15:01] [TradingBot] ==================================================
+[14.9.2026, 15:15:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[14.9.2026, 15:15:02] [TradingBot] ==================================================
+[14.9.2026, 15:15:02] [TradingBot] System Initializing in [PAPER] Mode.
+[14.9.2026, 15:15:02] [TradingBot] System currently holding 3/5 active positions.
+[14.9.2026, 15:15:02] [TradingBot] Active Capital Available: $63237.00
+[Broker] Pinging Screener API. Looking for 2 valid setups...
+[Broker] Valid target added: MKDW
+[Broker] Valid target added: ACVA
+[Agent A: Trader] Routing evaluation through gemini-3.5-flash...
+[Agent A: Trader] Proposal for MKDW: HOLD (confidence 95)
+[14.9.2026, 15:15:07] [TradingBot] --- AI TRADE DECISION FOR MKDW ---
+[14.9.2026, 15:15:07] [TradingBot] Action: HOLD | Confidence: 95
+[14.9.2026, 15:15:07] [TradingBot] Reasoning: The setup fails momentum breakout criteria because the price is below the 20-day SMA and volume data is undefined.
+[14.9.2026, 15:15:08] [TradingBot] Executing HOLD strategy for MKDW.
+[Agent A: Trader] Routing evaluation through gemini-3.5-flash...
+[Agent A: Trader] Proposal for ACVA: HOLD (confidence 90)
+[14.9.2026, 15:15:14] [TradingBot] --- AI TRADE DECISION FOR ACVA ---
+[14.9.2026, 15:15:14] [TradingBot] Action: HOLD | Confidence: 90
+[14.9.2026, 15:15:14] [TradingBot] Reasoning: Missing volume data prevents execution of the momentum breakout trade despite otherwise strong price action above the SMA.
+[14.9.2026, 15:15:14] [TradingBot] Executing HOLD strategy for ACVA.
+◇ injected env (12) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+◇ injected env (6) from ../.env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+◇ injected env (0) from ../.env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+[14.9.2026, 15:30:02] [TradingBot] ==================================================
+[14.9.2026, 15:30:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[14.9.2026, 15:30:02] [TradingBot] ==================================================
+[14.9.2026, 15:30:02] [TradingBot] System Initializing in [PAPER] Mode.
+[14.9.2026, 15:30:02] [TradingBot] System currently holding 3/5 active positions.
+[14.9.2026, 15:30:02] [TradingBot] Active Capital Available: $63237.00
+[Broker] Pinging Screener API. Looking for 2 valid setups...
+[Broker] Valid target added: MKDW
+[Broker] Valid target added: ACVA
+[Agent A: Trader] Routing evaluation through gemini-3.5-flash...
+[Agent A: Trader] Proposal for MKDW: HOLD (confidence 95)
+[14.9.2026, 15:30:09] [TradingBot] --- AI TRADE DECISION FOR MKDW ---
+[14.9.2026, 15:30:09] [TradingBot] Action: HOLD | Confidence: 95
+[14.9.2026, 15:30:09] [TradingBot] Reasoning: The setup is rejected and placed on hold due to missing volume data and the current price remaining below the 20-day SMA.
+[14.9.2026, 15:30:09] [TradingBot] Executing HOLD strategy for MKDW.
+[Agent A: Trader] Routing evaluation through gemini-3.5-flash...
+[Agent A: Trader] Proposal for ACVA: HOLD (confidence 95)
+[14.9.2026, 15:30:18] [TradingBot] --- AI TRADE DECISION FOR ACVA ---
+[14.9.2026, 15:30:18] [TradingBot] Action: HOLD | Confidence: 95
+[14.9.2026, 15:30:18] [TradingBot] Reasoning: The trade is on hold because crucial volume data is missing from the market feed.
+[14.9.2026, 15:30:18] [TradingBot] Executing HOLD strategy for ACVA.
+◇ injected env (12) from .env // tip: ⌘ enable debugging { debug: true }
+◇ injected env (6) from ../.env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+◇ injected env (0) from ../.env // tip: ⌘ suppress logs { quiet: true }
+[14.9.2026, 15:45:01] [TradingBot] ==================================================
+[14.9.2026, 15:45:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[14.9.2026, 15:45:02] [TradingBot] ==================================================
+[14.9.2026, 15:45:02] [TradingBot] System Initializing in [PAPER] Mode.
+[14.9.2026, 15:45:02] [TradingBot] System currently holding 3/5 active positions.
+[14.9.2026, 15:45:02] [TradingBot] Active Capital Available: $63237.00
+[Broker] Pinging Screener API. Looking for 2 valid setups...
+[Broker] Valid target added: BMGL
+[Broker] Valid target added: ELMT
+[Agent A: Trader] Routing evaluation through gemini-3.5-flash...
+[Agent A: Trader] Proposal for BMGL: HOLD (confidence 95)
+[14.9.2026, 15:45:31] [TradingBot] --- AI TRADE DECISION FOR BMGL ---
+[14.9.2026, 15:45:31] [TradingBot] Action: HOLD | Confidence: 95
+[14.9.2026, 15:45:31] [TradingBot] Reasoning: Position is on hold because volume data is undefined and Rule 4 mandates holding when critical data is missing.
+[14.9.2026, 15:45:31] [TradingBot] Executing HOLD strategy for BMGL.
+[Agent A: Trader] Routing evaluation through gemini-3.5-flash...
+[Agent A: Trader] Proposal for ELMT: HOLD (confidence 95)
+[14.9.2026, 15:45:46] [TradingBot] --- AI TRADE DECISION FOR ELMT ---
+[14.9.2026, 15:45:47] [TradingBot] Action: HOLD | Confidence: 95
+[14.9.2026, 15:45:47] [TradingBot] Reasoning: The transaction is on hold because volume data is undefined and trading with missing critical metrics violates strict risk parameters.
+[14.9.2026, 15:45:47] [TradingBot] Executing HOLD strategy for ELMT.
+◇ injected env (12) from .env // tip: ⌘ override existing { override: true }
+◇ injected env (6) from ../.env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+◇ injected env (0) from ../.env // tip: ◈ encrypted .env [www.dotenvx.com]
+[14.9.2026, 16:00:01] [TradingBot] ==================================================
+[14.9.2026, 16:00:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[14.9.2026, 16:00:02] [TradingBot] ==================================================
+[14.9.2026, 16:00:02] [TradingBot] System Initializing in [PAPER] Mode.
+[14.9.2026, 16:00:02] [TradingBot] System currently holding 3/5 active positions.
+[14.9.2026, 16:00:02] [TradingBot] Active Capital Available: $63237.00
+[Broker] Pinging Screener API. Looking for 2 valid setups...
+[Broker] Valid target added: BMGL
+[Broker] Valid target added: ELMT
+[Agent A: Trader] Routing evaluation through gemini-3.5-flash...
+[Agent A: Trader] Proposal for BMGL: HOLD (confidence 95)
+[14.9.2026, 16:00:11] [TradingBot] --- AI TRADE DECISION FOR BMGL ---
+[14.9.2026, 16:00:11] [TradingBot] Action: HOLD | Confidence: 95
+[14.9.2026, 16:00:11] [TradingBot] Reasoning: The momentum breakout setup is on hold due to missing volume data despite the asset trading above the five dollar penny stock threshold.
+[14.9.2026, 16:00:11] [TradingBot] Executing HOLD strategy for BMGL.
+[Agent A: Trader] Routing evaluation through gemini-3.5-flash...
+[Agent A: Trader] Proposal for ELMT: HOLD (confidence 95)
+[14.9.2026, 16:00:19] [TradingBot] --- AI TRADE DECISION FOR ELMT ---
+[14.9.2026, 16:00:19] [TradingBot] Action: HOLD | Confidence: 95
+[14.9.2026, 16:00:19] [TradingBot] Reasoning: Mandatory hold is enforced because volume data is missing and liquidity cannot be verified.
+[14.9.2026, 16:00:19] [TradingBot] Executing HOLD strategy for ELMT.
+◇ injected env (12) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+◇ injected env (6) from ../.env // tip: ⌁ auth for agents [www.vestauth.com]
+◇ injected env (0) from ../.env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+[14.9.2026, 16:15:01] [TradingBot] ==================================================
+[14.9.2026, 16:15:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[14.9.2026, 16:15:02] [TradingBot] ==================================================
+[14.9.2026, 16:15:02] [TradingBot] System Initializing in [PAPER] Mode.
+[14.9.2026, 16:15:02] [TradingBot] System currently holding 3/5 active positions.
+[14.9.2026, 16:15:02] [TradingBot] Active Capital Available: $63237.00
+[Broker] Pinging Screener API. Looking for 2 valid setups...
+[Broker] Valid target added: BMGL
+[Broker] Valid target added: ELMT
+[Agent A: Trader] Routing evaluation through gemini-3.5-flash...
+[Agent A: Trader] Proposal for BMGL: HOLD (confidence 95)
+[14.9.2026, 16:15:06] [TradingBot] --- AI TRADE DECISION FOR BMGL ---
+[14.9.2026, 16:15:06] [TradingBot] Action: HOLD | Confidence: 95
+[14.9.2026, 16:15:07] [TradingBot] Reasoning: The setup is on hold because volume data is undefined and missing data violates our discipline parameters for momentum breakout validation.
+[14.9.2026, 16:15:07] [TradingBot] Executing HOLD strategy for BMGL.
+[Agent A: Trader] Routing evaluation through gemini-3.5-flash...
+[Agent A: Trader] Proposal for ELMT: HOLD (confidence 95)
+[14.9.2026, 16:15:12] [TradingBot] --- AI TRADE DECISION FOR ELMT ---
+[14.9.2026, 16:15:12] [TradingBot] Action: HOLD | Confidence: 95
+[14.9.2026, 16:15:12] [TradingBot] Reasoning: The trade must be held because crucial volume data is missing from the market inputs.
+[14.9.2026, 16:15:12] [TradingBot] Executing HOLD strategy for ELMT.
+◇ injected env (12) from .env // tip: ⌘ suppress logs { quiet: true }
+◇ injected env (6) from ../.env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+◇ injected env (0) from ../.env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+[14.9.2026, 16:30:02] [TradingBot] ==================================================
+[14.9.2026, 16:30:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[14.9.2026, 16:30:02] [TradingBot] ==================================================
+[14.9.2026, 16:30:02] [TradingBot] System Initializing in [PAPER] Mode.
+[14.9.2026, 16:30:02] [TradingBot] System currently holding 3/5 active positions.
+[14.9.2026, 16:30:02] [TradingBot] Active Capital Available: $63237.00
+[Broker] Pinging Screener API. Looking for 2 valid setups...
+[Broker] Valid target added: BMGL
+[Broker] Valid target added: ELMT
+[Agent A: Trader] Routing evaluation through gemini-3.5-flash...
+[Agent A: Trader] Proposal for BMGL: HOLD (confidence 95)
+[14.9.2026, 16:30:13] [TradingBot] --- AI TRADE DECISION FOR BMGL ---
+[14.9.2026, 16:30:13] [TradingBot] Action: HOLD | Confidence: 95
+[14.9.2026, 16:30:13] [TradingBot] Reasoning: The trade is placed on hold because critical volume data is missing from the dataset preventing proper momentum confirmation.
+[14.9.2026, 16:30:13] [TradingBot] Executing HOLD strategy for BMGL.
+[Agent A: Trader] Routing evaluation through gemini-3.5-flash...
+[Agent A: Trader] Proposal for ELMT: HOLD (confidence 95)
+[14.9.2026, 16:30:18] [TradingBot] --- AI TRADE DECISION FOR ELMT ---
+[14.9.2026, 16:30:18] [TradingBot] Action: HOLD | Confidence: 95
+[14.9.2026, 16:30:18] [TradingBot] Reasoning: Position is on HOLD because essential trading volume data is undefined or missing.
+[14.9.2026, 16:30:18] [TradingBot] Executing HOLD strategy for ELMT.
+◇ injected env (12) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+◇ injected env (6) from ../.env // tip: ⌁ auth for agents [www.vestauth.com]
+◇ injected env (0) from ../.env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+[14.9.2026, 16:45:01] [TradingBot] ==================================================
+[14.9.2026, 16:45:01] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[14.9.2026, 16:45:01] [TradingBot] ==================================================
+[14.9.2026, 16:45:01] [TradingBot] System Initializing in [PAPER] Mode.
+[14.9.2026, 16:45:01] [TradingBot] System currently holding 3/5 active positions.
+[14.9.2026, 16:45:01] [TradingBot] Active Capital Available: $63237.00
+[Broker] Pinging Screener API. Looking for 2 valid setups...
+[Broker] Valid target added: BMGL
+[Broker] Valid target added: ELMT
+[Agent A: Trader] Routing evaluation through gemini-3.5-flash...
+[Agent A: Trader] Proposal for BMGL: HOLD (confidence 95)
+[14.9.2026, 16:45:09] [TradingBot] --- AI TRADE DECISION FOR BMGL ---
+[14.9.2026, 16:45:09] [TradingBot] Action: HOLD | Confidence: 95
+[14.9.2026, 16:45:09] [TradingBot] Reasoning: The lack of volume data presents a high execution risk and triggers a mandatory HOLD under our strict risk management protocols.
+[14.9.2026, 16:45:09] [TradingBot] Executing HOLD strategy for BMGL.
+[Agent A: Trader] Routing evaluation through gemini-3.5-flash...
+[Agent A: Trader] Proposal for ELMT: HOLD (confidence 95)
+[14.9.2026, 16:45:17] [TradingBot] --- AI TRADE DECISION FOR ELMT ---
+[14.9.2026, 16:45:17] [TradingBot] Action: HOLD | Confidence: 95
+[14.9.2026, 16:45:17] [TradingBot] Reasoning: The trade is placed on HOLD due to missing volume data which is a critical metric required to confirm a sustainable momentum breakout.
+[14.9.2026, 16:45:17] [TradingBot] Executing HOLD strategy for ELMT.
+◇ injected env (12) from .env // tip: ⌁ auth for agents [www.vestauth.com]
+◇ injected env (6) from ../.env // tip: ◈ encrypted .env [www.dotenvx.com]
+◇ injected env (0) from ../.env // tip: ⌘ override existing { override: true }
+[14.9.2026, 17:00:02] [TradingBot] ==================================================
+[14.9.2026, 17:00:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[14.9.2026, 17:00:02] [TradingBot] ==================================================
+[14.9.2026, 17:00:02] [TradingBot] System Initializing in [PAPER] Mode.
+[14.9.2026, 17:00:02] [TradingBot] System currently holding 3/5 active positions.
+[14.9.2026, 17:00:02] [TradingBot] Active Capital Available: $63237.00
+[Broker] Pinging Screener API. Looking for 2 valid setups...
+[Broker] Valid target added: BMGL
+[Broker] Valid target added: ELMT
+[Agent A: Trader] Routing evaluation through gemini-3.5-flash...
+[Agent A: Trader] Proposal for BMGL: HOLD (confidence 95)
+[14.9.2026, 17:00:15] [TradingBot] --- AI TRADE DECISION FOR BMGL ---
+[14.9.2026, 17:00:15] [TradingBot] Action: HOLD | Confidence: 95
+[14.9.2026, 17:00:15] [TradingBot] Reasoning: The momentum setup is rejected and placed on hold due to missing volume data.
+[14.9.2026, 17:00:15] [TradingBot] Executing HOLD strategy for BMGL.
+[Agent A: Trader] Routing evaluation through gemini-3.5-flash...
+[Agent A: Trader] Proposal for ELMT: HOLD (confidence 95)
+[14.9.2026, 17:00:23] [TradingBot] --- AI TRADE DECISION FOR ELMT ---
+[14.9.2026, 17:00:23] [TradingBot] Action: HOLD | Confidence: 95
+[14.9.2026, 17:00:23] [TradingBot] Reasoning: The setup is placed on hold because the volume data is undefined, violating our discipline regarding missing data validation.
+[14.9.2026, 17:00:23] [TradingBot] Executing HOLD strategy for ELMT.
+◇ injected env (12) from .env // tip: ⌘ override existing { override: true }
+◇ injected env (6) from ../.env // tip: ⌘ suppress logs { quiet: true }
+◇ injected env (0) from ../.env // tip: ⌘ enable debugging { debug: true }
+[14.9.2026, 17:15:01] [TradingBot] ==================================================
+[14.9.2026, 17:15:01] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[14.9.2026, 17:15:01] [TradingBot] ==================================================
+[14.9.2026, 17:15:01] [TradingBot] System Initializing in [PAPER] Mode.
+[14.9.2026, 17:15:01] [TradingBot] System currently holding 3/5 active positions.
+[14.9.2026, 17:15:02] [TradingBot] Active Capital Available: $63237.00
+[Broker] Pinging Screener API. Looking for 2 valid setups...
+[Broker] Valid target added: BMGL
+[Broker] Valid target added: ELMT
+[Agent A: Trader] Routing evaluation through gemini-3.5-flash...
+[Agent A: Trader] Proposal for BMGL: HOLD (confidence 95)
+[14.9.2026, 17:15:09] [TradingBot] --- AI TRADE DECISION FOR BMGL ---
+[14.9.2026, 17:15:09] [TradingBot] Action: HOLD | Confidence: 95
+[14.9.2026, 17:15:09] [TradingBot] Reasoning: The setup is placed on HOLD due to missing volume data which violates quantitative trading risk parameters.
+[14.9.2026, 17:15:09] [TradingBot] Executing HOLD strategy for BMGL.
+[Agent A: Trader] Routing evaluation through gemini-3.5-flash...
+[Agent A: Trader] Proposal for ELMT: HOLD (confidence 95)
+[14.9.2026, 17:15:16] [TradingBot] --- AI TRADE DECISION FOR ELMT ---
+[14.9.2026, 17:15:16] [TradingBot] Action: HOLD | Confidence: 95
+[14.9.2026, 17:15:16] [TradingBot] Reasoning: The momentum setup contains undefined volume data which triggers a mandatory hold due to missing critical market information.
+[14.9.2026, 17:15:16] [TradingBot] Executing HOLD strategy for ELMT.
+◇ injected env (12) from .env // tip: ⌘ enable debugging { debug: true }
+◇ injected env (6) from ../.env // tip: ⌘ override existing { override: true }
+◇ injected env (0) from ../.env // tip: ◈ encrypted .env [www.dotenvx.com]
+[14.9.2026, 17:30:02] [TradingBot] ==================================================
+[14.9.2026, 17:30:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[14.9.2026, 17:30:02] [TradingBot] ==================================================
+[14.9.2026, 17:30:02] [TradingBot] System Initializing in [PAPER] Mode.
+[14.9.2026, 17:30:02] [TradingBot] System currently holding 3/5 active positions.
+[14.9.2026, 17:30:02] [TradingBot] Active Capital Available: $63237.00
+[Broker] Pinging Screener API. Looking for 2 valid setups...
+[Broker] Valid target added: BMGL
+[Broker] Valid target added: ELMT
+[Agent A: Trader] Routing evaluation through gemini-3.5-flash...
+[AIEngine] Gemini primary call failed (429). Rerouting through OpenRouter fallback (meta-llama/llama-3.1-8b-instruct)...
+[AIEngine] OpenRouter fallback succeeded.
+[AIEngine] Failed to parse model response as JSON even after extraction. Raw response (truncated): { 
+  "action": "HOLD",
+  "target_symbol": "NONE",
+  "confidence_score": 0,
+  "reasoning": "Price is under 5.00 and Volume is undefined, failing the penny stock filter"
+[Agent A CRITICAL]: AI evaluation unavailable for BMGL - AIEngine received a non-JSON response from the model: Expected ',' or '}' after property value in JSON at position 167 (line 5 column 93)
+[14.9.2026, 17:30:09] [TradingBot] [System Error]: Error: Agent A (Trader) unavailable for BMGL: AIEngine received a non-JSON response from the model: Expected ',' or '}' after property value in JSON at position 167 (line 5 column 93)
+    at AIEngine.proposeTradeSetup (/home/adminbosskey/bosskey_trading_bot/src/AIEngine.js:158:19)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async AIEngine.evaluateBatch (/home/adminbosskey/bosskey_trading_bot/src/AIEngine.js:213:26)
+    at async runTradingCycle (/home/adminbosskey/bosskey_trading_bot/TradingBot.js:58:30)
+[Notifier] 📱 Push notification sent: "Trading Bot Error"
+◇ injected env (12) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+◇ injected env (6) from ../.env // tip: ⌘ suppress logs { quiet: true }
+◇ injected env (0) from ../.env // tip: ⌘ override existing { override: true }
+[14.9.2026, 17:45:02] [TradingBot] ==================================================
+[14.9.2026, 17:45:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[14.9.2026, 17:45:02] [TradingBot] ==================================================
+[14.9.2026, 17:45:02] [TradingBot] System Initializing in [PAPER] Mode.
+[14.9.2026, 17:45:02] [TradingBot] System currently holding 3/5 active positions.
+[14.9.2026, 17:45:02] [TradingBot] Active Capital Available: $63237.00
+[Broker] Pinging Screener API. Looking for 2 valid setups...
+[Broker] Valid target added: BMGL
+[Broker] Valid target added: WLDSW
+[Agent A: Trader] Routing evaluation through gemini-3.5-flash...
+[AIEngine] Gemini primary call failed (429). Rerouting through OpenRouter fallback (meta-llama/llama-3.1-8b-instruct)...
+[AIEngine] OpenRouter fallback succeeded.
+[Agent A: Trader] Proposal for BMGL: HOLD (confidence 0)
+[14.9.2026, 17:45:05] [TradingBot] --- AI TRADE DECISION FOR BMGL ---
+[14.9.2026, 17:45:05] [TradingBot] Action: HOLD | Confidence: 0
+[14.9.2026, 17:45:05] [TradingBot] Reasoning: Price is under 5.00, triggering the penny stock filter.
+[14.9.2026, 17:45:05] [TradingBot] Executing HOLD strategy for BMGL.
+[Agent A: Trader] Routing evaluation through gemini-3.5-flash...
+[AIEngine] Gemini primary call failed (429). Rerouting through OpenRouter fallback (meta-llama/llama-3.1-8b-instruct)...
+[AIEngine] OpenRouter fallback succeeded.
+[Agent A: Trader] Proposal for WLDSW: BUY (confidence 90)
+[Agent B: Risk Auditor] Reviewing proposal for WLDSW...
+[AIEngine] Gemini primary call failed (429). Rerouting through OpenRouter fallback (meta-llama/llama-3.1-8b-instruct)...
+[AIEngine] OpenRouter fallback succeeded.
+[Agent B: Risk Auditor] REJECTED WLDSW: Thin volume data is unavailable, making it difficult to assess the risk of slippage.
+[14.9.2026, 17:45:09] [TradingBot] --- AI TRADE DECISION FOR WLDSW ---
+[14.9.2026, 17:45:09] [TradingBot] Action: HOLD | Confidence: 90
+[14.9.2026, 17:45:09] [TradingBot] Reasoning: Vetoed by Risk Auditor: Thin volume data is unavailable, making it difficult to assess the risk of slippage.
+[14.9.2026, 17:45:09] [TradingBot] [Risk Auditor] Approved: false | Risk Score: 70 | Notes: High daily change with no volume data; confidence score suggests a high level of optimism, but slim volume poses significant slippage risk.
+[14.9.2026, 17:45:09] [TradingBot] Executing HOLD strategy for WLDSW.
+◇ injected env (12) from .env // tip: ⌁ auth for agents [www.vestauth.com]
+◇ injected env (6) from ../.env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+◇ injected env (0) from ../.env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+[14.9.2026, 18:00:02] [TradingBot] ==================================================
+[14.9.2026, 18:00:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[14.9.2026, 18:00:02] [TradingBot] ==================================================
+[14.9.2026, 18:00:02] [TradingBot] System Initializing in [PAPER] Mode.
+[14.9.2026, 18:00:02] [TradingBot] System currently holding 3/5 active positions.
+[14.9.2026, 18:00:02] [TradingBot] Active Capital Available: $63237.00
+[Broker] Pinging Screener API. Looking for 2 valid setups...
+[Broker] Valid target added: BMGL
+[Broker] Valid target added: WLDSW
+[Agent A: Trader] Routing evaluation through gemini-3.5-flash...
+[AIEngine] Gemini primary call failed (429). Rerouting through OpenRouter fallback (meta-llama/llama-3.1-8b-instruct)...
+[AIEngine] OpenRouter fallback succeeded.
+[AIEngine] Failed to parse model response as JSON even after extraction. Raw response (truncated): {
+  "action": "buy",
+  "target_symbol": "BMGL",
+  "confidence_score": 85,
+  "reasoning": Price is above 5.00, Daily Change is highly positive at 57.86%, and Price is higher than 20-Day SMA at 7.23 com
+[Agent A CRITICAL]: AI evaluation unavailable for BMGL - AIEngine received a non-JSON response from the model: Unexpected token 'P', ..."asoning": Price is a"... is not valid JSON
+[14.9.2026, 18:00:13] [TradingBot] [System Error]: Error: Agent A (Trader) unavailable for BMGL: AIEngine received a non-JSON response from the model: Unexpected token 'P', ..."asoning": Price is a"... is not valid JSON
+    at AIEngine.proposeTradeSetup (/home/adminbosskey/bosskey_trading_bot/src/AIEngine.js:158:19)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async AIEngine.evaluateBatch (/home/adminbosskey/bosskey_trading_bot/src/AIEngine.js:213:26)
+    at async runTradingCycle (/home/adminbosskey/bosskey_trading_bot/TradingBot.js:58:30)
+[Notifier] 📱 Push notification sent: "Trading Bot Error"
+◇ injected env (12) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+◇ injected env (6) from ../.env // tip: ⌘ suppress logs { quiet: true }
+◇ injected env (0) from ../.env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+[14.9.2026, 18:15:02] [TradingBot] ==================================================
+[14.9.2026, 18:15:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[14.9.2026, 18:15:02] [TradingBot] ==================================================
+[14.9.2026, 18:15:02] [TradingBot] System Initializing in [PAPER] Mode.
+[14.9.2026, 18:15:02] [TradingBot] System currently holding 3/5 active positions.
+[14.9.2026, 18:15:02] [TradingBot] Active Capital Available: $63237.00
+[Broker] Pinging Screener API. Looking for 2 valid setups...
+[Broker] Valid target added: BMGL
+[Broker] Valid target added: ELMT
+[Agent A: Trader] Routing evaluation through gemini-3.5-flash...
+[AIEngine] Gemini primary call failed (429). Rerouting through OpenRouter fallback (meta-llama/llama-3.1-8b-instruct)...
+[AIEngine] OpenRouter fallback succeeded.
+[Agent A: Trader] Proposal for BMGL: BUY (confidence 96)
+[Agent B: Risk Auditor] Reviewing proposal for BMGL...
+[AIEngine] Gemini primary call failed (429). Rerouting through OpenRouter fallback (meta-llama/llama-3.1-8b-instruct)...
+[AIEngine] OpenRouter fallback succeeded.
+[AIEngine] Failed to parse model response as JSON even after extraction. Raw response (truncated): {
+  "approved": false,
+  "risk_score": 32,
+  "veto_reason": "Thin volume and extremely high daily change raise concerns about false breakout risk and excessive slippage risk.",
+  "audit_notes": "Volum
+[Agent B Error]: AIEngine received a non-JSON response from the model: Expected ',' or '}' after property value in JSON at position 351 (line 5 column 175)
+[Agent B: Risk Auditor] REJECTED BMGL: Fallback rejection due to Risk Auditor error (Agent B unavailable).
+[14.9.2026, 18:15:06] [TradingBot] --- AI TRADE DECISION FOR BMGL ---
+[14.9.2026, 18:15:06] [TradingBot] Action: HOLD | Confidence: 96
+[14.9.2026, 18:15:06] [TradingBot] Reasoning: Vetoed by Risk Auditor: Fallback rejection due to Risk Auditor error (Agent B unavailable).
+[14.9.2026, 18:15:06] [TradingBot] [Risk Auditor] Approved: false | Risk Score: 0 | Notes: Agent B unavailable.
+[14.9.2026, 18:15:06] [TradingBot] Executing HOLD strategy for BMGL.
+[Agent A: Trader] Routing evaluation through gemini-3.5-flash...
+[AIEngine] Gemini primary call failed (429). Rerouting through OpenRouter fallback (meta-llama/llama-3.1-8b-instruct)...
+[AIEngine] OpenRouter fallback succeeded.
+[Agent A: Trader] Proposal for ELMT: BUY (confidence 90)
+[Agent B: Risk Auditor] Reviewing proposal for ELMT...
+[AIEngine] Gemini primary call failed (429). Rerouting through OpenRouter fallback (meta-llama/llama-3.1-8b-instruct)...
+[AIEngine] OpenRouter fallback succeeded.
+[Agent B: Risk Auditor] REJECTED ELMT: Thin volume and high daily change raise concerns about slippage and false breakout risks.
+[14.9.2026, 18:15:13] [TradingBot] --- AI TRADE DECISION FOR ELMT ---
+[14.9.2026, 18:15:13] [TradingBot] Action: HOLD | Confidence: 90
+[14.9.2026, 18:15:13] [TradingBot] Reasoning: Vetoed by Risk Auditor: Thin volume and high daily change raise concerns about slippage and false breakout risks.
+[14.9.2026, 18:15:13] [TradingBot] [Risk Auditor] Approved: false | Risk Score: 50 | Notes: Volume is undefined, which is a major red flag for slippage risk; also, the RSI is extremely high, suggesting a potential false breakout.
+[14.9.2026, 18:15:13] [TradingBot] Executing HOLD strategy for ELMT.
+◇ injected env (12) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+◇ injected env (6) from ../.env // tip: ⌁ auth for agents [www.vestauth.com]
+◇ injected env (0) from ../.env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+[14.9.2026, 18:30:02] [TradingBot] ==================================================
+[14.9.2026, 18:30:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[14.9.2026, 18:30:02] [TradingBot] ==================================================
+[14.9.2026, 18:30:02] [TradingBot] System Initializing in [PAPER] Mode.
+[14.9.2026, 18:30:02] [TradingBot] System currently holding 3/5 active positions.
+[14.9.2026, 18:30:02] [TradingBot] Active Capital Available: $63237.00
+[Broker] Pinging Screener API. Looking for 2 valid setups...
+[Broker] Valid target added: BMGL
+[Broker] Valid target added: VNCE
+[Agent A: Trader] Routing evaluation through gemini-3.5-flash...
+[AIEngine] Gemini primary call failed (429). Rerouting through OpenRouter fallback (meta-llama/llama-3.1-8b-instruct)...
+[AIEngine] OpenRouter fallback succeeded.
+[AIEngine] Failed to parse model response as JSON even after extraction. Raw response (truncated): {
+  "action": "HOLD",
+  "target_symbol": "BMGL",
+  "confidence_score": 0,
+  "reasoning": Current price 7.48 is above 5.00, but data is missing or undefined for Volume which suggests a chaotic market s
+[Agent A CRITICAL]: AI evaluation unavailable for BMGL - AIEngine received a non-JSON response from the model: Unexpected token 'C', ..."asoning": Current pr"... is not valid JSON
+[14.9.2026, 18:30:08] [TradingBot] [System Error]: Error: Agent A (Trader) unavailable for BMGL: AIEngine received a non-JSON response from the model: Unexpected token 'C', ..."asoning": Current pr"... is not valid JSON
+    at AIEngine.proposeTradeSetup (/home/adminbosskey/bosskey_trading_bot/src/AIEngine.js:158:19)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async AIEngine.evaluateBatch (/home/adminbosskey/bosskey_trading_bot/src/AIEngine.js:213:26)
+    at async runTradingCycle (/home/adminbosskey/bosskey_trading_bot/TradingBot.js:58:30)
+[Notifier] 📱 Push notification sent: "Trading Bot Error"
+◇ injected env (12) from .env // tip: ⌘ suppress logs { quiet: true }
+◇ injected env (6) from ../.env // tip: ⌁ auth for agents [www.vestauth.com]
+◇ injected env (0) from ../.env // tip: ⌘ override existing { override: true }
+[14.9.2026, 18:45:02] [TradingBot] ==================================================
+[14.9.2026, 18:45:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[14.9.2026, 18:45:02] [TradingBot] ==================================================
+[14.9.2026, 18:45:02] [TradingBot] System Initializing in [PAPER] Mode.
+[14.9.2026, 18:45:02] [TradingBot] System currently holding 3/5 active positions.
+[14.9.2026, 18:45:02] [TradingBot] Active Capital Available: $63237.00
+[Broker] Pinging Screener API. Looking for 2 valid setups...
+[Broker] Valid target added: BMGL
+[Broker] Valid target added: VNCE
+[Agent A: Trader] Routing evaluation through gemini-3.5-flash...
+[AIEngine] Gemini primary call failed (429). Rerouting through OpenRouter fallback (meta-llama/llama-3.1-8b-instruct)...
+[AIEngine] OpenRouter fallback succeeded.
+[AIEngine] Failed to parse model response as JSON even after extraction. Raw response (truncated): {
+  "action": "BUY",
+  "target_symbol": "BMGL",
+  "confidence_score": 85,
+  "reasoning": Current Price of 7.46 is above 5.00, with a highly positive 62.88% daily change and a higher price compared to 
+[Agent A CRITICAL]: AI evaluation unavailable for BMGL - AIEngine received a non-JSON response from the model: Unexpected token 'C', ..."asoning": Current Pr"... is not valid JSON
+[14.9.2026, 18:45:06] [TradingBot] [System Error]: Error: Agent A (Trader) unavailable for BMGL: AIEngine received a non-JSON response from the model: Unexpected token 'C', ..."asoning": Current Pr"... is not valid JSON
+    at AIEngine.proposeTradeSetup (/home/adminbosskey/bosskey_trading_bot/src/AIEngine.js:158:19)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async AIEngine.evaluateBatch (/home/adminbosskey/bosskey_trading_bot/src/AIEngine.js:213:26)
+    at async runTradingCycle (/home/adminbosskey/bosskey_trading_bot/TradingBot.js:58:30)
+[Notifier] 📱 Push notification sent: "Trading Bot Error"
+◇ injected env (12) from .env // tip: ⌘ enable debugging { debug: true }
+◇ injected env (6) from ../.env // tip: ◈ encrypted .env [www.dotenvx.com]
+◇ injected env (0) from ../.env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+[14.9.2026, 19:00:02] [TradingBot] ==================================================
+[14.9.2026, 19:00:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[14.9.2026, 19:00:02] [TradingBot] ==================================================
+[14.9.2026, 19:00:02] [TradingBot] System Initializing in [PAPER] Mode.
+[14.9.2026, 19:00:02] [TradingBot] System currently holding 3/5 active positions.
+[14.9.2026, 19:00:02] [TradingBot] Active Capital Available: $63237.00
+[Broker] Pinging Screener API. Looking for 2 valid setups...
+[Broker] Valid target added: BMGL
+[Broker] Valid target added: VNCE
+[Agent A: Trader] Routing evaluation through gemini-3.5-flash...
+[AIEngine] Gemini primary call failed (429). Rerouting through OpenRouter fallback (meta-llama/llama-3.1-8b-instruct)...
+[AIEngine] OpenRouter fallback succeeded.
+[Agent A: Trader] Proposal for BMGL: BUY (confidence 92)
+[Agent B: Risk Auditor] Reviewing proposal for BMGL...
+[AIEngine] Gemini primary call failed (429). Rerouting through OpenRouter fallback (meta-llama/llama-3.1-8b-instruct)...
+[AIEngine] OpenRouter fallback succeeded.
+[Agent B: Risk Auditor] REJECTED BMGL: Thin volume and high daily change raise concerns about slippage and false breakout risks.
+[14.9.2026, 19:00:13] [TradingBot] --- AI TRADE DECISION FOR BMGL ---
+[14.9.2026, 19:00:13] [TradingBot] Action: HOLD | Confidence: 92
+[14.9.2026, 19:00:13] [TradingBot] Reasoning: Vetoed by Risk Auditor: Thin volume and high daily change raise concerns about slippage and false breakout risks.
+[14.9.2026, 19:00:13] [TradingBot] [Risk Auditor] Approved: false | Risk Score: 42 | Notes: Volume is undefined, which is a material concern for a large percentage move, and the RSI is extremely high, suggesting a potential false breakout.
+[14.9.2026, 19:00:13] [TradingBot] Executing HOLD strategy for BMGL.
+[Agent A: Trader] Routing evaluation through gemini-3.5-flash...
+[AIEngine] Gemini primary call failed (429). Rerouting through OpenRouter fallback (meta-llama/llama-3.1-8b-instruct)...
+[AIEngine] OpenRouter fallback succeeded.
+[AIEngine] Failed to parse model response as JSON even after extraction. Raw response (truncated): {
+  "action": "BUY",
+  "target_symbol": "VNCE",
+  "confidence_score": 80,
+  "reasoning": The stock VNCE has a highly positive daily change of 38.36% and a current price of 7.25, which is above the SMA
+[Agent A CRITICAL]: AI evaluation unavailable for VNCE - AIEngine received a non-JSON response from the model: Unexpected token 'T', ..."asoning": The stock "... is not valid JSON
+[14.9.2026, 19:00:18] [TradingBot] [System Error]: Error: Agent A (Trader) unavailable for VNCE: AIEngine received a non-JSON response from the model: Unexpected token 'T', ..."asoning": The stock "... is not valid JSON
+    at AIEngine.proposeTradeSetup (/home/adminbosskey/bosskey_trading_bot/src/AIEngine.js:158:19)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async AIEngine.evaluateBatch (/home/adminbosskey/bosskey_trading_bot/src/AIEngine.js:213:26)
+    at async runTradingCycle (/home/adminbosskey/bosskey_trading_bot/TradingBot.js:58:30)
+[Notifier] 📱 Push notification sent: "Trading Bot Error"
+◇ injected env (12) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+◇ injected env (6) from ../.env // tip: ⌘ suppress logs { quiet: true }
+◇ injected env (0) from ../.env // tip: ⌘ suppress logs { quiet: true }
+[14.9.2026, 19:15:02] [TradingBot] ==================================================
+[14.9.2026, 19:15:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[14.9.2026, 19:15:02] [TradingBot] ==================================================
+[14.9.2026, 19:15:02] [TradingBot] System Initializing in [PAPER] Mode.
+[14.9.2026, 19:15:02] [TradingBot] System currently holding 3/5 active positions.
+[14.9.2026, 19:15:02] [TradingBot] Active Capital Available: $63237.00
+[Broker] Pinging Screener API. Looking for 2 valid setups...
+[Broker] Valid target added: BMGL
+[Broker] Valid target added: VNCE
+[Agent A: Trader] Routing evaluation through gemini-3.5-flash...
+[AIEngine] Gemini primary call failed (429). Rerouting through OpenRouter fallback (meta-llama/llama-3.1-8b-instruct)...
+[AIEngine] OpenRouter fallback succeeded.
+[AIEngine] Failed to parse model response as JSON even after extraction. Raw response (truncated): { 
+  "action": "HOLD",
+  "target_symbol": "NONE",
+  "confidence_score": 50,
+  "reasoning": "Current Price and 20-Day SMA is under 5.00, triggering the penny stock filter."
+[Agent A CRITICAL]: AI evaluation unavailable for BMGL - AIEngine received a non-JSON response from the model: Expected ',' or '}' after property value in JSON at position 171 (line 5 column 96)
+[14.9.2026, 19:15:07] [TradingBot] [System Error]: Error: Agent A (Trader) unavailable for BMGL: AIEngine received a non-JSON response from the model: Expected ',' or '}' after property value in JSON at position 171 (line 5 column 96)
+    at AIEngine.proposeTradeSetup (/home/adminbosskey/bosskey_trading_bot/src/AIEngine.js:158:19)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async AIEngine.evaluateBatch (/home/adminbosskey/bosskey_trading_bot/src/AIEngine.js:213:26)
+    at async runTradingCycle (/home/adminbosskey/bosskey_trading_bot/TradingBot.js:58:30)
+[Notifier] 📱 Push notification sent: "Trading Bot Error"
+◇ injected env (12) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+◇ injected env (6) from ../.env // tip: ⌁ auth for agents [www.vestauth.com]
+◇ injected env (0) from ../.env // tip: ⌘ override existing { override: true }
+[14.9.2026, 19:30:02] [TradingBot] ==================================================
+[14.9.2026, 19:30:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[14.9.2026, 19:30:02] [TradingBot] ==================================================
+[14.9.2026, 19:30:02] [TradingBot] System Initializing in [PAPER] Mode.
+[14.9.2026, 19:30:02] [TradingBot] System currently holding 3/5 active positions.
+[14.9.2026, 19:30:02] [TradingBot] Active Capital Available: $63237.00
+[Broker] Pinging Screener API. Looking for 2 valid setups...
+[Broker] Valid target added: BMGL
+[Broker] Valid target added: VNCE
+[Agent A: Trader] Routing evaluation through gemini-3.5-flash...
+[AIEngine] Gemini primary call failed (429). Rerouting through OpenRouter fallback (meta-llama/llama-3.1-8b-instruct)...
+[AIEngine] OpenRouter fallback succeeded.
+[Agent A: Trader] Proposal for BMGL: BUY (confidence 90)
+[Agent B: Risk Auditor] Reviewing proposal for BMGL...
+[AIEngine] Gemini primary call failed (429). Rerouting through OpenRouter fallback (meta-llama/llama-3.1-8b-instruct)...
+[AIEngine] OpenRouter fallback succeeded.
+[Agent B: Risk Auditor] REJECTED BMGL: Thin volume available to fill the position, increasing the risk of excessive slippage.
+[14.9.2026, 19:30:11] [TradingBot] --- AI TRADE DECISION FOR BMGL ---
+[14.9.2026, 19:30:11] [TradingBot] Action: HOLD | Confidence: 90
+[14.9.2026, 19:30:11] [TradingBot] Reasoning: Vetoed by Risk Auditor: Thin volume available to fill the position, increasing the risk of excessive slippage.
+[14.9.2026, 19:30:11] [TradingBot] [Risk Auditor] Approved: false | Risk Score: 60 | Notes: Momentum breakout under thin volume with high daily change (54.37%); confidence score seems inflated relative to the setup.
+[14.9.2026, 19:30:11] [TradingBot] Executing HOLD strategy for BMGL.
+[Agent A: Trader] Routing evaluation through gemini-3.5-flash...
+[AIEngine] Gemini primary call failed (429). Rerouting through OpenRouter fallback (meta-llama/llama-3.1-8b-instruct)...
+[AIEngine] OpenRouter fallback succeeded.
+[AIEngine] Failed to parse model response as JSON even after extraction. Raw response (truncated): { 
+  "action": "BUY", 
+  "target_symbol": "VNCE", 
+  "confidence_score": 80, 
+  "reasoning": "Current price of 7.313 is closing on the high, showing strong momentum with a 39.56% daily change and is g
+[Agent A CRITICAL]: AI evaluation unavailable for VNCE - AIEngine received a non-JSON response from the model: Expected ',' or '}' after property value in JSON at position 235 (line 5 column 158)
+[14.9.2026, 19:30:12] [TradingBot] [System Error]: Error: Agent A (Trader) unavailable for VNCE: AIEngine received a non-JSON response from the model: Expected ',' or '}' after property value in JSON at position 235 (line 5 column 158)
+    at AIEngine.proposeTradeSetup (/home/adminbosskey/bosskey_trading_bot/src/AIEngine.js:158:19)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async AIEngine.evaluateBatch (/home/adminbosskey/bosskey_trading_bot/src/AIEngine.js:213:26)
+    at async runTradingCycle (/home/adminbosskey/bosskey_trading_bot/TradingBot.js:58:30)
+[Notifier] 📱 Push notification sent: "Trading Bot Error"
+◇ injected env (12) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+◇ injected env (6) from ../.env // tip: ◈ secrets for agents [www.dotenvx.com]
+◇ injected env (0) from ../.env // tip: ◈ secrets for agents [www.dotenvx.com]
+[14.9.2026, 19:45:01] [TradingBot] ==================================================
+[14.9.2026, 19:45:01] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[14.9.2026, 19:45:01] [TradingBot] ==================================================
+[14.9.2026, 19:45:01] [TradingBot] System Initializing in [PAPER] Mode.
+[14.9.2026, 19:45:02] [TradingBot] System currently holding 3/5 active positions.
+[14.9.2026, 19:45:02] [TradingBot] Active Capital Available: $63237.00
+[Broker] Pinging Screener API. Looking for 2 valid setups...
+[Broker] Valid target added: BMGL
+[Broker] Valid target added: VNCE
+[Agent A: Trader] Routing evaluation through gemini-3.5-flash...
+[AIEngine] Gemini primary call failed (429). Rerouting through OpenRouter fallback (meta-llama/llama-3.1-8b-instruct)...
+[AIEngine] OpenRouter fallback succeeded.
+[Agent A: Trader] Proposal for BMGL: BUY (confidence 80)
+[Agent B: Risk Auditor] Reviewing proposal for BMGL...
+[AIEngine] Gemini primary call failed (429). Rerouting through OpenRouter fallback (meta-llama/llama-3.1-8b-instruct)...
+[AIEngine] OpenRouter fallback succeeded.
+[Agent B: Risk Auditor] REJECTED BMGL: Thin volume on a large percentage move increases slippage risk
+[14.9.2026, 19:45:05] [TradingBot] --- AI TRADE DECISION FOR BMGL ---
+[14.9.2026, 19:45:06] [TradingBot] Action: HOLD | Confidence: 80
+[14.9.2026, 19:45:06] [TradingBot] Reasoning: Vetoed by Risk Auditor: Thin volume on a large percentage move increases slippage risk
+[14.9.2026, 19:45:06] [TradingBot] [Risk Auditor] Approved: false | Risk Score: 20 | Notes: High confidence score despite slim and frothy market; needs more volume confirmation
+[14.9.2026, 19:45:06] [TradingBot] Executing HOLD strategy for BMGL.
+[Agent A: Trader] Routing evaluation through gemini-3.5-flash...
+[AIEngine] Gemini primary call failed (429). Rerouting through OpenRouter fallback (meta-llama/llama-3.1-8b-instruct)...
+[AIEngine] OpenRouter fallback succeeded.
+[AIEngine] Failed to parse model response as JSON even after extraction. Raw response (truncated): {
+  "action": "BUY",
+  "target_symbol": "VNCE",
+  "confidence_score": 80,
+  "reasoning": The price of VNCE at 7.33 is higher than the 20-Day SMA at 6.36 and has increased 39.89% in a day, which sugges
+[Agent A CRITICAL]: AI evaluation unavailable for VNCE - AIEngine received a non-JSON response from the model: Unexpected token 'T', ..."asoning": The price "... is not valid JSON
+[14.9.2026, 19:45:07] [TradingBot] [System Error]: Error: Agent A (Trader) unavailable for VNCE: AIEngine received a non-JSON response from the model: Unexpected token 'T', ..."asoning": The price "... is not valid JSON
+    at AIEngine.proposeTradeSetup (/home/adminbosskey/bosskey_trading_bot/src/AIEngine.js:158:19)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async AIEngine.evaluateBatch (/home/adminbosskey/bosskey_trading_bot/src/AIEngine.js:213:26)
+    at async runTradingCycle (/home/adminbosskey/bosskey_trading_bot/TradingBot.js:58:30)
+[Notifier] 📱 Push notification sent: "Trading Bot Error"
+◇ injected env (12) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+◇ injected env (6) from ../.env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+◇ injected env (0) from ../.env // tip: ◈ secrets for agents [www.dotenvx.com]
+[14.9.2026, 20:00:02] [TradingBot] ==================================================
+[14.9.2026, 20:00:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[14.9.2026, 20:00:02] [TradingBot] ==================================================
+[14.9.2026, 20:00:02] [TradingBot] System Initializing in [PAPER] Mode.
+[14.9.2026, 20:00:02] [TradingBot] System currently holding 3/5 active positions.
+[14.9.2026, 20:00:02] [TradingBot] Active Capital Available: $63237.00
+[Broker] Pinging Screener API. Looking for 2 valid setups...
+[Broker] Valid target added: BMGL
+[Broker] Valid target added: VNCE
+[Agent A: Trader] Routing evaluation through gemini-3.5-flash...
+[AIEngine] Gemini primary call failed (429). Rerouting through OpenRouter fallback (meta-llama/llama-3.1-8b-instruct)...
+[AIEngine] OpenRouter fallback succeeded.
+[Agent A: Trader] Proposal for BMGL: HOLD (confidence 0)
+[14.9.2026, 20:00:09] [TradingBot] --- AI TRADE DECISION FOR BMGL ---
+[14.9.2026, 20:00:09] [TradingBot] Action: HOLD | Confidence: 0
+[14.9.2026, 20:00:09] [TradingBot] Reasoning: Current Price is below 5.00, triggering the penny stock filter
+[14.9.2026, 20:00:09] [TradingBot] Executing HOLD strategy for BMGL.
+[Agent A: Trader] Routing evaluation through gemini-3.5-flash...
+[AIEngine] Gemini primary call failed (429). Rerouting through OpenRouter fallback (meta-llama/llama-3.1-8b-instruct)...
+[AIEngine] OpenRouter fallback succeeded.
+[Agent A: Trader] Proposal for VNCE: BUY (confidence 80)
+[Agent B: Risk Auditor] Reviewing proposal for VNCE...
+[AIEngine] Gemini primary call failed (429). Rerouting through OpenRouter fallback (meta-llama/llama-3.1-8b-instruct)...
+[AIEngine] OpenRouter fallback succeeded.
+[Agent B: Risk Auditor] REJECTED VNCE: Thin volume with high daily change indicates material slippage risk
+[14.9.2026, 20:00:16] [TradingBot] --- AI TRADE DECISION FOR VNCE ---
+[14.9.2026, 20:00:16] [TradingBot] Action: HOLD | Confidence: 80
+[14.9.2026, 20:00:16] [TradingBot] Reasoning: Vetoed by Risk Auditor: Thin volume with high daily change indicates material slippage risk
+[14.9.2026, 20:00:16] [TradingBot] [Risk Auditor] Approved: false | Risk Score: 42 | Notes: High daily change and unknown volume leave room for slippage risk
+[14.9.2026, 20:00:16] [TradingBot] Executing HOLD strategy for VNCE.
+◇ injected env (12) from .env // tip: ⌘ enable debugging { debug: true }
+◇ injected env (6) from ../.env // tip: ⌘ override existing { override: true }
+◇ injected env (0) from ../.env // tip: ⌁ auth for agents [www.vestauth.com]
+[14.9.2026, 20:15:01] [TradingBot] ==================================================
+[14.9.2026, 20:15:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[14.9.2026, 20:15:02] [TradingBot] ==================================================
+[14.9.2026, 20:15:02] [TradingBot] System Initializing in [PAPER] Mode.
+[14.9.2026, 20:15:02] [TradingBot] System currently holding 3/5 active positions.
+[14.9.2026, 20:15:02] [TradingBot] Active Capital Available: $63237.00
+[Broker] Pinging Screener API. Looking for 2 valid setups...
+[Broker] Valid target added: BMGL
+[Broker] Valid target added: VNCE
+[Agent A: Trader] Routing evaluation through gemini-3.5-flash...
+[AIEngine] Gemini primary call failed (429). Rerouting through OpenRouter fallback (meta-llama/llama-3.1-8b-instruct)...
+[AIEngine] OpenRouter fallback succeeded.
+[AIEngine] Failed to parse model response as JSON even after extraction. Raw response (truncated): {
+  "action": "HOLD",
+  "target_symbol": "BMGL",
+  "confidence_score": 0,
+  "reasoning": "Price 7.389 is under 5.00, triggers penny stock filter and no trade can be executed"
+[Agent A CRITICAL]: AI evaluation unavailable for BMGL - AIEngine received a non-JSON response from the model: Expected ',' or '}' after property value in JSON at position 174 (line 5 column 101)
+[14.9.2026, 20:15:05] [TradingBot] [System Error]: Error: Agent A (Trader) unavailable for BMGL: AIEngine received a non-JSON response from the model: Expected ',' or '}' after property value in JSON at position 174 (line 5 column 101)
+    at AIEngine.proposeTradeSetup (/home/adminbosskey/bosskey_trading_bot/src/AIEngine.js:158:19)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async AIEngine.evaluateBatch (/home/adminbosskey/bosskey_trading_bot/src/AIEngine.js:213:26)
+    at async runTradingCycle (/home/adminbosskey/bosskey_trading_bot/TradingBot.js:58:30)
+[Notifier] 📱 Push notification sent: "Trading Bot Error"
+◇ injected env (12) from .env // tip: ⌘ override existing { override: true }
+◇ injected env (6) from ../.env // tip: ◈ secrets for agents [www.dotenvx.com]
+◇ injected env (0) from ../.env // tip: ⌘ override existing { override: true }
+[14.9.2026, 20:30:01] [TradingBot] ==================================================
+[14.9.2026, 20:30:01] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[14.9.2026, 20:30:02] [TradingBot] ==================================================
+[14.9.2026, 20:30:02] [TradingBot] System Initializing in [PAPER] Mode.
+[14.9.2026, 20:30:02] [TradingBot] System currently holding 3/5 active positions.
+[14.9.2026, 20:30:02] [TradingBot] Active Capital Available: $63237.00
+[Broker] Pinging Screener API. Looking for 2 valid setups...
+[Broker] Valid target added: BMGL
+[Broker] Valid target added: VNCE
+[Agent A: Trader] Routing evaluation through gemini-3.5-flash...
+[AIEngine] Gemini primary call failed (429). Rerouting through OpenRouter fallback (meta-llama/llama-3.1-8b-instruct)...
+[AIEngine] OpenRouter fallback succeeded.
+[AIEngine] Failed to parse model response as JSON even after extraction. Raw response (truncated): {
+  "action": "BUY",
+  "target_symbol": "BMGL",
+  "confidence_score": 90,
+  "reasoning": Current Price is above 5.00, highly positive Daily Change of 60.69% and above 20-Day SMA"
+}
+[Agent A CRITICAL]: AI evaluation unavailable for BMGL - AIEngine received a non-JSON response from the model: Unexpected token 'C', ..."asoning": Current Pr"... is not valid JSON
+[14.9.2026, 20:30:07] [TradingBot] [System Error]: Error: Agent A (Trader) unavailable for BMGL: AIEngine received a non-JSON response from the model: Unexpected token 'C', ..."asoning": Current Pr"... is not valid JSON
+    at AIEngine.proposeTradeSetup (/home/adminbosskey/bosskey_trading_bot/src/AIEngine.js:158:19)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async AIEngine.evaluateBatch (/home/adminbosskey/bosskey_trading_bot/src/AIEngine.js:213:26)
+    at async runTradingCycle (/home/adminbosskey/bosskey_trading_bot/TradingBot.js:58:30)
+[Notifier] 📱 Push notification sent: "Trading Bot Error"
+◇ injected env (12) from .env // tip: ⌁ auth for agents [www.vestauth.com]
+◇ injected env (6) from ../.env // tip: ⌁ auth for agents [www.vestauth.com]
+◇ injected env (0) from ../.env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+[14.9.2026, 20:45:02] [TradingBot] ==================================================
+[14.9.2026, 20:45:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[14.9.2026, 20:45:02] [TradingBot] ==================================================
+[14.9.2026, 20:45:02] [TradingBot] System Initializing in [PAPER] Mode.
+[14.9.2026, 20:45:02] [TradingBot] System currently holding 3/5 active positions.
+[14.9.2026, 20:45:02] [TradingBot] Active Capital Available: $63237.00
+[Broker] Pinging Screener API. Looking for 2 valid setups...
+[Broker] Valid target added: BMGL
+[Broker] Valid target added: VNCE
+[Agent A: Trader] Routing evaluation through gemini-3.5-flash...
+[AIEngine] Gemini primary call failed (429). Rerouting through OpenRouter fallback (meta-llama/llama-3.1-8b-instruct)...
+[AIEngine] OpenRouter fallback succeeded.
+[AIEngine] Failed to parse model response as JSON even after extraction. Raw response (truncated): {
+  "action": "BUY",
+  "target_symbol": "BMGL",
+  "confidence_score": 85,
+  "reasoning": Price is above 5.00 and has significantly increased, also above 20-Day SMA, indicating positive momentum breako
+[Agent A CRITICAL]: AI evaluation unavailable for BMGL - AIEngine received a non-JSON response from the model: Unexpected token 'P', ..."asoning": Price is a"... is not valid JSON
+[14.9.2026, 20:45:05] [TradingBot] [System Error]: Error: Agent A (Trader) unavailable for BMGL: AIEngine received a non-JSON response from the model: Unexpected token 'P', ..."asoning": Price is a"... is not valid JSON
+    at AIEngine.proposeTradeSetup (/home/adminbosskey/bosskey_trading_bot/src/AIEngine.js:158:19)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async AIEngine.evaluateBatch (/home/adminbosskey/bosskey_trading_bot/src/AIEngine.js:213:26)
+    at async runTradingCycle (/home/adminbosskey/bosskey_trading_bot/TradingBot.js:58:30)
+[Notifier] 📱 Push notification sent: "Trading Bot Error"
+◇ injected env (12) from .env // tip: ⌘ suppress logs { quiet: true }
+◇ injected env (6) from ../.env // tip: ⌘ enable debugging { debug: true }
+◇ injected env (0) from ../.env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+[14.9.2026, 21:00:02] [TradingBot] ==================================================
+[14.9.2026, 21:00:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[14.9.2026, 21:00:02] [TradingBot] ==================================================
+[14.9.2026, 21:00:02] [TradingBot] System Initializing in [PAPER] Mode.
+[14.9.2026, 21:00:02] [TradingBot] System currently holding 3/5 active positions.
+[14.9.2026, 21:00:02] [TradingBot] Active Capital Available: $63237.00
+[Broker] Pinging Screener API. Looking for 2 valid setups...
+[Broker] Valid target added: BMGL
+[Broker] Valid target added: VNCE
+[Agent A: Trader] Routing evaluation through gemini-3.5-flash...
+[AIEngine] Gemini primary call failed (429). Rerouting through OpenRouter fallback (meta-llama/llama-3.1-8b-instruct)...
+[AIEngine] OpenRouter fallback succeeded.
+[Agent A: Trader] Proposal for BMGL: BUY (confidence 85)
+[Agent B: Risk Auditor] Reviewing proposal for BMGL...
+[AIEngine] Gemini primary call failed (429). Rerouting through OpenRouter fallback (meta-llama/llama-3.1-8b-instruct)...
+[AIEngine] OpenRouter fallback succeeded.
+[Agent B: Risk Auditor] REJECTED BMGL: Thin volume and high daily change indicate excessive slippage risk and potential false breakout
+[14.9.2026, 21:00:15] [TradingBot] --- AI TRADE DECISION FOR BMGL ---
+[14.9.2026, 21:00:15] [TradingBot] Action: HOLD | Confidence: 85
+[14.9.2026, 21:00:15] [TradingBot] Reasoning: Vetoed by Risk Auditor: Thin volume and high daily change indicate excessive slippage risk and potential false breakout
+[14.9.2026, 21:00:16] [TradingBot] [Risk Auditor] Approved: false | Risk Score: 20 | Notes: Volume is undefined, indicating a lack of liquidity, and the 62.88% daily change is unusually high, suggesting a false breakout risk
+[14.9.2026, 21:00:16] [TradingBot] Executing HOLD strategy for BMGL.
+[Agent A: Trader] Routing evaluation through gemini-3.5-flash...
+[AIEngine] Gemini primary call failed (429). Rerouting through OpenRouter fallback (meta-llama/llama-3.1-8b-instruct)...
+[AIEngine] OpenRouter fallback succeeded.
+[AIEngine] Failed to parse model response as JSON even after extraction. Raw response (truncated): {
+  "action": "HOLD",
+  "target_symbol": "VNCE",
+  "confidence_score": 30,
+  "reasoning": Penny stock filter triggered since Current Price 7.6651 is above 5.00 but the setup is uncertain due to undefi
+[Agent A CRITICAL]: AI evaluation unavailable for VNCE - AIEngine received a non-JSON response from the model: Unexpected token 'P', ..."asoning": Penny stoc"... is not valid JSON
+[14.9.2026, 21:00:17] [TradingBot] [System Error]: Error: Agent A (Trader) unavailable for VNCE: AIEngine received a non-JSON response from the model: Unexpected token 'P', ..."asoning": Penny stoc"... is not valid JSON
+    at AIEngine.proposeTradeSetup (/home/adminbosskey/bosskey_trading_bot/src/AIEngine.js:158:19)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async AIEngine.evaluateBatch (/home/adminbosskey/bosskey_trading_bot/src/AIEngine.js:213:26)
+    at async runTradingCycle (/home/adminbosskey/bosskey_trading_bot/TradingBot.js:58:30)
+[Notifier] 📱 Push notification sent: "Trading Bot Error"
+◇ injected env (12) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+◇ injected env (6) from ../.env // tip: ⌘ enable debugging { debug: true }
+◇ injected env (0) from ../.env // tip: ⌘ enable debugging { debug: true }
+[14.9.2026, 21:15:01] [TradingBot] ==================================================
+[14.9.2026, 21:15:01] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[14.9.2026, 21:15:01] [TradingBot] ==================================================
+[14.9.2026, 21:15:02] [TradingBot] System Initializing in [PAPER] Mode.
+[14.9.2026, 21:15:02] [TradingBot] System currently holding 3/5 active positions.
+[14.9.2026, 21:15:02] [TradingBot] Active Capital Available: $63237.00
+[Broker] Pinging Screener API. Looking for 2 valid setups...
+[Broker] Valid target added: BMGL
+[Broker] Valid target added: VNCE
+[Agent A: Trader] Routing evaluation through gemini-3.5-flash...
+[AIEngine] Gemini primary call failed (429). Rerouting through OpenRouter fallback (meta-llama/llama-3.1-8b-instruct)...
+[AIEngine] OpenRouter fallback succeeded.
+[AIEngine] Failed to parse model response as JSON even after extraction. Raw response (truncated): {
+  "action": "HOLD",
+  "target_symbol": "BMGL",
+  "confidence_score": 0,
+  "reasoning": "Price is under 5.00 so the penny stock filter must be triggered failing the conditions to execute a buy positi
+[Agent A CRITICAL]: AI evaluation unavailable for BMGL - AIEngine received a non-JSON response from the model: Expected ',' or '}' after property value in JSON at position 204 (line 5 column 131)
+[14.9.2026, 21:15:06] [TradingBot] [System Error]: Error: Agent A (Trader) unavailable for BMGL: AIEngine received a non-JSON response from the model: Expected ',' or '}' after property value in JSON at position 204 (line 5 column 131)
+    at AIEngine.proposeTradeSetup (/home/adminbosskey/bosskey_trading_bot/src/AIEngine.js:158:19)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async AIEngine.evaluateBatch (/home/adminbosskey/bosskey_trading_bot/src/AIEngine.js:213:26)
+    at async runTradingCycle (/home/adminbosskey/bosskey_trading_bot/TradingBot.js:58:30)
+[Notifier] 📱 Push notification sent: "Trading Bot Error"
+◇ injected env (12) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+◇ injected env (6) from ../.env // tip: ⌁ auth for agents [www.vestauth.com]
+◇ injected env (0) from ../.env // tip: ⌘ suppress logs { quiet: true }
+[14.9.2026, 21:30:02] [TradingBot] ==================================================
+[14.9.2026, 21:30:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[14.9.2026, 21:30:02] [TradingBot] ==================================================
+[14.9.2026, 21:30:02] [TradingBot] System Initializing in [PAPER] Mode.
+[14.9.2026, 21:30:02] [TradingBot] System currently holding 3/5 active positions.
+[14.9.2026, 21:30:02] [TradingBot] Active Capital Available: $63237.00
+[Broker] Pinging Screener API. Looking for 2 valid setups...
+[Broker] Valid target added: BMGL
+[Broker] Valid target added: VNCE
+[Agent A: Trader] Routing evaluation through gemini-3.5-flash...
+[AIEngine] Gemini primary call failed (429). Rerouting through OpenRouter fallback (meta-llama/llama-3.1-8b-instruct)...
+[AIEngine] OpenRouter fallback succeeded.
+[Agent A: Trader] Proposal for BMGL: BUY (confidence 92)
+[Agent B: Risk Auditor] Reviewing proposal for BMGL...
+[AIEngine] Gemini primary call failed (429). Rerouting through OpenRouter fallback (meta-llama/llama-3.1-8b-instruct)...
+[AIEngine] OpenRouter fallback succeeded.
+[Agent B: Risk Auditor] REJECTED BMGL: Thin volume and high daily change indicate high slippage risk and potential exhaustion.
+[14.9.2026, 21:30:09] [TradingBot] --- AI TRADE DECISION FOR BMGL ---
+[14.9.2026, 21:30:09] [TradingBot] Action: HOLD | Confidence: 92
+[14.9.2026, 21:30:09] [TradingBot] Reasoning: Vetoed by Risk Auditor: Thin volume and high daily change indicate high slippage risk and potential exhaustion.
+[14.9.2026, 21:30:09] [TradingBot] [Risk Auditor] Approved: false | Risk Score: 80 | Notes: Volume is undefined, a strong daily move without much data is suspicious.
+[14.9.2026, 21:30:09] [TradingBot] Executing HOLD strategy for BMGL.
+[Agent A: Trader] Routing evaluation through gemini-3.5-flash...
+[AIEngine] Gemini primary call failed (429). Rerouting through OpenRouter fallback (meta-llama/llama-3.1-8b-instruct)...
+[AIEngine] OpenRouter fallback succeeded.
+[AIEngine] Failed to parse model response as JSON even after extraction. Raw response (truncated): { "action": "BUY", "target_symbol": "VNCE", "confidence_score": 80, "reasoning": The stock VNCE has a high daily change and is above its 20-day SMA, indicating a potential momentum breakout. }
+[Agent A CRITICAL]: AI evaluation unavailable for VNCE - AIEngine received a non-JSON response from the model: Unexpected token 'T', ..."asoning": The stock "... is not valid JSON
+[14.9.2026, 21:30:14] [TradingBot] [System Error]: Error: Agent A (Trader) unavailable for VNCE: AIEngine received a non-JSON response from the model: Unexpected token 'T', ..."asoning": The stock "... is not valid JSON
+    at AIEngine.proposeTradeSetup (/home/adminbosskey/bosskey_trading_bot/src/AIEngine.js:158:19)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async AIEngine.evaluateBatch (/home/adminbosskey/bosskey_trading_bot/src/AIEngine.js:213:26)
+    at async runTradingCycle (/home/adminbosskey/bosskey_trading_bot/TradingBot.js:58:30)
+[Notifier] 📱 Push notification sent: "Trading Bot Error"
+◇ injected env (12) from .env // tip: ⌘ enable debugging { debug: true }
+◇ injected env (6) from ../.env // tip: ⌘ enable debugging { debug: true }
+◇ injected env (0) from ../.env // tip: ⌘ suppress logs { quiet: true }
+[14.9.2026, 21:45:02] [TradingBot] ==================================================
+[14.9.2026, 21:45:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[14.9.2026, 21:45:02] [TradingBot] ==================================================
+[14.9.2026, 21:45:02] [TradingBot] System Initializing in [PAPER] Mode.
+[14.9.2026, 21:45:02] [TradingBot] System currently holding 3/5 active positions.
+[14.9.2026, 21:45:02] [TradingBot] Active Capital Available: $63237.00
+[Broker] Pinging Screener API. Looking for 2 valid setups...
+[Broker] Valid target added: BMGL
+[Broker] Valid target added: VNCE
+[Agent A: Trader] Routing evaluation through gemini-3.5-flash...
+[AIEngine] Gemini primary call failed (503). Rerouting through OpenRouter fallback (meta-llama/llama-3.1-8b-instruct)...
+[AIEngine] OpenRouter fallback succeeded.
+[Agent A: Trader] Proposal for BMGL: HOLD (confidence 0)
+[14.9.2026, 21:45:09] [TradingBot] --- AI TRADE DECISION FOR BMGL ---
+[14.9.2026, 21:45:09] [TradingBot] Action: HOLD | Confidence: 0
+[14.9.2026, 21:45:09] [TradingBot] Reasoning: Price is less than 5.00, failing the penny stock filter
+[14.9.2026, 21:45:09] [TradingBot] Executing HOLD strategy for BMGL.
+[Agent A: Trader] Routing evaluation through gemini-3.5-flash...
+[AIEngine] Gemini primary call failed (429). Rerouting through OpenRouter fallback (meta-llama/llama-3.1-8b-instruct)...
+[AIEngine] OpenRouter fallback succeeded.
+[AIEngine] Failed to parse model response as JSON even after extraction. Raw response (truncated): {
+  "action": "HOLD",
+  "target_symbol": "VNCE",
+  "confidence_score": 20,
+  "reasoning": The Current Price of 7.67 is under the Penny Stock filter threshold of 5.00.
+}
+[Agent A CRITICAL]: AI evaluation unavailable for VNCE - AIEngine received a non-JSON response from the model: Unexpected token 'T', ..."asoning": The Curren"... is not valid JSON
+[14.9.2026, 21:45:10] [TradingBot] [System Error]: Error: Agent A (Trader) unavailable for VNCE: AIEngine received a non-JSON response from the model: Unexpected token 'T', ..."asoning": The Curren"... is not valid JSON
+    at AIEngine.proposeTradeSetup (/home/adminbosskey/bosskey_trading_bot/src/AIEngine.js:158:19)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async AIEngine.evaluateBatch (/home/adminbosskey/bosskey_trading_bot/src/AIEngine.js:213:26)
+    at async runTradingCycle (/home/adminbosskey/bosskey_trading_bot/TradingBot.js:58:30)
+[Notifier] 📱 Push notification sent: "Trading Bot Error"
+◇ injected env (9) from ../.env // tip: ⌘ suppress logs { quiet: true }
+[14.9.2026, 22:15:01] [Settlement] ==================================================
+[14.9.2026, 22:15:01] [Settlement] 🏦 INITIATING DAILY BATCH SETTLEMENT
+[14.9.2026, 22:15:01] [Settlement] ==================================================
+[14.9.2026, 22:15:01] [Settlement] No trades were closed today. No settlement required.
+[Notifier] 📱 Push notification sent: "Daily Settlement Report"

@@ -1,0 +1,284 @@
+# Bosskey Trading Bot — Full System Diagnostic & Project Review
+**Prepared:** 2026-09-14 | **Prepared by:** Claude Code (Sonnet 5), at the request of the project owner, for review by Gemini
+**Scope:** Full source code audit, `execution.log` forensic analysis (10,711 lines / ~4 weeks), live PostgreSQL database inspection (`bosskey_trading`), live Alpaca paper-account reconciliation, and full test suite execution.
+
+---
+
+## 0. Executive Summary
+
+The user's own diagnosis — "the issue lies with AIEngine.js" — is **partially correct but is not the primary or most dangerous problem**. There are **five independent, compounding failures**, only one of which lives in `AIEngine.js`. In order of severity:
+
+1. **Stop-loss/take-profit protection silently expires after ~1 trading day** (`BrokerClient.js`) — every open position eventually trades completely unprotected. This is the most financially dangerous bug in the system.
+2. **The database has no idea what the broker is actually doing.** The process that used to reconcile closed positions (`Liquidator.js`) was deleted on 2026-08-21 and never replaced. As a direct result, real, currently-open, badly-losing positions are marked `CLOSED` with `net_profit = $0.00` in the database — the ledger is fiction.
+3. **Zero trades have been approved since the "Agent Debate" risk gate launched on 2026-09-03** (0 approvals out of 38+ audited proposals), largely because `BrokerClient.js` never actually collects trading volume data, so every AI prompt says `Volume: undefined` and the risk auditor correctly rejects on missing data every time.
+4. **AIEngine.js** (the file the user flagged): the primary model (Gemini) is rate-limited on ~53% of calls, and the small fallback model on OpenRouter frequently emits malformed JSON that isn't recoverable by the existing sanitization, hard-erroring roughly 1 in 8 cycles.
+5. **A silent environment-variable bug** (`Config.js`, `BrokerClient.js`, `Settlement.js`) loads the wrong `.env` file when scripts run from cron. It currently "works" only by accident, because a stale, duplicate credentials file happens to still contain a matching password.
+
+**Net effect:** Live paper-account data shows **~$21,000 in unrealized losses currently sitting in positions the database believes are worth $0 or don't exist**, and the bot has not successfully opened a new trade in the 12 days since the current risk architecture went live. Trading is not "sometimes not working" — for new entries, it has been **completely non-functional since 2026-09-03**, and for existing positions, risk management has been **non-functional since roughly 24 hours after each entry**.
+
+None of this is visible from the dashboard or from `npm test` (21/21 tests pass — see §6). It only surfaces by cross-referencing the database against the live Alpaca account, which this report does in §2.
+
+---
+
+## 1. System Overview (as built)
+
+| Component | File | Role |
+|---|---|---|
+| Entry point (cron, every 15 min, 15:00–21:45 local, Mon–Fri) | `TradingBot.js` | Orchestrates one trading cycle |
+| AI decision layer | `src/AIEngine.js` | Two-agent debate: Agent A (Trader) proposes, Agent B (Risk Auditor) must approve |
+| Market data & execution | `src/BrokerClient.js` | Screens Alpaca movers, computes SMA/RSI, submits bracket orders |
+| Risk sizing | `src/RiskEngine.js` | ATR-based dynamic stop-loss (2×ATR) / take-profit (3×ATR) |
+| Fundamentals filter | `src/FundamentalClient.js` | Rejects setups with earnings in next 5 days (Finnhub → yahoo-finance2 fallback) |
+| Settlement (cron, daily 22:15) | `src/Settlement.js` | Sums closed trades, distributes P&L into capital pots |
+| Persistence | `src/DatabaseClient.js`, PostgreSQL `bosskey_trading` | Tables: `system_logs`, `trade_analytics`, `capital_pots` |
+| API/Dashboard | `src/DashboardAPI.js` (PM2, port 3000), React dashboard (port 5173) | Telemetry + mode switcher |
+| **Missing:** position reconciliation | *(deleted 2026-08-21, never replaced — see §2.2)* | Nothing currently tells the database when Alpaca closes a position |
+
+PM2 status at time of audit: `bosskey-api` and `bosskey-dashboard` both online, 3 days uptime, low resource use — these two daemons are healthy. The trading logic itself runs as one-shot cron jobs, not PM2 daemons.
+
+---
+
+## 2. CRITICAL — Position & Capital Ledger Is Disconnected From Reality
+
+This is the single most important finding in this report, and it was **only discoverable by querying the live Alpaca account directly**, which the code itself never does after entry.
+
+### 2.1 Bracket protective orders expire after one trading day
+
+`src/BrokerClient.js:193-241`, `executeBuyOrder()`, submits every bracket order with:
+```js
+time_in_force: 'day'
+```
+This applies to the whole bracket, including the `take_profit` (limit) and `stop_loss` (stop) child legs. A `day` order is automatically canceled by the exchange at the close of the session it was submitted in. Live order history pulled from the Alpaca paper account confirms this is exactly what is happening to **every single bracket order the bot has ever submitted**:
+
+| Symbol | Entry date | Stop leg | Take-profit leg |
+|---|---|---|---|
+| SDOT | 2026-08-24 | `canceled` (same day) | `expired` (same day) |
+| ISRL | 2026-09-02 | `canceled` (same day) | `expired` (same day) |
+| RDAC | 2026-09-02 | `canceled` (same day) | `expired` (same day) |
+| AAPL | 2026-09-09 | `canceled` (same day) | `expired` (same day) |
+
+**A live check of currently-open orders on the account returns zero.** There is not a single active stop-loss or take-profit order protecting any of the bot's current holdings, right now, as of this audit.
+
+Since this strategy holds positions for many days (ISRL/RDAC have been open 12 days; SDOT for 3 weeks), the safety mechanism the whole `RiskEngine.js` / ATR architecture was built around evaporates within hours of every entry. This is very likely the direct cause of SDOT's -51% ($4,662.56 unrealized loss) and WETO's -92% ($15,553.95 unrealized loss, see §2.2) — nothing was watching either position once the entry day ended.
+
+**Fix:** set `time_in_force: 'gtc'` on the bracket order (Alpaca supports GTC brackets), or explicitly set `time_in_force` on the nested `take_profit`/`stop_loss` legs if the parent must stay `day` for the entry itself.
+
+### 2.2 The reconciliation process was deleted and never rebuilt
+
+Git history shows `src/Liquidator.js` existed through 2026-08-20 and was removed in commit `8caf045` ("replace static liquidator with broker-side OCO bracket orders", 2026-08-21), on the reasoning that Alpaca's own bracket orders would handle exits. **What was not carried over: any code that writes the result of an exit back into `trade_analytics`.** Grep across the entire codebase confirms there is no `UPDATE trade_analytics SET status = 'CLOSED'` anywhere in `TradingBot.js`, `BrokerClient.js`, or `Settlement.js`. `Settlement.js` only ever *reads* rows that are already `CLOSED` — nothing ever makes that transition anymore.
+
+The practical result, confirmed by cross-referencing `trade_analytics` against a live `GET /v2/positions` call to Alpaca on 2026-09-14:
+
+| Symbol | Database says | Alpaca (live, paper) says | Reality |
+|---|---|---|---|
+| **WETO** | `CLOSED`, `net_profit = $0.00` (id 24, backdated to a 2026-09-02 mass "repair") | **Still open.** 549 shares, cost basis $16,827.52, current value $1,273.57 | **-$15,553.95 unrealized loss, completely unbooked, position still live** |
+| **SDOT** | `CLOSED`, `net_profit = $0.00` (id 25, same 09-02 repair) | **Still open.** 368 shares, cost basis $9,089.60, current value $4,427.04 | **-$4,662.56 unrealized loss, completely unbooked, position still live** |
+| **WEAV** | `CLOSED`, `net_profit = $0.00` (id 5, same 09-02 repair) | **Still open.** 1,128 shares, currently +$14.49 | Small unbooked gain, but the DB has no idea this position exists |
+| **RIBBU** | `OPEN` (id 30, opened 2026-09-02, still counted against the 5-slot cap) | **Does not exist in the account.** No position, no order history. | Ghost row artificially consuming one of five position slots for 12 days |
+| **AAPL** | **Not present at all** — no row, open or closed | 1 share held, opened via a bracket order 2026-09-09 | A real trade that the database was never told about |
+| ISRL | `OPEN` (id 28) | Open, 346 shares, -$132.26 unrealized | Consistent, but unprotected (see §2.1) |
+| RDAC | `OPEN` (id 29) | Open, 1,144 shares, -$786.34 unrealized | Consistent, but unprotected (see §2.1) |
+
+Background: the RELEASE-README's 2026-09-03 entry describes a "capacity lock" repair where 5 rows (WEAV, the second WETO row, SDOT, FVNNU, FVN) were manually set to `CLOSED` / `net_profit = $0.00` because they were believed to be dead "ghost positions" blocking the 5-slot cap. **That assumption was wrong for at least WEAV, SDOT, and WETO** — they were not ghosts, they were live positions that got written off the books while still actively running (and, in WETO's case, continued to lose another ~$15k after being marked "closed" at $0).
+
+**Consequences:**
+- `capital_pots.active_capital` ($63,237.00, last touched 2026-09-02) has been computed against a fictional position count for 12 days.
+- The 5-slot position cap TradingBot.js enforces (`TradingBot.js:31-42`) is being computed from a `trade_analytics` table that both overcounts (RIBBU, a ghost) and undercounts (AAPL is invisible, WEAV/SDOT/WETO are invisible) relative to the real account.
+- `Settlement.js` has logged "No trades were closed today" on every single run since 2026-09-03 (see §5) — not because nothing is happening on the account, but because **nothing can ever transition to `CLOSED` anymore**, so there is structurally nothing for Settlement to find.
+
+**This is the top-priority fix.** Before anything else — including the AI/trading-frequency issues below — the system needs a reconciliation job that periodically diffs Alpaca's actual position/order state against `trade_analytics` and corrects it. Until that exists, every number on the dashboard and in `capital_pots` should be treated as unreliable.
+
+---
+
+## 3. CRITICAL — Zero New Trades Approved Since the Risk-Debate Launch (2026-09-03)
+
+Statistics pulled directly from `execution.log` (535 recorded trading cycles, 2026-08-19 through 2026-09-14):
+
+| Metric | Count |
+|---|---|
+| Trading cycles run | 535 |
+| Trades successfully executed | **20 — all between 2026-08-19 and 2026-08-25** |
+| Trades executed since the Agent Debate went live (2026-09-03 onward) | **0** |
+| Agent B (`Risk Auditor`) explicit `APPROVED` verdicts (all time) | **0** |
+| Agent B explicit `REJECTED` verdicts | 38 |
+| Cycles where Agent A itself hard-failed (`Agent A CRITICAL`) | 66 |
+
+All 20 real trades in the database predate the two-agent debate entirely (`AIEngine.js`'s `auditTradeSetup` / Agent B was introduced in commit `0bb514b`, 2026-09-03). Since then, **not one proposal has cleared Agent B**, out of at least 38 proposals that reached it.
+
+### 3.1 Root cause: volume data is never actually collected
+
+Grepping the Risk Auditor's own rejection notes shows the dominant, recurring reason:
+
+> "Volume is undefined, making it difficult to assess slippage risk..."
+> "Audit revealed critical data gaps with undefined volume..."
+> "Thin volume not provided for MKDW..."
+> "Volume data is undefined, making it impossible to assess slippage risk..."
+
+This phrase (or a close variant) appears in the majority of the 38 rejections. Looking at `src/BrokerClient.js:108-116`, the market-data object sent to the AI is built as:
+```js
+validSetups.push({
+    symbol: mover.symbol,
+    price: mover.price,
+    dailyChange: mover.percent_change.toFixed(2),
+    volume: mover.volume,        // <-- this field
+    sma_20: sma_20,
+    rsi_14: this.calculateRSI(closePrices, 14),
+    rawBars: bars
+});
+```
+`mover` comes straight from Alpaca's `/v1beta1/screener/stocks/movers` response (`BrokerClient.js:49-61`), which does not appear to include a `volume` field for each mover in its schema — hence `mover.volume` resolves to `undefined` for effectively every candidate, every cycle. That literal `undefined` gets string-interpolated straight into the Agent A/Agent B prompts (`AIEngine.js:132`, `:182`: `Volume: ${marketData.volume}`), so the model is *correctly* told there is no volume data and is *correctly* skeptical of every setup as a result. This is not the AI "being too conservative" — it's the AI faithfully doing its job on top of a data pipeline that was never actually wired up.
+
+The bars endpoint the code already calls (`BrokerClient.js:80-92`, used for SMA/RSI) returns Alpaca's standard OHLCV bar shape (`o,h,l,c,v,t,n,vw`), i.e. **the volume data is one line away** — `bars[bars.length - 1].v` (or an average over the recent window) — it is simply never read out of a response the code is already fetching.
+
+**Fix:** populate `volume` from the `bars` array instead of the nonexistent `mover.volume`. This alone is very likely to unblock the majority of currently-stuck proposals.
+
+### 3.2 Position-slot math is also corrupted by §2.2
+
+Even once Agent B starts approving trades again, `TradingBot.js:31-42` computes `neededSlots = 5 - openPositions` from the same desynced `trade_analytics` table documented in §2.2 — currently reporting 3/5 held, when Alpaca actually shows 6 real positions. Fixing §3.1 without first fixing §2.2 will make the bot open trades against a capacity number that doesn't reflect the real account.
+
+---
+
+## 4. `AIEngine.js` — The File the User Flagged
+
+This is a real, active problem, but it is downstream of §2 and §3 in terms of impact. Two distinct failure modes, both visible in `execution.log`:
+
+### 4.1 The primary model is rate-limited over half the time
+
+```
+Gemini primary call failed:  284 / 535 cycles observed (≈53%)
+  — HTTP 429 (quota exceeded): 257
+  — HTTP 503 (service unavailable): 27
+```
+The model configured is `gemini-3.5-flash` (`AIEngine.js:40`). Every cycle can make up to 4 calls (2 candidates × Agent A + Agent B), so this is a high-volume workload against what is very likely a free/low tier API key. The existing `isRetryableGeminiError` fallback logic (`AIEngine.js:9-15`) correctly detects and reroutes these — the fallback mechanism itself is sound engineering — but being on the fallback model for roughly half of all decisions has real consequences (see 4.2).
+
+**Recommendation:** confirm the Gemini API key's tier/quota and either upgrade it or reduce call volume (e.g., cache/skip re-evaluating a symbol that was just rejected minutes ago), because right now the "fallback" path is really the primary path for half of all trading decisions.
+
+### 4.2 The fallback model (OpenRouter `llama-3.1-8b-instruct`) cannot reliably produce valid JSON
+
+66 hard failures (`Agent A CRITICAL`) are on record. Two distinct patterns, both confirmed directly in the log and **neither is fixable by the existing `extractJSONBlock` regex hardening** (added 2026-09-11), because in both cases the braces are present and look valid — the corruption is *inside* the object, not around it:
+
+**Pattern A — unescaped/unquoted string value:**
+```
+{ "action": "BUY", "target_symbol": "VNCE", "confidence_score": 80, "reasoning": The stock VNCE has a high daily change and is above its 20-day SMA, indicating a potential momentum breakout. }
+```
+The model forgot to quote the `reasoning` value. `extractJSONBlock`'s `/\{[\s\S]*\}/` regex still matches this whole (invalid) blob because it does start with `{` and end with `}` — so it's handed to `JSON.parse`, which throws.
+
+**Pattern B — truncated output:**
+```
+{
+  "action": "HOLD",
+  "target_symbol": "BMGL",
+  "confidence_score": 0,
+  "reasoning": "Price is under 5.00 so the penny stock filter must be triggered failing the conditions to execute a buy positi
+```
+Output cut off mid-string, almost certainly a token-limit truncation on the OpenRouter/8B side.
+
+This is a genuine structural limitation of using an 8-billion-parameter instruction model for a strict-JSON task — the 2026-09-11 hardening pass fixed the "conversational filler wrapped around valid JSON" case well, but that was never the failure mode actually occurring most often in production; these two patterns are.
+
+**Recommendations, in order of effort:**
+1. Cheapest: wrap the `JSON.parse` call in a retry (one re-prompt of the same model with "your last response was invalid JSON: <error>. Return ONLY corrected JSON.") before giving up.
+2. Better: switch the fallback model to something meaningfully stronger at structured output (even a mid-size model) — an 8B model was likely chosen for cost, but it is currently costing far more in missed/errored cycles than a slightly larger model would cost in tokens.
+3. Best long-term: use the provider's native structured-output / JSON-schema mode if OpenRouter/the chosen fallback model supports it, instead of relying on prompt instructions alone (Gemini's own path already does this correctly via `responseMimeType: "application/json"` at `AIEngine.js:43` — the OpenRouter path has no equivalent).
+
+### 4.3 What's already correct in this file (do not "fix" these)
+- Fail-closed design: an Agent B error returns `approved: false` (never silently approves), and an Agent A hard failure throws instead of masking itself as `HOLD` — both are exactly the right call for a system that will eventually touch real money.
+- The 429/503-vs-everything-else distinction in `isRetryableGeminiError` is correct and well-reasoned (don't reroute on auth/bad-request errors).
+- Test coverage for the debate logic (`Systest/AIEngine.test.js`) is genuinely good — 9 tests covering approve/veto/fail-closed/fallback-routing paths, all passing.
+
+---
+
+## 5. Environment Configuration Bug — Currently Masked by a Lucky Coincidence
+
+`src/Config.js:1`, `src/BrokerClient.js:1`, and `src/Settlement.js:1` all load environment variables with:
+```js
+require('dotenv').config({ path: '../.env' });
+```
+This path is resolved **relative to the process's current working directory**, not relative to the file. `index.js` and `TradingBot.js` load correctly (`path: __dirname + '/.env'`), but when `Settlement.js` is invoked directly by cron (`cd /home/.../bosskey_trading_bot && node src/Settlement.js`), the CWD is the project root, so `'../.env'` resolves to **`/home/adminbosskey/.env`** — a stray, older file that is *not* the project's `.env`.
+
+Verified directly:
+```
+$ node -e "require('dotenv').config({ path: '../.env' }); console.log(process.env.DB_HOST)"
+◇ injected env (9) from ../.env
+undefined
+```
+`/home/adminbosskey/.env` uses the `PG*` naming convention (`PGHOST`, `PGUSER`, `PGPASSWORD`, `PGPORT`, `PGDATABASE`) left over from an older version of the code (`sandbox.js`, an early `TradingBot.js`), not the `DB_*` names `DatabaseClient.js` actually reads. So `DatabaseClient` gets constructed with `host: undefined, user: undefined, password: undefined...`.
+
+**Why it hasn't broken yet:** the `pg` driver falls back to the standard libpq environment variables (`PGHOST`, `PGUSER`, `PGPASSWORD`, `PGDATABASE`, `PGPORT`) whenever an explicit config field is `undefined` — and by coincidence, `/home/adminbosskey/.env` happens to contain a full, currently-valid set of those same `PG*` variables, including the correct current database password. Settlement therefore connects successfully purely by luck, not by design.
+
+**This is a latent landmine, not a currently-active bug**, but it's a serious one:
+- If that stray home-directory file is ever cleaned up, deleted, or edited (it looks exactly like abandoned clutter, and it's outside the git repo and outside `.gitignore` review), `Settlement.js` (and any other script invoked the same way) will start silently failing to connect to Postgres with no clear error pointing at the cause.
+- It's also a credential-hygiene problem independent of the bug: real API keys (Alpaca, Gemini) and the DB password are duplicated in a second, un-tracked location outside the project directory.
+
+**Fix:** change all three files to `path: require('path').resolve(__dirname, '../.env')` (matching the pattern already used correctly in `DashboardAPI.js:1`), and delete or archive `/home/adminbosskey/.env` once confirmed unused.
+
+---
+
+## 6. Settlement, Database Integrity, and Test Suite
+
+- **`Settlement.js` itself is well-hardened** as of the 2026-09-03 patch: it now skips non-finite `net_profit` rows and refuses to write a non-finite total to `capital_pots` (`Settlement.js:44-64`). This correctly fixed the historical incident on 2026-09-02 where a `NULL`/`NaN` row corrupted `active_capital` (visible in `execution.log:4660`: `Batch processed 5 closed trades. Daily Net: $NaN`). Good, verified fix — do not revert.
+- **However**, one row from that same incident was apparently missed by the repair: `trade_analytics` id `1` (symbol `NNNN`) still has a **literal Postgres `NaN`** in `net_profit` and a `NULL` `closed_at` despite `status = 'CLOSED'`. It's currently harmless (Settlement's `DATE(closed_at...)` filter excludes it since `closed_at` is null, and the dashboard's `PerformanceMetrics.jsx:43` already guards with `parseFloat(t.net_profit) || 0`), but it's a dangling data-integrity error that should be cleaned up before it trips up some future query that isn't as defensively written.
+- **`system_logs`** contains 5,475 `TradingBot` entries, 153 `Liquidator` entries (all from 2026-08-18 to 2026-08-20, before deletion — see §2.2), and 88 `Settlement` entries. `Settlement` has logged "No trades were closed today" on **every run since 2026-09-03** — direct log confirmation of §2.2's finding that nothing can transition to `CLOSED` anymore.
+- **Logger.js** opens a brand-new PostgreSQL connection for every single log line (`Logger.js:12-24`) rather than reusing a pooled connection. At current volume (~5,700+ log lines/month) this is not an emergency, but it is wasteful and will not scale if logging frequency increases; consider a connection pool (`pg.Pool`) instead of one-`Client`-per-line.
+- **Full test suite passes: 6 suites / 21 tests, 3.0s.** This is good baseline coverage for the pieces it covers (Config safety, ATR math, fundamentals fallback, bracket payload shape, the debate engine, Settlement's NaN-guard). **None of it exercises the actual gaps found in this report** — there is no test (and, structurally, no code to test) for position reconciliation, for bracket `time_in_force` behavior, or for `scanMarketMovers`'s volume field, because that logic doesn't fully exist yet. The 21/21 green suite is a true reflection of unit-level correctness, not of system-level correctness — worth saying explicitly since a report to Gemini might otherwise lean on "tests pass" as evidence the system is healthy.
+
+---
+
+## 7. Recommendations, Prioritized
+
+### P0 — Do before running this system unattended again, in any mode
+1. **Reconciliation job.** Build a scheduled process that pulls `GET /v2/positions` and recent `GET /v2/orders` from Alpaca and reconciles them against `trade_analytics` (close rows that are actually closed with real fill prices, flag/alert on rows that don't match either direction). This single fix resolves §2.2 and makes every other number in the system trustworthy again.
+2. **Fix bracket `time_in_force`.** Change `'day'` to `'gtc'` (or explicitly set it on the nested legs) in `BrokerClient.js:221`. Every day this ships unfixed, every open position is unprotected after its first session.
+3. **Manually reconcile the live paper account now**, independent of any code fix: WETO and SDOT are currently open, real, and carrying a combined ~$20,216 unrealized loss that is invisible everywhere in the dashboard/database today. Decide whether to close them out or knowingly hold them, but do so with eyes open — right now no part of this system is tracking them at all.
+
+### P1 — Needed to make the bot actually trade again
+4. **Populate real volume data** in `BrokerClient.scanMarketMovers()` from the `bars` response (`bars[bars.length-1].v` or similar) instead of the nonexistent `mover.volume`.
+5. **Harden the OpenRouter JSON path**: add a single retry-with-correction prompt on parse failure, and/or upgrade the fallback model — an 8B model is the direct cause of 66 hard-failed cycles.
+6. **Investigate Gemini quota** — 53% of primary calls failing suggests the current API key tier is undersized for the call volume this architecture generates (up to 4 calls/cycle × 96 cycles/day).
+
+### P2 — Hygiene, before this ever touches real capital
+7. Fix the `'../.env'` relative-path bug in `Config.js`, `BrokerClient.js`, `Settlement.js` (use `path.resolve(__dirname, '../.env')`), and delete/archive the stray `/home/adminbosskey/.env`.
+8. Clean up `trade_analytics` id `1`'s dangling `NaN`/`NULL` row.
+9. Move `Logger.js` to a pooled DB connection instead of one client per log line.
+10. Re-verify the still-open item flagged in `RELEASE-README.md`: as of this audit, `BrokerClient.js` does correctly route the order URL and the Alpaca client's `paper` flag off of `Config.getMode()`, so that specific historical concern looks resolved in code — but this should be re-confirmed with a real PRODUCTION-key dry run before ever flipping `SYSTEM_MODE`, especially now that P0 items above are outstanding.
+
+---
+
+## 8. Suggested Question for Gemini
+
+Given the above, the open strategic question worth putting to Gemini is less "how do we patch `AIEngine.js`" and more:
+> **Given that the position-reconciliation layer was removed five weeks ago and never rebuilt, and that the risk-debate gate has blocked 100% of new trades for the last two weeks, is the right move to harden the current architecture (P0–P2 above), or to treat this as a checkpoint to redesign the exit/reconciliation layer from scratch before adding any more AI-side features?** The AI decision layer is arguably the most *tested and correct* part of the codebase right now (§4.3) — the actual structural risk is entirely in the broker/database boundary (§2).
+
+---
+
+## Appendix A — Verification Commands Run
+
+```bash
+npm test                                      # 6 suites / 21 tests passing
+psql -d bosskey_trading -c "\dt"              # table list
+psql -d bosskey_trading -c "SELECT * FROM capital_pots;"
+psql -d bosskey_trading -c "SELECT ... FROM trade_analytics ORDER BY id;"
+psql -d bosskey_trading -c "SELECT count(*), process FROM system_logs GROUP BY process;"
+curl (via node fetch) https://paper-api.alpaca.markets/v2/positions
+curl (via node fetch) https://paper-api.alpaca.markets/v2/account
+curl (via node fetch) https://paper-api.alpaca.markets/v2/orders?status=open
+curl (via node fetch) https://paper-api.alpaca.markets/v2/orders?status=all&symbols=ISRL,RDAC,SDOT,WEAV,WETO,AAPL
+grep/awk forensic pass over execution.log (10,711 lines, 2026-08-18 → 2026-09-14)
+git log --all --format="%h %ad %s" --date=format:'%Y-%m-%d %H:%M'
+```
+All Alpaca calls were read-only (`GET`) against the **paper** account using the keys already present in `.env`; nothing was modified on the broker or in the database during this audit.
+
+## Appendix B — Raw execution.log Statistics
+
+| Metric | Value |
+|---|---|
+| Total trading cycles logged | 535 |
+| Date range | 2026-08-19 → 2026-09-14 |
+| Gemini primary failures (429) | 257 |
+| Gemini primary failures (503) | 27 |
+| OpenRouter fallback successes | 113 |
+| Agent A hard failures (`CRITICAL`) | 66 |
+| Agent B `REJECTED` | 38 |
+| Agent B `APPROVED` | 0 |
+| Trades executed (all pre-2026-09-03) | 20 |
+| Trades executed (2026-09-03 → present) | 0 |
+| `Settlement` runs logging "No trades were closed today" | Every run since 2026-09-03 (11 consecutive) |
