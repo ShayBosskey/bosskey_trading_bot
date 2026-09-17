@@ -203,17 +203,9 @@ class BrokerClient {
 
         console.log(`[Broker] Formatting BRACKET BUY order for ${qty} shares of ${symbol}...`);
 
-        const orderUrl = Config.getMode() === 'PRODUCTION'
-            ? 'https://api.alpaca.markets/v2/orders'
-            : 'https://paper-api.alpaca.markets/v2/orders';
-        const response = await fetch(orderUrl, {
+        const response = await fetch(`${this.#getBaseUrl()}/v2/orders`, {
             method: 'POST',
-            headers: {
-                'APCA-API-KEY-ID': process.env.ALPACA_API_KEY,
-                'APCA-API-SECRET-KEY': process.env.ALPACA_SECRET_KEY,
-                'accept': 'application/json',
-                'content-type': 'application/json'
-            },
+            headers: { ...this.#authHeaders(), 'content-type': 'application/json' },
             body: JSON.stringify({
                 symbol: symbol,
                 qty: String(qty),

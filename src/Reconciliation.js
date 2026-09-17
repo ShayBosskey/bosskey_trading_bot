@@ -30,9 +30,7 @@ class Reconciliation {
         this.notifier = new Notifier();
     }
 
-    async #findResolvableClose(trade, liveBySymbol) {
-        if (liveBySymbol.has(trade.symbol)) return null; // still genuinely open
-
+    async #findResolvableClose(trade) {
         const closingSide = trade.action === 'SELL_SHORT' ? 'buy' : 'sell';
         const fill = await this.broker.getLastFilledOrder(trade.symbol, closingSide);
         if (!fill) return null; // no verifiable close on record - flag, don't guess
@@ -95,7 +93,7 @@ class Reconciliation {
                 resolvedCloses.push(this.#buildClose(trade, filledSells[0]));
             } else if (filledSells.length === 0 && liveBySymbol.has(trade.symbol)) {
                 const live = liveBySymbol.get(trade.symbol);
-                if (parseInt(live.qty, 10) === trade.qty) {
+                if (parseInt(live.qty, 10) === parseInt(trade.qty, 10)) {
                     reopened.push(trade);
                     liveBySymbol.delete(trade.symbol);
                 } else {
@@ -138,7 +136,18 @@ class Reconciliation {
                     continue;
                 }
 
-                const resolved = await this.#findResolvableClose(trade, liveBySymbol);
+                const countRes = await this.db.client.query(
+                    'SELECT COUNT(*)::int AS count FROM trade_analytics WHERE symbol = $1',
+                    [trade.symbol]
+                );
+
+                if (countRes.rows[0].count > 1) {
+                    report.unresolvedGaps.push(trade.symbol);
+                    await this.logger.log(`⚠️ ${trade.symbol} (id=${trade.id}) is OPEN in the DB but absent from Alpaca, and ${trade.symbol} has multiple historical rows in trade_analytics — cannot be safely attributed to a single lot. Needs manual review.`);
+                    continue;
+                }
+
+                const resolved = await this.#findResolvableClose(trade);
                 if (resolved) {
                     report.resolvedCloses.push(resolved);
                 } else {
@@ -159,6 +168,20 @@ class Reconciliation {
                 await this.logger.log(`⚠️ Alpaca holds ${symbol} but it has no OPEN row in trade_analytics. Needs manual review (not auto-inserted).`);
             }
 
+            // A close with a non-finite net_profit/margin_percentage (e.g. a corrupted
+            // buy_price on an old row) must NOT be written to trade_analytics or allowed
+            // to poison totalNetProfit with NaN/Infinity.
+            const validCloses = [];
+            for (const closeItem of report.resolvedCloses) {
+                if (Number.isFinite(closeItem.netProfit) && Number.isFinite(closeItem.marginPercentage)) {
+                    validCloses.push(closeItem);
+                } else {
+                    report.unresolvedGaps.push(closeItem.trade.symbol);
+                    await this.logger.log(`⚠️ ${closeItem.trade.symbol} (id=${closeItem.trade.id}) produced a non-finite net_profit/margin_percentage — skipping this close. Needs manual review.`);
+                }
+            }
+            report.resolvedCloses = validCloses;
+
             let totalNetProfit = 0;
             for (const closeItem of report.resolvedCloses) {
                 await this.logger.log(
@@ -169,6 +192,10 @@ class Reconciliation {
             }
             for (const trade of report.reopened) {
                 await this.logger.log(`Reopening: ${trade.symbol} (id=${trade.id}) is still a live Alpaca position; the CLOSED status was fabricated. Reverting to OPEN.`);
+            }
+
+            if (!Number.isFinite(totalNetProfit)) {
+                throw new Error(`Computed totalNetProfit is not finite (${totalNetProfit}). Aborting reconciliation without touching capital_pots.`);
             }
 
             if (!dryRun) {
