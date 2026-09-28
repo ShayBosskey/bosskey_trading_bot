@@ -4,6 +4,7 @@ const BrokerClient = require('./BrokerClient');
 const DatabaseClient = require('./DatabaseClient');
 const Logger = require('./Logger');
 const Notifier = require('./Notifier');
+const attachGlobalErrorLogger = require('./ErrorHandler');
 
 // Replaces the exit engine deleted in 8caf045 (src/Liquidator.js), which was
 // removed when execution moved to broker-side OCO brackets. Nothing took over
@@ -197,6 +198,7 @@ class PositionsSync {
 
 // Execute (applies by default; pass --dry-run to preview)
 if (require.main === module) {
+    attachGlobalErrorLogger('PositionsSync');
     const dryRun = process.argv.includes('--dry-run');
     new PositionsSync().run({ dryRun }).catch(() => process.exit(1));
 }

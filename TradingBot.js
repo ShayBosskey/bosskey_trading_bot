@@ -6,6 +6,7 @@ const Logger = require('./src/Logger');
 const Notifier = require('./src/Notifier');
 const Config = require('./src/Config');
 const RiskEngine = require('./src/RiskEngine');
+const attachGlobalErrorLogger = require('./src/ErrorHandler');
 
 async function runTradingCycle() {
     const logger = new Logger('TradingBot');
@@ -126,4 +127,5 @@ async function runTradingCycle() {
     }
 }
 
+attachGlobalErrorLogger('TradingBot');
 runTradingCycle();

@@ -3,6 +3,7 @@ require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
 const DatabaseClient = require('./DatabaseClient');
 const Logger = require('./Logger');
 const Notifier = require('./Notifier');
+const attachGlobalErrorLogger = require('./ErrorHandler');
 
 class Settlement {
     constructor() {
@@ -121,6 +122,7 @@ class Settlement {
 
 // Execute
 if (require.main === module) {
+    attachGlobalErrorLogger('Settlement');
     const settlement = new Settlement();
     settlement.runDailySettlement();
 }

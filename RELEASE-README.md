@@ -71,3 +71,10 @@ Schema: `Date (Timestamp) | Title | Description | New Features`
 - **Docs**: New `escalation/README.md` covering the architecture, voice-command safety model, Docker install on Raspberry Pi OS, configuration, launch, phone setup, a test drill, everyday Docker commands, and troubleshooting. Root `README.md` updated.
 - **Testing**: Added `Systest/VoiceEscalator.test.js` and 7 bridge suites under `escalation/bridge/test/` (call file, Wyoming parser, AGI protocol, command parser, conversation flow, cooldown/service, bot actions). Full suite: 17 suites / 99 tests passing. The bridge was also smoke-tested live on the host: auth rejection, call file spooled, cooldown 429, and bad AGI id rejected. The Docker images themselves have not been built yet (Docker isn't installed on the Pi).
 
+---
+
+**2026-09-28 (13:11:06 CEST)** | Crash Alerts Wired Into Cron Scripts | `attachGlobalErrorLogger` existed but no entry script ever called it, so crashes sent no ntfy push and could not trigger a voice call. |
+- **Wiring (`TradingBot.js`, `src/Settlement.js`, `src/PositionsSync.js`)**: Each script now calls `attachGlobalErrorLogger('<name>')` before it runs. Settlement and PositionsSync do this inside their `require.main === module` guard, so tests that import them don't install process-wide handlers. An uncaught exception or unhandled rejection now sends the `CRITICAL SYSTEM CRASH` push and requests an escalation call, then exits with code 1 (the same exit Node would have made anyway).
+- **Scope note**: Errors these scripts already catch themselves (their `try/catch` blocks) still send only their existing ntfy push. The global handler covers failures that escape those blocks.
+- **Testing**: Added `Systest/ErrorHandler.test.js` (2 tests: exception and non-Error rejection both push, escalate, and exit 1). Full suite: 18 suites / 101 tests passing.
+
