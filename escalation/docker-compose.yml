@@ -46,7 +46,9 @@ services:
 
   # --- Speech to text (whisper.cpp HTTP server on :8080) --------------------
   whisper:
-    image: ghcr.io/ggml-org/whisper.cpp:main-arm64
+    # Built locally: the prebuilt arm64 image needs ARMv8.2+ and crashes (SIGILL)
+    # on a Pi 4. See whisper/Dockerfile.
+    build: ./whisper
     container_name: esc-whisper
     restart: unless-stopped
     # First start downloads the model into the volume (~140 MB for base.en).

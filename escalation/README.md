@@ -22,7 +22,7 @@ bot crashes ─► ErrorHandler ─► VoiceEscalator ──POST /escalate──
 |------------|-----------------------------------------|------------------------------------------|--------------------------------------|
 | `asterisk` | built from `asterisk/` (Alpine, Ast. 20)| SIP server, dials your phone             | Tailscale IP, UDP 5060 + 10000–10100 |
 | `piper`    | `lscr.io/linuxserver/piper`             | Text → speech (`en_GB-alan-medium`)      | internal only (Wyoming, 10200)       |
-| `whisper`  | `ghcr.io/ggml-org/whisper.cpp:main-arm64`| Speech → text                           | internal only (HTTP, 8080)           |
+| `whisper`  | built from `whisper/` (whisper.cpp v1.9.4)| Speech → text                          | internal only (HTTP, 8080)           |
 | `ollama`   | `ollama/ollama`                         | Maps free-form speech to one action      | internal only (HTTP, 11434)          |
 | `bridge`   | built from `bridge/` (Node 22)          | Glue: HTTP API, .call files, the call    | `127.0.0.1:3100` (API), `127.0.0.1:4573` (AGI) |
 
@@ -111,7 +111,7 @@ refuses the halt command and the butler will tell you so on the call.
 
 ```bash
 cd ~/bosskey_trading_bot/escalation
-docker compose build            # builds the asterisk + bridge images (~5 min on a Pi 4)
+docker compose build            # builds the asterisk, whisper and bridge images (~15 min on a Pi 4)
 docker compose up -d            # starts all five containers in the background
 docker compose ps               # every service should show "running" / "Up"
 docker compose logs -f bridge   # watch warm-up; Ctrl+C stops watching (the stack keeps running)
@@ -190,6 +190,7 @@ waits for the Tailscale IP to come up before it binds SIP.
 | Phone never rings | `pjsip show contacts` (above) must list the phone. If it doesn't: is Tailscale connected on the phone, is the SIP password correct, is the app allowed to run in the background? |
 | Rings, but silence / one-way audio | The phone must reach UDP 10000–10100 on the Tailscale IP. Dial 600 to test. Make sure the SIP app isn't forcing TCP/TLS or SRTP. |
 | Butler says "an error has occurred" | Piper or whisper isn't ready: `docker compose logs piper whisper`. |
+| `whisper` keeps restarting with exit code 132 | SIGILL: the binary uses CPU instructions the Pi lacks. That's why `whisper/Dockerfile` compiles whisper.cpp on the Pi (`GGML_NATIVE=ON`) instead of using the upstream `main-arm64` image, which needs ARMv8.2+ (a Pi 4 is ARMv8.0). If you move the stack to another machine, rebuild it there with `docker compose build whisper`. |
 | Long pause after you speak | Normal on a Pi 4 (roughly 5–15 s for whisper plus, when needed, the LLM). For speed, use `WHISPER_MODEL=tiny.en` and/or `OLLAMA_MODEL=qwen2.5:0.5b`, then `docker compose up -d`. |
 | "The bot refused the command" | `BOT_ADMIN_TOKEN` must equal the bot's `ADMIN_API_TOKEN`, and `bosskey-api` must be running under PM2 (`pm2 ls`). |
 | Test curl returns 429 | The cooldown is working. Wait, or run `docker compose restart bridge` to reset it. |
@@ -216,6 +217,8 @@ escalation/
 ├── asterisk/
 │   ├── Dockerfile, entrypoint.sh
 │   └── config/                 # pjsip.conf.template, extensions.conf, rtp.conf, modules.conf, ...
+├── whisper/
+│   └── Dockerfile              # compiles whisper.cpp for the Pi's own CPU
 └── bridge/
     ├── Dockerfile, package.json
     ├── src/

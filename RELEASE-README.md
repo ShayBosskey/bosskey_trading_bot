@@ -78,3 +78,12 @@ Schema: `Date (Timestamp) | Title | Description | New Features`
 - **Scope note**: Errors these scripts already catch themselves (their `try/catch` blocks) still send only their existing ntfy push. The global handler covers failures that escape those blocks.
 - **Testing**: Added `Systest/ErrorHandler.test.js` (2 tests: exception and non-Error rejection both push, escalate, and exit 1). Full suite: 18 suites / 101 tests passing.
 
+---
+
+**2026-09-28 (13:39:08 CEST)** | Escalation Stack Deployed; whisper.cpp Built for the Pi 4 | Installed Docker on the Pi and launched the voice escalation stack. The upstream whisper.cpp image crashed on this hardware, so whisper.cpp is now compiled locally. |
+- **Deployment**: Installed Docker Engine 29.8.1 and Compose v5.5.1, generated `escalation/.env`, and added `ESCALATION_BRIDGE_URL`/`ESCALATION_TOKEN` to the bot `.env`. All five containers are up. SIP is bound only to the Tailscale IP (`100.82.40.78:5060`). The bridge warm-up pulled `qwen2.5:1.5b` and rendered every fixed prompt with the `en_GB-alan-medium` voice.
+- **whisper.cpp crash fix (`escalation/whisper/Dockerfile`)**: `ghcr.io/ggml-org/whisper.cpp:main-arm64` is built on ARMv8.2+ CI runners and crash-looped with SIGILL (exit 132) on the Pi 4's Cortex-A72 (ARMv8.0: `fp asimd crc32`). It is replaced by a multi-stage build of whisper.cpp `v1.9.4` compiled on the Pi with `GGML_NATIVE=ON`. The entrypoint is unchanged, so the compose `command` stayed the same. The broken upstream image was removed.
+- **End-to-end verification (inside the bridge container)**: Piper TTS, then an 8 kHz WAV, then whisper, then CommandParser, then a read-only `GET /api/v1/system/status` all worked (bot reported `PAPER`). No mode change was issued.
+- **Known limitations found by the test**: (1) whisper `base.en` takes about 27 s per short clip on the Pi 4 because it always encodes a full 30 s window. (2) Synthetic 8 kHz audio was misheard ("halt" as "hold", "status" as "theatus"). (3) LLM classification takes 11-20 s warm, and the first call after start timed out at 45 s while the model loaded. (4) The LLM misread "don't stop the bot, just leave it running" as `STATUS_REPORT`. That outcome is harmless because it is read-only, but it is wrong. Every state change still requires pressing 1 on the keypad. Latency tuning is a pending follow-up.
+- **Docs**: `escalation/README.md` updated with the locally built whisper image, the build time, and a SIGILL troubleshooting entry.
+
