@@ -1,0 +1,33 @@
+; One UDP transport, bound ONLY to the Pi's Tailscale address - nothing on the
+; LAN or internet can reach SIP.
+[transport-tailscale]
+type=transport
+protocol=udp
+bind=${TAILSCALE_IP}:5060
+
+; Your phone. The SIP app registers with username/password below.
+[${SIP_USERNAME}]
+type=endpoint
+transport=transport-tailscale
+context=from-mobile
+disallow=all
+allow=g722,ulaw,alaw        ; g722 = wideband ("HD voice"), ulaw/alaw = universal fallback
+auth=${SIP_USERNAME}-auth
+aors=${SIP_USERNAME}
+direct_media=no             ; audio always flows through Asterisk (it has to record you)
+rtp_symmetric=yes           ; mobile-friendly: send audio back where it came from
+force_rport=yes
+rewrite_contact=yes
+dtmf_mode=rfc4733           ; keypad presses for "press 1 to confirm"
+
+[${SIP_USERNAME}-auth]
+type=auth
+auth_type=userpass
+username=${SIP_USERNAME}
+password=${SIP_PASSWORD}
+
+[${SIP_USERNAME}]
+type=aor
+max_contacts=1
+remove_existing=yes         ; a re-registering phone replaces its stale contact
+qualify_frequency=30        ; ping the phone every 30 s so we know it's reachable

@@ -1,0 +1,11 @@
+{
+  "name": "bosskey-escalation-bridge",
+  "version": "1.0.0",
+  "description": "Bridges the trading bot to Asterisk, Piper, whisper.cpp and Ollama for voice escalation calls.",
+  "main": "src/server.js",
+  "private": true,
+  "license": "ISC",
+  "type": "commonjs",
+  "engines": { "node": ">=22" },
+  "scripts": { "start": "node src/server.js" }
+}

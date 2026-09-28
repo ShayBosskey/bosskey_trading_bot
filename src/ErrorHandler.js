@@ -1,7 +1,9 @@
 const Notifier = require('./Notifier');
+const VoiceEscalator = require('./VoiceEscalator');
 
 function attachGlobalErrorLogger(scriptName) {
     const notifier = new Notifier();
+    const voiceEscalator = new VoiceEscalator();
 
     const handleCriticalError = async (errorType, err) => {
         // Format the local Swiss time
@@ -15,12 +17,16 @@ function attachGlobalErrorLogger(scriptName) {
 
         const pushBody = `Script: ${scriptName}\nTime: ${timestamp}\nError: ${errorMessage}`;
         
-        // Await the push notification so the script doesn't die before it sends
-        await notifier.push(
-            "CRITICAL SYSTEM CRASH",
-            pushBody,
-            "rotating_light"
-        );
+        // Await both so the script doesn't die before they send. Neither throws,
+        // and the voice call request is capped by its own short timeout.
+        await Promise.all([
+            notifier.push(
+                "CRITICAL SYSTEM CRASH",
+                pushBody,
+                "rotating_light"
+            ),
+            voiceEscalator.escalate(`${scriptName} crashed`, `${errorType}: ${errorMessage}`)
+        ]);
 
         // Force a clean exit with a failure code
         process.exit(1);

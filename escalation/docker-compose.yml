@@ -1,0 +1,116 @@
+# Bosskey voice escalation stack.
+#
+#   trading bot (host, PM2/cron) --POST /escalate--> bridge --.call file--> asterisk --SIP/Tailscale--> your phone
+#                                                      |  ^                    |
+#                                     piper (TTS) <----+  +---- FastAGI -------+   (answer -> record -> transcribe -> act)
+#                                     whisper (STT) <--+
+#                                     ollama (LLM) <---+
+#
+# Everything reads its secrets from ./.env (copy env.example -> .env first).
+
+name: bosskey-escalation
+
+services:
+  # --- SIP server -----------------------------------------------------------
+  # Host networking on purpose: SIP carries RTP audio on a whole UDP port range,
+  # and Docker's port-mapping/NAT is the #1 cause of "call connects but no audio".
+  # With host networking Asterisk binds SIP directly to the Tailscale IP only.
+  asterisk:
+    build: ./asterisk
+    container_name: esc-asterisk
+    network_mode: host
+    restart: unless-stopped
+    environment:
+      TAILSCALE_IP: ${TAILSCALE_IP}
+      SIP_USERNAME: ${SIP_USERNAME}
+      SIP_PASSWORD: ${SIP_PASSWORD}
+      TZ: ${TZ}
+    volumes:
+      - asterisk_spool:/var/spool/asterisk              # .call files land in ./outgoing
+      - escalation_audio:/var/lib/asterisk/sounds/escalation   # TTS prompts + your recorded replies
+
+  # --- Text to speech (Wyoming protocol on :10200) --------------------------
+  piper:
+    image: lscr.io/linuxserver/piper:latest
+    container_name: esc-piper
+    restart: unless-stopped
+    environment:
+      PUID: 1000
+      PGID: 1000
+      TZ: ${TZ}
+      PIPER_VOICE: ${PIPER_VOICE}   # en_GB-alan-medium = British male, the butler
+      PIPER_LENGTH: "1.1"           # slightly slower, more measured delivery
+    volumes:
+      - piper_data:/config          # downloaded voice models are cached here
+    networks: [escalation]
+
+  # --- Speech to text (whisper.cpp HTTP server on :8080) --------------------
+  whisper:
+    image: ghcr.io/ggml-org/whisper.cpp:main-arm64
+    container_name: esc-whisper
+    restart: unless-stopped
+    # First start downloads the model into the volume (~140 MB for base.en).
+    # --convert makes the server run ffmpeg on uploads, so Asterisk's 8 kHz
+    # recordings are accepted as-is.
+    command:
+      - >-
+        [ -f /models/ggml-${WHISPER_MODEL}.bin ] || ./models/download-ggml-model.sh ${WHISPER_MODEL} /models;
+        exec whisper-server --host 0.0.0.0 --port 8080
+        -m /models/ggml-${WHISPER_MODEL}.bin -l en -t 4 --convert
+    volumes:
+      - whisper_models:/models
+    networks: [escalation]
+
+  # --- Local LLM (Ollama API on :11434) -------------------------------------
+  ollama:
+    image: ollama/ollama:latest
+    container_name: esc-ollama
+    restart: unless-stopped
+    environment:
+      OLLAMA_KEEP_ALIVE: 24h        # keep the model in RAM; cold-loading on a Pi 4 costs seconds mid-call
+      OLLAMA_NUM_PARALLEL: 1
+    volumes:
+      - ollama_models:/root/.ollama
+    networks: [escalation]
+
+  # --- Node.js bridge -------------------------------------------------------
+  bridge:
+    build: ./bridge
+    container_name: esc-bridge
+    restart: unless-stopped
+    depends_on: [asterisk, piper, whisper, ollama]
+    environment:
+      TZ: ${TZ}
+      ESCALATION_TOKEN: ${ESCALATION_TOKEN}
+      BOT_API_URL: ${BOT_API_URL}
+      BOT_ADMIN_TOKEN: ${BOT_ADMIN_TOKEN}
+      OLLAMA_MODEL: ${OLLAMA_MODEL}
+      PIPER_VOICE: ${PIPER_VOICE}     # only used to invalidate cached prompts when you change voice
+      SIP_USERNAME: ${SIP_USERNAME}
+      CALL_COOLDOWN_MINUTES: ${CALL_COOLDOWN_MINUTES}
+      PIPER_HOST: piper
+      PIPER_PORT: 10200
+      WHISPER_URL: http://whisper:8080
+      OLLAMA_URL: http://ollama:11434
+      SPOOL_DIR: /spool
+      AUDIO_DIR: /audio
+      ASTERISK_AUDIO_DIR: /var/lib/asterisk/sounds/escalation
+    volumes:
+      - asterisk_spool:/spool         # same volume Asterisk watches
+      - escalation_audio:/audio       # same volume Asterisk plays/records from
+    ports:
+      - "127.0.0.1:3100:3100"         # HTTP API for the trading bot (localhost only)
+      - "127.0.0.1:4573:4573"         # FastAGI - Asterisk (host network) connects here
+    extra_hosts:
+      - "host.docker.internal:host-gateway"   # lets the bridge reach the bot's Dashboard API on the host
+    networks: [escalation]
+
+networks:
+  escalation:
+
+volumes:
+  asterisk_spool:
+  escalation_audio:
+  piper_data:
+  whisper_models:
+  ollama_models:
