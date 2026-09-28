@@ -144,54 +144,33 @@ class BrokerClient {
         }
     }
 
-    async executeTrade(decision, marketData, dynamicRiskAmount) {
-        // Abort if the AI said HOLD
-        if ((decision.action !== 'BUY' && decision.action !== 'SELL_SHORT') || decision.target_symbol === 'NONE') return;
+    // Alpaca will not honour GTC on a bracket whose entry is a *market* order: the
+    // parent and both protective legs silently come back as `day`. At 16:00 ET the
+    // take-profit leg expires, OCO cancels the stop-loss along with it, and the
+    // position is left completely naked overnight. Confirmed against the live
+    // order history for ISRL/RDAC/SDOT/AAPL - every leg recorded tif=day with the
+    // TP expiring at 20:00 UTC and the SL cancelled microseconds later.
+    //
+    // A *limit* entry is accepted as GTC, so the bracket and both legs survive
+    // across sessions. The limit is priced marketably (a small buffer above the
+    // quote) so it still fills promptly while capping entry slippage.
+    //
+    // Returns the REAL fill from Alpaca - never the screener's quote - because the
+    // ledger's buy_price is what every downstream P&L calculation is built on.
+    async executeBuyOrder(symbol, allocateAmount, currentPrice, takeProfitPrice, stopLossPrice, options = {}) {
+        const {
+            slippageBufferPct = 0.005,
+            fillTimeoutMs = 20000,
+            pollIntervalMs = 1000
+        } = options;
 
-        // Match the single object returned by our new scanner
-        const target = marketData.symbol === decision.target_symbol ? marketData : null;
-        if (!target) {
-            console.log(`[Broker] Target data mismatch.`);
-            return;
+        if (!Number.isFinite(currentPrice) || currentPrice <= 0) {
+            throw new Error(`Invalid reference price ($${currentPrice}) for ${symbol}.`);
+        }
+        if (!Number.isFinite(takeProfitPrice) || !Number.isFinite(stopLossPrice)) {
+            throw new Error(`Invalid bracket prices for ${symbol} (TP: ${takeProfitPrice}, SL: ${stopLossPrice}).`);
         }
 
-        // Use the dynamically calculated Kelly Criterion risk amount passed from TradingBot
-        const positionSize = dynamicRiskAmount; 
-        let shares = Math.floor(positionSize / target.price);
-
-        const cash = await this.getCashBalance();
-
-        // Safety Check: Never over-leverage the available cash
-        if ((shares * target.price) > cash) {
-            shares = Math.floor(cash / target.price);
-        }
-
-        if (shares <= 0) {
-            console.log(`\n[Broker] Insufficient cash to execute ${decision.action} on ${decision.target_symbol}.`);
-            return;
-        }
-
-        console.log(`\n[Broker] Formatting MARKET ${decision.action} order for ${shares} shares of ${decision.target_symbol}...`);
-
-        try {
-            const orderSide = decision.action === 'BUY' ? 'buy' : 'sell';
-
-            const order = await this.alpaca.trading.orders.market({
-                symbol: decision.target_symbol,
-                qty: shares, 
-                side: orderSide,
-                timeInForce: 'day'
-            });
-            console.log(`[Broker] ${decision.action} Order Executed! Alpaca ID: ${order.id}`);
-
-            return { executed: true, symbol: decision.target_symbol, qty: shares, price: target.price, action: decision.action };
-        } catch (err) {
-            console.log(`[Broker] Order Failed: ${err.message}`);
-            return null;
-        }
-    }
-	
-    async executeBuyOrder(symbol, allocateAmount, currentPrice, takeProfitPrice, stopLossPrice) {
         // Calculate maximum whole shares
         const qty = Math.floor(allocateAmount / currentPrice);
 
@@ -201,7 +180,20 @@ class BrokerClient {
             throw new Error(`Allocated capital ($${allocateAmount}) is insufficient or invalid to buy 1 share of ${symbol} at $${currentPrice}.`);
         }
 
-        console.log(`[Broker] Formatting BRACKET BUY order for ${qty} shares of ${symbol}...`);
+        const limitPrice = this.#formatPrice(currentPrice * (1 + slippageBufferPct));
+        const takeProfit = this.#formatPrice(takeProfitPrice);
+        const stopLoss = this.#formatPrice(stopLossPrice);
+
+        // Alpaca rejects a buy bracket whose TP is not above, or SL not below, the
+        // entry. Catching it here gives a readable error instead of an API 422.
+        if (parseFloat(takeProfit) <= parseFloat(limitPrice)) {
+            throw new Error(`Take-profit ($${takeProfit}) must be above the entry limit ($${limitPrice}) for ${symbol}.`);
+        }
+        if (parseFloat(stopLoss) >= parseFloat(limitPrice)) {
+            throw new Error(`Stop-loss ($${stopLoss}) must be below the entry limit ($${limitPrice}) for ${symbol}.`);
+        }
+
+        console.log(`[Broker] Formatting GTC BRACKET BUY (limit $${limitPrice}) for ${qty} shares of ${symbol}...`);
 
         const response = await fetch(`${this.#getBaseUrl()}/v2/orders`, {
             method: 'POST',
@@ -210,27 +202,117 @@ class BrokerClient {
                 symbol: symbol,
                 qty: String(qty),
                 side: 'buy',
-                type: 'market',
+                type: 'limit',
+                limit_price: limitPrice,
                 time_in_force: 'gtc',
                 order_class: 'bracket',
                 take_profit: {
-                    limit_price: takeProfitPrice.toFixed(2)
+                    limit_price: takeProfit
                 },
                 stop_loss: {
-                    stop_price: stopLossPrice.toFixed(2)
+                    stop_price: stopLoss
                 }
             })
         });
 
         if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(`Alpaca Order API Error: ${errorData.message}`);
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(`Alpaca Order API Error: ${errorData.message || response.status}`);
         }
 
+        const order = await response.json();
+
+        // The whole point of this change is the GTC brackets. If Alpaca ever coerces
+        // it back to `day`, that must be loud rather than silent - a silent coercion
+        // is precisely what left six positions unprotected.
+        if (order.time_in_force !== 'gtc') {
+            console.warn(`[Broker] ⚠️ Alpaca returned time_in_force='${order.time_in_force}' (expected 'gtc') for ${symbol}. Protective legs may expire at the close.`);
+        }
+
+        const settled = await this.#awaitFill(order.id, { fillTimeoutMs, pollIntervalMs });
+
+        if (!settled.filled) {
+            console.log(`[Broker] ${symbol} entry did not fill within ${fillTimeoutMs}ms (status: ${settled.status}). Order cancelled; nothing recorded.`);
+            return { filled: false, orderId: order.id, status: settled.status, symbol };
+        }
+
+        console.log(`[Broker] ${symbol} BRACKET filled: ${settled.qty} @ $${settled.filledAvgPrice} (GTC legs active).`);
+
         return {
-            qty: qty,
-            filled_avg_price: currentPrice
+            filled: true,
+            orderId: order.id,
+            symbol,
+            qty: settled.qty,
+            filled_avg_price: settled.filledAvgPrice,
+            time_in_force: order.time_in_force
         };
+    }
+
+    // Polls a submitted order to its resting state. Returns the real fill, or
+    // cancels the order so no untracked position can exist without a ledger row.
+    async #awaitFill(orderId, { fillTimeoutMs, pollIntervalMs }) {
+        const deadline = Date.now() + fillTimeoutMs;
+        let order = null;
+
+        while (Date.now() < deadline) {
+            order = await this.#getOrder(orderId);
+
+            if (order.status === 'filled') {
+                return {
+                    filled: true,
+                    qty: parseInt(order.filled_qty, 10),
+                    filledAvgPrice: parseFloat(order.filled_avg_price),
+                    status: order.status
+                };
+            }
+
+            if (['canceled', 'expired', 'rejected', 'suspended'].includes(order.status)) {
+                throw new Error(`Order ${orderId} ended as '${order.status}' without filling.`);
+            }
+
+            await new Promise(resolve => setTimeout(resolve, pollIntervalMs));
+        }
+
+        // Timed out. Cancel so we never hold shares the ledger knows nothing about.
+        await this.#cancelOrder(orderId);
+        order = await this.#getOrder(orderId);
+
+        // A fill can land in the gap between the timeout and the cancel taking
+        // effect, in which case the position is real and must still be recorded.
+        const filledQty = parseInt(order.filled_qty, 10);
+        if (filledQty > 0 && order.filled_avg_price) {
+            return {
+                filled: true,
+                qty: filledQty,
+                filledAvgPrice: parseFloat(order.filled_avg_price),
+                status: order.status
+            };
+        }
+
+        return { filled: false, qty: 0, filledAvgPrice: null, status: order.status };
+    }
+
+    async #getOrder(orderId) {
+        const response = await fetch(`${this.#getBaseUrl()}/v2/orders/${orderId}`, {
+            headers: this.#authHeaders()
+        });
+        if (!response.ok) throw new Error(`Alpaca Get Order API Error: ${response.status}`);
+        return await response.json();
+    }
+
+    async #cancelOrder(orderId) {
+        // 422 here means "already filled/done" - not an error worth throwing on.
+        const response = await fetch(`${this.#getBaseUrl()}/v2/orders/${orderId}`, {
+            method: 'DELETE',
+            headers: this.#authHeaders()
+        });
+        return response.ok || response.status === 422;
+    }
+
+    // Alpaca accepts penny increments at or above $1.00, and 4 decimals below it.
+    // Blindly using toFixed(2) rounds a sub-dollar stop to $0.00 and gets rejected.
+    #formatPrice(price) {
+        return price >= 1 ? price.toFixed(2) : price.toFixed(4);
     }
 
     #getBaseUrl() {

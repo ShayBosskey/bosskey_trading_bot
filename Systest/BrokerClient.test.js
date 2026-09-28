@@ -15,38 +15,122 @@ global.fetch = jest.fn(() =>
 
 describe('BrokerClient Execution Architecture', () => {
     let broker;
+    const originalFetch = global.fetch;
 
     beforeEach(() => {
         broker = new BrokerClient();
-        fetch.mockClear();
     });
 
-    test('executeBuyOrder constructs correct Bracket Order payload', async () => {
+    afterEach(() => {
+        global.fetch = originalFetch;
+    });
+
+    // Mocks the two-step lifecycle: POST /v2/orders, then the GET poll that
+    // resolves the real fill.
+    function mockOrderLifecycle(pollResponses, submitOverrides = {}) {
+        const polls = [...pollResponses];
+        let lastPoll = polls[polls.length - 1];
+        global.fetch = jest.fn((url, init) => {
+            if (init && init.method === 'POST') {
+                return Promise.resolve({
+                    ok: true,
+                    json: () => Promise.resolve({ id: 'mock-order-id', time_in_force: 'gtc', ...submitOverrides })
+                });
+            }
+            if (init && init.method === 'DELETE') {
+                return Promise.resolve({ ok: true, status: 200, json: () => Promise.resolve({}) });
+            }
+            // Each GET advances the script, then repeats the final state.
+            if (polls.length > 0) lastPoll = polls.shift();
+            return Promise.resolve({ ok: true, json: () => Promise.resolve(lastPoll) });
+        });
+        return global.fetch;
+    }
+
+    test('executeBuyOrder submits a GTC bracket with a marketable LIMIT entry', async () => {
+        // A market entry is what Alpaca silently coerces to tif=day, killing the
+        // protective legs at the close. The entry must therefore be a limit order.
+        mockOrderLifecycle([{ status: 'filled', filled_qty: '100', filled_avg_price: '10.02' }]);
+
         const symbol = 'WETO';
         const allocateAmount = 1000;
         const currentPrice = 10.00;
-        
-        // Simulating a 10% profit target and 5% stop loss
         const takeProfitPrice = currentPrice * 1.10; // 11.00
         const stopLossPrice = currentPrice * 0.95;   // 9.50
 
         await broker.executeBuyOrder(symbol, allocateAmount, currentPrice, takeProfitPrice, stopLossPrice);
 
-        // Verify fetch was called once
-        expect(fetch).toHaveBeenCalledTimes(1);
+        const postCall = global.fetch.mock.calls.find(c => c[1] && c[1].method === 'POST');
+        const requestBody = JSON.parse(postCall[1].body);
 
-        // Extract the payload sent to Alpaca
-        const fetchArgs = fetch.mock.calls[0];
-        const requestBody = JSON.parse(fetchArgs[1].body);
-
-        // Assertions: Verify Risk Parameters
         expect(requestBody.order_class).toBe('bracket');
         expect(requestBody.qty).toBe('100');
         expect(requestBody.take_profit.limit_price).toBe('11.00');
         expect(requestBody.stop_loss.stop_price).toBe('9.50');
         // Brackets must stay protected across sessions, not expire after one day (P0 fix).
         expect(requestBody.time_in_force).toBe('gtc');
+        expect(requestBody.type).toBe('limit');
+        expect(requestBody.limit_price).toBe('10.05'); // 0.5% marketable buffer
     });
+
+    test('executeBuyOrder returns Alpaca real filled_avg_price, not the screener quote', async () => {
+        // The fabricated-P&L bug: the ledger recorded the screener's quote as
+        // buy_price, so real sells were measured against prices never paid.
+        mockOrderLifecycle([{ status: 'filled', filled_qty: '100', filled_avg_price: '10.02' }]);
+
+        const result = await broker.executeBuyOrder('WETO', 1000, 10.00, 11.00, 9.50);
+
+        expect(result.filled).toBe(true);
+        expect(result.filled_avg_price).toBe(10.02);
+        expect(result.filled_avg_price).not.toBe(10.00);
+        expect(result.qty).toBe(100);
+    });
+
+    test('executeBuyOrder cancels an entry that never fills and records nothing', async () => {
+        mockOrderLifecycle([{ status: 'new', filled_qty: '0', filled_avg_price: null }]);
+
+        const result = await broker.executeBuyOrder('WETO', 1000, 10.00, 11.00, 9.50, {
+            fillTimeoutMs: 10,
+            pollIntervalMs: 1
+        });
+
+        expect(result.filled).toBe(false);
+        expect(global.fetch.mock.calls.some(c => c[1] && c[1].method === 'DELETE')).toBe(true);
+    });
+
+    test('executeBuyOrder still records a fill that lands during the cancel race', async () => {
+        // First poll shows unfilled; the post-cancel re-check shows it filled.
+        mockOrderLifecycle([
+            { status: 'new', filled_qty: '0', filled_avg_price: null },
+            { status: 'filled', filled_qty: '100', filled_avg_price: '10.04' }
+        ]);
+
+        const result = await broker.executeBuyOrder('WETO', 1000, 10.00, 11.00, 9.50, {
+            fillTimeoutMs: 10,
+            pollIntervalMs: 1
+        });
+
+        expect(result.filled).toBe(true);
+        expect(result.filled_avg_price).toBe(10.04);
+    });
+
+    test('executeBuyOrder rejects a bracket whose stop-loss is not below the entry', async () => {
+        mockOrderLifecycle([{ status: 'filled', filled_qty: '100', filled_avg_price: '10.00' }]);
+
+        await expect(
+            broker.executeBuyOrder('WETO', 1000, 10.00, 11.00, 10.50)
+        ).rejects.toThrow(/Stop-loss/);
+    });
+
+    test('executeBuyOrder prices sub-dollar stops to 4 decimals instead of rounding to 0.00', async () => {
+        mockOrderLifecycle([{ status: 'filled', filled_qty: '2', filled_avg_price: '5.00' }]);
+
+        await broker.executeBuyOrder('PENNY', 10, 5.00, 7.50, 0.4321);
+
+        const postCall = global.fetch.mock.calls.find(c => c[1] && c[1].method === 'POST');
+        expect(JSON.parse(postCall[1].body).stop_loss.stop_price).toBe('0.4321');
+    });
+
 });
 
 describe('BrokerClient Market Scanner', () => {

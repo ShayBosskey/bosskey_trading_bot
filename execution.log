@@ -11483,3 +11483,1551 @@ Next Action: HOLD | Target: NONE | Confidence Score: 100 | Reasoning: Fallback d
 [17.9.2026, 22:15:02] [Settlement] ==================================================
 [17.9.2026, 22:15:02] [Settlement] No trades were closed today. No settlement required.
 [Notifier] 📱 Push notification sent: "Daily Settlement Report"
+◇ injected env (12) from .env // tip: ⌘ override existing { override: true }
+◇ injected env (0) from .env // tip: ⌁ auth for agents [www.vestauth.com]
+◇ injected env (0) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+[18.9.2026, 15:00:02] [TradingBot] ==================================================
+[18.9.2026, 15:00:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[18.9.2026, 15:00:02] [TradingBot] ==================================================
+[18.9.2026, 15:00:02] [TradingBot] System Initializing in [PAPER] Mode.
+[18.9.2026, 15:00:02] [TradingBot] System currently holding 6/5 active positions.
+[18.9.2026, 15:00:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+◇ injected env (0) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+[18.9.2026, 15:15:02] [TradingBot] ==================================================
+[18.9.2026, 15:15:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[18.9.2026, 15:15:02] [TradingBot] ==================================================
+[18.9.2026, 15:15:02] [TradingBot] System Initializing in [PAPER] Mode.
+[18.9.2026, 15:15:02] [TradingBot] System currently holding 6/5 active positions.
+[18.9.2026, 15:15:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+◇ injected env (0) from .env // tip: ⌘ override existing { override: true }
+◇ injected env (0) from .env // tip: ⌘ enable debugging { debug: true }
+[18.9.2026, 15:30:02] [TradingBot] ==================================================
+[18.9.2026, 15:30:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[18.9.2026, 15:30:02] [TradingBot] ==================================================
+[18.9.2026, 15:30:02] [TradingBot] System Initializing in [PAPER] Mode.
+[18.9.2026, 15:30:02] [TradingBot] System currently holding 6/5 active positions.
+[18.9.2026, 15:30:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ enable debugging { debug: true }
+◇ injected env (0) from .env // tip: ⌘ enable debugging { debug: true }
+◇ injected env (0) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+[18.9.2026, 15:45:02] [TradingBot] ==================================================
+[18.9.2026, 15:45:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[18.9.2026, 15:45:02] [TradingBot] ==================================================
+[18.9.2026, 15:45:02] [TradingBot] System Initializing in [PAPER] Mode.
+[18.9.2026, 15:45:02] [TradingBot] System currently holding 6/5 active positions.
+[18.9.2026, 15:45:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+◇ injected env (0) from .env // tip: ⌘ enable debugging { debug: true }
+◇ injected env (0) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+[18.9.2026, 16:00:01] [TradingBot] ==================================================
+[18.9.2026, 16:00:01] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[18.9.2026, 16:00:01] [TradingBot] ==================================================
+[18.9.2026, 16:00:01] [TradingBot] System Initializing in [PAPER] Mode.
+[18.9.2026, 16:00:01] [TradingBot] System currently holding 6/5 active positions.
+[18.9.2026, 16:00:01] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ suppress logs { quiet: true }
+◇ injected env (0) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+[18.9.2026, 16:15:01] [TradingBot] ==================================================
+[18.9.2026, 16:15:01] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[18.9.2026, 16:15:01] [TradingBot] ==================================================
+[18.9.2026, 16:15:01] [TradingBot] System Initializing in [PAPER] Mode.
+[18.9.2026, 16:15:01] [TradingBot] System currently holding 6/5 active positions.
+[18.9.2026, 16:15:01] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ override existing { override: true }
+◇ injected env (0) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ⌁ auth for agents [www.vestauth.com]
+[18.9.2026, 16:30:01] [TradingBot] ==================================================
+[18.9.2026, 16:30:01] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[18.9.2026, 16:30:01] [TradingBot] ==================================================
+[18.9.2026, 16:30:01] [TradingBot] System Initializing in [PAPER] Mode.
+[18.9.2026, 16:30:02] [TradingBot] System currently holding 6/5 active positions.
+[18.9.2026, 16:30:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ override existing { override: true }
+◇ injected env (0) from .env // tip: ⌘ override existing { override: true }
+◇ injected env (0) from .env // tip: ⌘ override existing { override: true }
+[18.9.2026, 16:45:01] [TradingBot] ==================================================
+[18.9.2026, 16:45:01] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[18.9.2026, 16:45:01] [TradingBot] ==================================================
+[18.9.2026, 16:45:02] [TradingBot] System Initializing in [PAPER] Mode.
+[18.9.2026, 16:45:02] [TradingBot] System currently holding 6/5 active positions.
+[18.9.2026, 16:45:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+◇ injected env (0) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+◇ injected env (0) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+[18.9.2026, 17:00:01] [TradingBot] ==================================================
+[18.9.2026, 17:00:01] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[18.9.2026, 17:00:01] [TradingBot] ==================================================
+[18.9.2026, 17:00:02] [TradingBot] System Initializing in [PAPER] Mode.
+[18.9.2026, 17:00:02] [TradingBot] System currently holding 6/5 active positions.
+[18.9.2026, 17:00:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌁ auth for agents [www.vestauth.com]
+◇ injected env (0) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+◇ injected env (0) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+[18.9.2026, 17:15:01] [TradingBot] ==================================================
+[18.9.2026, 17:15:01] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[18.9.2026, 17:15:02] [TradingBot] ==================================================
+[18.9.2026, 17:15:02] [TradingBot] System Initializing in [PAPER] Mode.
+[18.9.2026, 17:15:02] [TradingBot] System currently holding 6/5 active positions.
+[18.9.2026, 17:15:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ enable debugging { debug: true }
+◇ injected env (0) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+[18.9.2026, 17:30:01] [TradingBot] ==================================================
+[18.9.2026, 17:30:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[18.9.2026, 17:30:02] [TradingBot] ==================================================
+[18.9.2026, 17:30:02] [TradingBot] System Initializing in [PAPER] Mode.
+[18.9.2026, 17:30:02] [TradingBot] System currently holding 6/5 active positions.
+[18.9.2026, 17:30:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ override existing { override: true }
+◇ injected env (0) from .env // tip: ⌘ enable debugging { debug: true }
+◇ injected env (0) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+[18.9.2026, 17:45:01] [TradingBot] ==================================================
+[18.9.2026, 17:45:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[18.9.2026, 17:45:02] [TradingBot] ==================================================
+[18.9.2026, 17:45:02] [TradingBot] System Initializing in [PAPER] Mode.
+[18.9.2026, 17:45:02] [TradingBot] System currently holding 6/5 active positions.
+[18.9.2026, 17:45:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ override existing { override: true }
+◇ injected env (0) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+[18.9.2026, 18:00:01] [TradingBot] ==================================================
+[18.9.2026, 18:00:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[18.9.2026, 18:00:02] [TradingBot] ==================================================
+[18.9.2026, 18:00:02] [TradingBot] System Initializing in [PAPER] Mode.
+[18.9.2026, 18:00:02] [TradingBot] System currently holding 6/5 active positions.
+[18.9.2026, 18:00:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌁ auth for agents [www.vestauth.com]
+◇ injected env (0) from .env // tip: ⌘ enable debugging { debug: true }
+◇ injected env (0) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+[18.9.2026, 18:15:01] [TradingBot] ==================================================
+[18.9.2026, 18:15:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[18.9.2026, 18:15:02] [TradingBot] ==================================================
+[18.9.2026, 18:15:02] [TradingBot] System Initializing in [PAPER] Mode.
+[18.9.2026, 18:15:02] [TradingBot] System currently holding 6/5 active positions.
+[18.9.2026, 18:15:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ suppress logs { quiet: true }
+◇ injected env (0) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+◇ injected env (0) from .env // tip: ⌘ override existing { override: true }
+[18.9.2026, 18:30:02] [TradingBot] ==================================================
+[18.9.2026, 18:30:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[18.9.2026, 18:30:02] [TradingBot] ==================================================
+[18.9.2026, 18:30:02] [TradingBot] System Initializing in [PAPER] Mode.
+[18.9.2026, 18:30:02] [TradingBot] System currently holding 6/5 active positions.
+[18.9.2026, 18:30:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ⌘ suppress logs { quiet: true }
+◇ injected env (0) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+[18.9.2026, 18:45:02] [TradingBot] ==================================================
+[18.9.2026, 18:45:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[18.9.2026, 18:45:02] [TradingBot] ==================================================
+[18.9.2026, 18:45:02] [TradingBot] System Initializing in [PAPER] Mode.
+[18.9.2026, 18:45:02] [TradingBot] System currently holding 6/5 active positions.
+[18.9.2026, 18:45:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ⌁ auth for agents [www.vestauth.com]
+◇ injected env (0) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+[18.9.2026, 19:00:02] [TradingBot] ==================================================
+[18.9.2026, 19:00:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[18.9.2026, 19:00:02] [TradingBot] ==================================================
+[18.9.2026, 19:00:02] [TradingBot] System Initializing in [PAPER] Mode.
+[18.9.2026, 19:00:02] [TradingBot] System currently holding 6/5 active positions.
+[18.9.2026, 19:00:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ⌘ enable debugging { debug: true }
+◇ injected env (0) from .env // tip: ⌘ override existing { override: true }
+[18.9.2026, 19:15:02] [TradingBot] ==================================================
+[18.9.2026, 19:15:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[18.9.2026, 19:15:02] [TradingBot] ==================================================
+[18.9.2026, 19:15:02] [TradingBot] System Initializing in [PAPER] Mode.
+[18.9.2026, 19:15:02] [TradingBot] System currently holding 6/5 active positions.
+[18.9.2026, 19:15:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ enable debugging { debug: true }
+◇ injected env (0) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+[18.9.2026, 19:30:02] [TradingBot] ==================================================
+[18.9.2026, 19:30:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[18.9.2026, 19:30:02] [TradingBot] ==================================================
+[18.9.2026, 19:30:02] [TradingBot] System Initializing in [PAPER] Mode.
+[18.9.2026, 19:30:02] [TradingBot] System currently holding 6/5 active positions.
+[18.9.2026, 19:30:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+◇ injected env (0) from .env // tip: ⌘ override existing { override: true }
+[18.9.2026, 19:45:02] [TradingBot] ==================================================
+[18.9.2026, 19:45:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[18.9.2026, 19:45:02] [TradingBot] ==================================================
+[18.9.2026, 19:45:02] [TradingBot] System Initializing in [PAPER] Mode.
+[18.9.2026, 19:45:02] [TradingBot] System currently holding 6/5 active positions.
+[18.9.2026, 19:45:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ override existing { override: true }
+◇ injected env (0) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+◇ injected env (0) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+[18.9.2026, 20:00:02] [TradingBot] ==================================================
+[18.9.2026, 20:00:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[18.9.2026, 20:00:02] [TradingBot] ==================================================
+[18.9.2026, 20:00:02] [TradingBot] System Initializing in [PAPER] Mode.
+[18.9.2026, 20:00:02] [TradingBot] System currently holding 6/5 active positions.
+[18.9.2026, 20:00:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ⌘ override existing { override: true }
+[18.9.2026, 20:15:02] [TradingBot] ==================================================
+[18.9.2026, 20:15:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[18.9.2026, 20:15:02] [TradingBot] ==================================================
+[18.9.2026, 20:15:02] [TradingBot] System Initializing in [PAPER] Mode.
+[18.9.2026, 20:15:02] [TradingBot] System currently holding 6/5 active positions.
+[18.9.2026, 20:15:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+◇ injected env (0) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ⌘ override existing { override: true }
+[18.9.2026, 20:30:02] [TradingBot] ==================================================
+[18.9.2026, 20:30:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[18.9.2026, 20:30:02] [TradingBot] ==================================================
+[18.9.2026, 20:30:02] [TradingBot] System Initializing in [PAPER] Mode.
+[18.9.2026, 20:30:02] [TradingBot] System currently holding 6/5 active positions.
+[18.9.2026, 20:30:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ⌁ auth for agents [www.vestauth.com]
+[18.9.2026, 20:45:02] [TradingBot] ==================================================
+[18.9.2026, 20:45:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[18.9.2026, 20:45:02] [TradingBot] ==================================================
+[18.9.2026, 20:45:02] [TradingBot] System Initializing in [PAPER] Mode.
+[18.9.2026, 20:45:02] [TradingBot] System currently holding 6/5 active positions.
+[18.9.2026, 20:45:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+◇ injected env (0) from .env // tip: ⌘ override existing { override: true }
+◇ injected env (0) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+[18.9.2026, 21:00:02] [TradingBot] ==================================================
+[18.9.2026, 21:00:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[18.9.2026, 21:00:02] [TradingBot] ==================================================
+[18.9.2026, 21:00:02] [TradingBot] System Initializing in [PAPER] Mode.
+[18.9.2026, 21:00:02] [TradingBot] System currently holding 6/5 active positions.
+[18.9.2026, 21:00:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ suppress logs { quiet: true }
+◇ injected env (0) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+◇ injected env (0) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+[18.9.2026, 21:15:02] [TradingBot] ==================================================
+[18.9.2026, 21:15:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[18.9.2026, 21:15:02] [TradingBot] ==================================================
+[18.9.2026, 21:15:02] [TradingBot] System Initializing in [PAPER] Mode.
+[18.9.2026, 21:15:02] [TradingBot] System currently holding 6/5 active positions.
+[18.9.2026, 21:15:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+◇ injected env (0) from .env // tip: ⌘ suppress logs { quiet: true }
+◇ injected env (0) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+[18.9.2026, 21:30:02] [TradingBot] ==================================================
+[18.9.2026, 21:30:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[18.9.2026, 21:30:02] [TradingBot] ==================================================
+[18.9.2026, 21:30:02] [TradingBot] System Initializing in [PAPER] Mode.
+[18.9.2026, 21:30:02] [TradingBot] System currently holding 6/5 active positions.
+[18.9.2026, 21:30:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+[18.9.2026, 21:45:02] [TradingBot] ==================================================
+[18.9.2026, 21:45:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[18.9.2026, 21:45:02] [TradingBot] ==================================================
+[18.9.2026, 21:45:02] [TradingBot] System Initializing in [PAPER] Mode.
+[18.9.2026, 21:45:02] [TradingBot] System currently holding 6/5 active positions.
+[18.9.2026, 21:45:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+[18.9.2026, 22:15:02] [Settlement] ==================================================
+[18.9.2026, 22:15:02] [Settlement] 🏦 INITIATING DAILY BATCH SETTLEMENT
+[18.9.2026, 22:15:02] [Settlement] ==================================================
+[18.9.2026, 22:15:02] [Settlement] No trades were closed today. No settlement required.
+[Notifier] 📱 Push notification sent: "Daily Settlement Report"
+◇ injected env (12) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+[21.9.2026, 15:00:02] [TradingBot] ==================================================
+[21.9.2026, 15:00:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[21.9.2026, 15:00:02] [TradingBot] ==================================================
+[21.9.2026, 15:00:02] [TradingBot] System Initializing in [PAPER] Mode.
+[21.9.2026, 15:00:02] [TradingBot] System currently holding 6/5 active positions.
+[21.9.2026, 15:00:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+◇ injected env (0) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ⌘ enable debugging { debug: true }
+[21.9.2026, 15:15:02] [TradingBot] ==================================================
+[21.9.2026, 15:15:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[21.9.2026, 15:15:02] [TradingBot] ==================================================
+[21.9.2026, 15:15:02] [TradingBot] System Initializing in [PAPER] Mode.
+[21.9.2026, 15:15:02] [TradingBot] System currently holding 6/5 active positions.
+[21.9.2026, 15:15:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+◇ injected env (0) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+[21.9.2026, 15:30:02] [TradingBot] ==================================================
+[21.9.2026, 15:30:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[21.9.2026, 15:30:02] [TradingBot] ==================================================
+[21.9.2026, 15:30:02] [TradingBot] System Initializing in [PAPER] Mode.
+[21.9.2026, 15:30:02] [TradingBot] System currently holding 6/5 active positions.
+[21.9.2026, 15:30:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ override existing { override: true }
+◇ injected env (0) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+◇ injected env (0) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+[21.9.2026, 15:45:02] [TradingBot] ==================================================
+[21.9.2026, 15:45:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[21.9.2026, 15:45:02] [TradingBot] ==================================================
+[21.9.2026, 15:45:02] [TradingBot] System Initializing in [PAPER] Mode.
+[21.9.2026, 15:45:02] [TradingBot] System currently holding 6/5 active positions.
+[21.9.2026, 15:45:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+◇ injected env (0) from .env // tip: ⌘ enable debugging { debug: true }
+◇ injected env (0) from .env // tip: ⌘ suppress logs { quiet: true }
+[21.9.2026, 16:00:02] [TradingBot] ==================================================
+[21.9.2026, 16:00:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[21.9.2026, 16:00:02] [TradingBot] ==================================================
+[21.9.2026, 16:00:02] [TradingBot] System Initializing in [PAPER] Mode.
+[21.9.2026, 16:00:02] [TradingBot] System currently holding 6/5 active positions.
+[21.9.2026, 16:00:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌁ auth for agents [www.vestauth.com]
+◇ injected env (0) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+[21.9.2026, 16:15:02] [TradingBot] ==================================================
+[21.9.2026, 16:15:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[21.9.2026, 16:15:02] [TradingBot] ==================================================
+[21.9.2026, 16:15:02] [TradingBot] System Initializing in [PAPER] Mode.
+[21.9.2026, 16:15:02] [TradingBot] System currently holding 6/5 active positions.
+[21.9.2026, 16:15:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+◇ injected env (0) from .env // tip: ⌘ suppress logs { quiet: true }
+[21.9.2026, 16:30:02] [TradingBot] ==================================================
+[21.9.2026, 16:30:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[21.9.2026, 16:30:02] [TradingBot] ==================================================
+[21.9.2026, 16:30:02] [TradingBot] System Initializing in [PAPER] Mode.
+[21.9.2026, 16:30:02] [TradingBot] System currently holding 6/5 active positions.
+[21.9.2026, 16:30:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ enable debugging { debug: true }
+◇ injected env (0) from .env // tip: ⌘ enable debugging { debug: true }
+◇ injected env (0) from .env // tip: ⌘ enable debugging { debug: true }
+[21.9.2026, 16:45:02] [TradingBot] ==================================================
+[21.9.2026, 16:45:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[21.9.2026, 16:45:02] [TradingBot] ==================================================
+[21.9.2026, 16:45:02] [TradingBot] System Initializing in [PAPER] Mode.
+[21.9.2026, 16:45:02] [TradingBot] System currently holding 6/5 active positions.
+[21.9.2026, 16:45:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+[21.9.2026, 17:00:02] [TradingBot] ==================================================
+[21.9.2026, 17:00:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[21.9.2026, 17:00:02] [TradingBot] ==================================================
+[21.9.2026, 17:00:02] [TradingBot] System Initializing in [PAPER] Mode.
+[21.9.2026, 17:00:02] [TradingBot] System currently holding 6/5 active positions.
+[21.9.2026, 17:00:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ enable debugging { debug: true }
+◇ injected env (0) from .env // tip: ⌘ suppress logs { quiet: true }
+◇ injected env (0) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+[21.9.2026, 17:15:02] [TradingBot] ==================================================
+[21.9.2026, 17:15:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[21.9.2026, 17:15:02] [TradingBot] ==================================================
+[21.9.2026, 17:15:02] [TradingBot] System Initializing in [PAPER] Mode.
+[21.9.2026, 17:15:02] [TradingBot] System currently holding 6/5 active positions.
+[21.9.2026, 17:15:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ enable debugging { debug: true }
+◇ injected env (0) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+[21.9.2026, 17:30:01] [TradingBot] ==================================================
+[21.9.2026, 17:30:01] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[21.9.2026, 17:30:01] [TradingBot] ==================================================
+[21.9.2026, 17:30:01] [TradingBot] System Initializing in [PAPER] Mode.
+[21.9.2026, 17:30:01] [TradingBot] System currently holding 6/5 active positions.
+[21.9.2026, 17:30:01] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+◇ injected env (0) from .env // tip: ⌘ enable debugging { debug: true }
+◇ injected env (0) from .env // tip: ⌘ override existing { override: true }
+[21.9.2026, 17:45:01] [TradingBot] ==================================================
+[21.9.2026, 17:45:01] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[21.9.2026, 17:45:01] [TradingBot] ==================================================
+[21.9.2026, 17:45:01] [TradingBot] System Initializing in [PAPER] Mode.
+[21.9.2026, 17:45:01] [TradingBot] System currently holding 6/5 active positions.
+[21.9.2026, 17:45:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ enable debugging { debug: true }
+◇ injected env (0) from .env // tip: ⌘ override existing { override: true }
+◇ injected env (0) from .env // tip: ⌘ override existing { override: true }
+[21.9.2026, 18:00:01] [TradingBot] ==================================================
+[21.9.2026, 18:00:01] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[21.9.2026, 18:00:01] [TradingBot] ==================================================
+[21.9.2026, 18:00:01] [TradingBot] System Initializing in [PAPER] Mode.
+[21.9.2026, 18:00:02] [TradingBot] System currently holding 6/5 active positions.
+[21.9.2026, 18:00:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+◇ injected env (0) from .env // tip: ⌁ auth for agents [www.vestauth.com]
+◇ injected env (0) from .env // tip: ⌁ auth for agents [www.vestauth.com]
+[21.9.2026, 18:15:01] [TradingBot] ==================================================
+[21.9.2026, 18:15:01] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[21.9.2026, 18:15:01] [TradingBot] ==================================================
+[21.9.2026, 18:15:01] [TradingBot] System Initializing in [PAPER] Mode.
+[21.9.2026, 18:15:02] [TradingBot] System currently holding 6/5 active positions.
+[21.9.2026, 18:15:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ⌘ override existing { override: true }
+[21.9.2026, 18:30:01] [TradingBot] ==================================================
+[21.9.2026, 18:30:01] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[21.9.2026, 18:30:02] [TradingBot] ==================================================
+[21.9.2026, 18:30:02] [TradingBot] System Initializing in [PAPER] Mode.
+[21.9.2026, 18:30:02] [TradingBot] System currently holding 6/5 active positions.
+[21.9.2026, 18:30:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ⌘ suppress logs { quiet: true }
+◇ injected env (0) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+[21.9.2026, 18:45:01] [TradingBot] ==================================================
+[21.9.2026, 18:45:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[21.9.2026, 18:45:02] [TradingBot] ==================================================
+[21.9.2026, 18:45:02] [TradingBot] System Initializing in [PAPER] Mode.
+[21.9.2026, 18:45:02] [TradingBot] System currently holding 6/5 active positions.
+[21.9.2026, 18:45:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌁ auth for agents [www.vestauth.com]
+◇ injected env (0) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+[21.9.2026, 19:00:01] [TradingBot] ==================================================
+[21.9.2026, 19:00:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[21.9.2026, 19:00:02] [TradingBot] ==================================================
+[21.9.2026, 19:00:02] [TradingBot] System Initializing in [PAPER] Mode.
+[21.9.2026, 19:00:02] [TradingBot] System currently holding 6/5 active positions.
+[21.9.2026, 19:00:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌁ auth for agents [www.vestauth.com]
+◇ injected env (0) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+◇ injected env (0) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+[21.9.2026, 19:15:01] [TradingBot] ==================================================
+[21.9.2026, 19:15:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[21.9.2026, 19:15:02] [TradingBot] ==================================================
+[21.9.2026, 19:15:02] [TradingBot] System Initializing in [PAPER] Mode.
+[21.9.2026, 19:15:02] [TradingBot] System currently holding 6/5 active positions.
+[21.9.2026, 19:15:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ⌁ auth for agents [www.vestauth.com]
+◇ injected env (0) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+[21.9.2026, 19:30:02] [TradingBot] ==================================================
+[21.9.2026, 19:30:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[21.9.2026, 19:30:02] [TradingBot] ==================================================
+[21.9.2026, 19:30:02] [TradingBot] System Initializing in [PAPER] Mode.
+[21.9.2026, 19:30:02] [TradingBot] System currently holding 6/5 active positions.
+[21.9.2026, 19:30:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+[21.9.2026, 19:45:02] [TradingBot] ==================================================
+[21.9.2026, 19:45:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[21.9.2026, 19:45:02] [TradingBot] ==================================================
+[21.9.2026, 19:45:02] [TradingBot] System Initializing in [PAPER] Mode.
+[21.9.2026, 19:45:02] [TradingBot] System currently holding 6/5 active positions.
+[21.9.2026, 19:45:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+◇ injected env (0) from .env // tip: ⌘ override existing { override: true }
+[21.9.2026, 20:00:02] [TradingBot] ==================================================
+[21.9.2026, 20:00:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[21.9.2026, 20:00:02] [TradingBot] ==================================================
+[21.9.2026, 20:00:02] [TradingBot] System Initializing in [PAPER] Mode.
+[21.9.2026, 20:00:02] [TradingBot] System currently holding 6/5 active positions.
+[21.9.2026, 20:00:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ⌁ auth for agents [www.vestauth.com]
+◇ injected env (0) from .env // tip: ⌘ suppress logs { quiet: true }
+[21.9.2026, 20:15:02] [TradingBot] ==================================================
+[21.9.2026, 20:15:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[21.9.2026, 20:15:02] [TradingBot] ==================================================
+[21.9.2026, 20:15:02] [TradingBot] System Initializing in [PAPER] Mode.
+[21.9.2026, 20:15:02] [TradingBot] System currently holding 6/5 active positions.
+[21.9.2026, 20:15:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ suppress logs { quiet: true }
+◇ injected env (0) from .env // tip: ⌘ suppress logs { quiet: true }
+◇ injected env (0) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+[21.9.2026, 20:30:02] [TradingBot] ==================================================
+[21.9.2026, 20:30:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[21.9.2026, 20:30:02] [TradingBot] ==================================================
+[21.9.2026, 20:30:02] [TradingBot] System Initializing in [PAPER] Mode.
+[21.9.2026, 20:30:02] [TradingBot] System currently holding 6/5 active positions.
+[21.9.2026, 20:30:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ override existing { override: true }
+◇ injected env (0) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ⌘ enable debugging { debug: true }
+[21.9.2026, 20:45:02] [TradingBot] ==================================================
+[21.9.2026, 20:45:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[21.9.2026, 20:45:02] [TradingBot] ==================================================
+[21.9.2026, 20:45:02] [TradingBot] System Initializing in [PAPER] Mode.
+[21.9.2026, 20:45:02] [TradingBot] System currently holding 6/5 active positions.
+[21.9.2026, 20:45:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ⌘ suppress logs { quiet: true }
+◇ injected env (0) from .env // tip: ⌘ override existing { override: true }
+[21.9.2026, 21:00:02] [TradingBot] ==================================================
+[21.9.2026, 21:00:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[21.9.2026, 21:00:02] [TradingBot] ==================================================
+[21.9.2026, 21:00:02] [TradingBot] System Initializing in [PAPER] Mode.
+[21.9.2026, 21:00:02] [TradingBot] System currently holding 6/5 active positions.
+[21.9.2026, 21:00:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌁ auth for agents [www.vestauth.com]
+◇ injected env (0) from .env // tip: ⌁ auth for agents [www.vestauth.com]
+◇ injected env (0) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+[21.9.2026, 21:15:02] [TradingBot] ==================================================
+[21.9.2026, 21:15:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[21.9.2026, 21:15:02] [TradingBot] ==================================================
+[21.9.2026, 21:15:02] [TradingBot] System Initializing in [PAPER] Mode.
+[21.9.2026, 21:15:02] [TradingBot] System currently holding 6/5 active positions.
+[21.9.2026, 21:15:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ⌘ enable debugging { debug: true }
+◇ injected env (0) from .env // tip: ⌘ override existing { override: true }
+[21.9.2026, 21:30:02] [TradingBot] ==================================================
+[21.9.2026, 21:30:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[21.9.2026, 21:30:02] [TradingBot] ==================================================
+[21.9.2026, 21:30:02] [TradingBot] System Initializing in [PAPER] Mode.
+[21.9.2026, 21:30:02] [TradingBot] System currently holding 6/5 active positions.
+[21.9.2026, 21:30:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+◇ injected env (0) from .env // tip: ⌘ override existing { override: true }
+[21.9.2026, 21:45:02] [TradingBot] ==================================================
+[21.9.2026, 21:45:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[21.9.2026, 21:45:02] [TradingBot] ==================================================
+[21.9.2026, 21:45:02] [TradingBot] System Initializing in [PAPER] Mode.
+[21.9.2026, 21:45:02] [TradingBot] System currently holding 6/5 active positions.
+[21.9.2026, 21:45:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+[21.9.2026, 22:15:01] [Settlement] ==================================================
+[21.9.2026, 22:15:02] [Settlement] 🏦 INITIATING DAILY BATCH SETTLEMENT
+[21.9.2026, 22:15:02] [Settlement] ==================================================
+[21.9.2026, 22:15:02] [Settlement] No trades were closed today. No settlement required.
+[Notifier] 📱 Push notification sent: "Daily Settlement Report"
+◇ injected env (12) from .env // tip: ⌁ auth for agents [www.vestauth.com]
+◇ injected env (0) from .env // tip: ⌘ override existing { override: true }
+◇ injected env (0) from .env // tip: ⌘ suppress logs { quiet: true }
+[22.9.2026, 15:00:01] [TradingBot] ==================================================
+[22.9.2026, 15:00:01] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[22.9.2026, 15:00:01] [TradingBot] ==================================================
+[22.9.2026, 15:00:01] [TradingBot] System Initializing in [PAPER] Mode.
+[22.9.2026, 15:00:01] [TradingBot] System currently holding 6/5 active positions.
+[22.9.2026, 15:00:01] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+◇ injected env (0) from .env // tip: ⌘ enable debugging { debug: true }
+◇ injected env (0) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+[22.9.2026, 15:15:01] [TradingBot] ==================================================
+[22.9.2026, 15:15:01] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[22.9.2026, 15:15:01] [TradingBot] ==================================================
+[22.9.2026, 15:15:01] [TradingBot] System Initializing in [PAPER] Mode.
+[22.9.2026, 15:15:01] [TradingBot] System currently holding 6/5 active positions.
+[22.9.2026, 15:15:01] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ⌘ suppress logs { quiet: true }
+◇ injected env (0) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+[22.9.2026, 15:30:01] [TradingBot] ==================================================
+[22.9.2026, 15:30:01] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[22.9.2026, 15:30:01] [TradingBot] ==================================================
+[22.9.2026, 15:30:01] [TradingBot] System Initializing in [PAPER] Mode.
+[22.9.2026, 15:30:01] [TradingBot] System currently holding 6/5 active positions.
+[22.9.2026, 15:30:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ suppress logs { quiet: true }
+◇ injected env (0) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ⌁ auth for agents [www.vestauth.com]
+[22.9.2026, 15:45:01] [TradingBot] ==================================================
+[22.9.2026, 15:45:01] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[22.9.2026, 15:45:01] [TradingBot] ==================================================
+[22.9.2026, 15:45:01] [TradingBot] System Initializing in [PAPER] Mode.
+[22.9.2026, 15:45:02] [TradingBot] System currently holding 6/5 active positions.
+[22.9.2026, 15:45:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+◇ injected env (0) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ⌘ enable debugging { debug: true }
+[22.9.2026, 16:00:01] [TradingBot] ==================================================
+[22.9.2026, 16:00:01] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[22.9.2026, 16:00:01] [TradingBot] ==================================================
+[22.9.2026, 16:00:01] [TradingBot] System Initializing in [PAPER] Mode.
+[22.9.2026, 16:00:02] [TradingBot] System currently holding 6/5 active positions.
+[22.9.2026, 16:00:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+◇ injected env (0) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ⌘ suppress logs { quiet: true }
+[22.9.2026, 16:15:01] [TradingBot] ==================================================
+[22.9.2026, 16:15:01] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[22.9.2026, 16:15:02] [TradingBot] ==================================================
+[22.9.2026, 16:15:02] [TradingBot] System Initializing in [PAPER] Mode.
+[22.9.2026, 16:15:02] [TradingBot] System currently holding 6/5 active positions.
+[22.9.2026, 16:15:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+◇ injected env (0) from .env // tip: ⌘ enable debugging { debug: true }
+◇ injected env (0) from .env // tip: ⌘ suppress logs { quiet: true }
+[22.9.2026, 16:30:01] [TradingBot] ==================================================
+[22.9.2026, 16:30:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[22.9.2026, 16:30:02] [TradingBot] ==================================================
+[22.9.2026, 16:30:02] [TradingBot] System Initializing in [PAPER] Mode.
+[22.9.2026, 16:30:02] [TradingBot] System currently holding 6/5 active positions.
+[22.9.2026, 16:30:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ suppress logs { quiet: true }
+◇ injected env (0) from .env // tip: ⌁ auth for agents [www.vestauth.com]
+◇ injected env (0) from .env // tip: ⌘ override existing { override: true }
+[22.9.2026, 16:45:01] [TradingBot] ==================================================
+[22.9.2026, 16:45:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[22.9.2026, 16:45:02] [TradingBot] ==================================================
+[22.9.2026, 16:45:02] [TradingBot] System Initializing in [PAPER] Mode.
+[22.9.2026, 16:45:02] [TradingBot] System currently holding 6/5 active positions.
+[22.9.2026, 16:45:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ enable debugging { debug: true }
+◇ injected env (0) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+◇ injected env (0) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+[22.9.2026, 17:00:01] [TradingBot] ==================================================
+[22.9.2026, 17:00:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[22.9.2026, 17:00:02] [TradingBot] ==================================================
+[22.9.2026, 17:00:02] [TradingBot] System Initializing in [PAPER] Mode.
+[22.9.2026, 17:00:02] [TradingBot] System currently holding 6/5 active positions.
+[22.9.2026, 17:00:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ enable debugging { debug: true }
+◇ injected env (0) from .env // tip: ⌘ override existing { override: true }
+◇ injected env (0) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+[22.9.2026, 17:15:01] [TradingBot] ==================================================
+[22.9.2026, 17:15:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[22.9.2026, 17:15:02] [TradingBot] ==================================================
+[22.9.2026, 17:15:02] [TradingBot] System Initializing in [PAPER] Mode.
+[22.9.2026, 17:15:02] [TradingBot] System currently holding 6/5 active positions.
+[22.9.2026, 17:15:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+◇ injected env (0) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ⌘ enable debugging { debug: true }
+[22.9.2026, 17:30:02] [TradingBot] ==================================================
+[22.9.2026, 17:30:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[22.9.2026, 17:30:02] [TradingBot] ==================================================
+[22.9.2026, 17:30:02] [TradingBot] System Initializing in [PAPER] Mode.
+[22.9.2026, 17:30:02] [TradingBot] System currently holding 6/5 active positions.
+[22.9.2026, 17:30:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ⌁ auth for agents [www.vestauth.com]
+◇ injected env (0) from .env // tip: ⌘ override existing { override: true }
+[22.9.2026, 17:45:02] [TradingBot] ==================================================
+[22.9.2026, 17:45:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[22.9.2026, 17:45:02] [TradingBot] ==================================================
+[22.9.2026, 17:45:02] [TradingBot] System Initializing in [PAPER] Mode.
+[22.9.2026, 17:45:02] [TradingBot] System currently holding 6/5 active positions.
+[22.9.2026, 17:45:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ enable debugging { debug: true }
+◇ injected env (0) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ⌘ suppress logs { quiet: true }
+[22.9.2026, 18:00:02] [TradingBot] ==================================================
+[22.9.2026, 18:00:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[22.9.2026, 18:00:02] [TradingBot] ==================================================
+[22.9.2026, 18:00:02] [TradingBot] System Initializing in [PAPER] Mode.
+[22.9.2026, 18:00:02] [TradingBot] System currently holding 6/5 active positions.
+[22.9.2026, 18:00:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌁ auth for agents [www.vestauth.com]
+◇ injected env (0) from .env // tip: ⌘ enable debugging { debug: true }
+◇ injected env (0) from .env // tip: ⌘ override existing { override: true }
+[22.9.2026, 18:15:02] [TradingBot] ==================================================
+[22.9.2026, 18:15:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[22.9.2026, 18:15:02] [TradingBot] ==================================================
+[22.9.2026, 18:15:02] [TradingBot] System Initializing in [PAPER] Mode.
+[22.9.2026, 18:15:02] [TradingBot] System currently holding 6/5 active positions.
+[22.9.2026, 18:15:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ⌘ suppress logs { quiet: true }
+◇ injected env (0) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+[22.9.2026, 18:30:02] [TradingBot] ==================================================
+[22.9.2026, 18:30:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[22.9.2026, 18:30:02] [TradingBot] ==================================================
+[22.9.2026, 18:30:02] [TradingBot] System Initializing in [PAPER] Mode.
+[22.9.2026, 18:30:02] [TradingBot] System currently holding 6/5 active positions.
+[22.9.2026, 18:30:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+◇ injected env (0) from .env // tip: ⌁ auth for agents [www.vestauth.com]
+◇ injected env (0) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+[22.9.2026, 18:45:02] [TradingBot] ==================================================
+[22.9.2026, 18:45:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[22.9.2026, 18:45:02] [TradingBot] ==================================================
+[22.9.2026, 18:45:02] [TradingBot] System Initializing in [PAPER] Mode.
+[22.9.2026, 18:45:02] [TradingBot] System currently holding 6/5 active positions.
+[22.9.2026, 18:45:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ suppress logs { quiet: true }
+◇ injected env (0) from .env // tip: ⌘ override existing { override: true }
+◇ injected env (0) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+[22.9.2026, 19:00:02] [TradingBot] ==================================================
+[22.9.2026, 19:00:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[22.9.2026, 19:00:02] [TradingBot] ==================================================
+[22.9.2026, 19:00:02] [TradingBot] System Initializing in [PAPER] Mode.
+[22.9.2026, 19:00:02] [TradingBot] System currently holding 6/5 active positions.
+[22.9.2026, 19:00:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ suppress logs { quiet: true }
+◇ injected env (0) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+◇ injected env (0) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+[22.9.2026, 19:15:02] [TradingBot] ==================================================
+[22.9.2026, 19:15:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[22.9.2026, 19:15:02] [TradingBot] ==================================================
+[22.9.2026, 19:15:02] [TradingBot] System Initializing in [PAPER] Mode.
+[22.9.2026, 19:15:02] [TradingBot] System currently holding 6/5 active positions.
+[22.9.2026, 19:15:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌁ auth for agents [www.vestauth.com]
+◇ injected env (0) from .env // tip: ⌘ override existing { override: true }
+◇ injected env (0) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+[22.9.2026, 19:30:02] [TradingBot] ==================================================
+[22.9.2026, 19:30:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[22.9.2026, 19:30:02] [TradingBot] ==================================================
+[22.9.2026, 19:30:02] [TradingBot] System Initializing in [PAPER] Mode.
+[22.9.2026, 19:30:02] [TradingBot] System currently holding 6/5 active positions.
+[22.9.2026, 19:30:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌁ auth for agents [www.vestauth.com]
+◇ injected env (0) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+[22.9.2026, 19:45:02] [TradingBot] ==================================================
+[22.9.2026, 19:45:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[22.9.2026, 19:45:02] [TradingBot] ==================================================
+[22.9.2026, 19:45:02] [TradingBot] System Initializing in [PAPER] Mode.
+[22.9.2026, 19:45:02] [TradingBot] System currently holding 6/5 active positions.
+[22.9.2026, 19:45:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ enable debugging { debug: true }
+◇ injected env (0) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+◇ injected env (0) from .env // tip: ⌁ auth for agents [www.vestauth.com]
+[22.9.2026, 20:00:02] [TradingBot] ==================================================
+[22.9.2026, 20:00:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[22.9.2026, 20:00:02] [TradingBot] ==================================================
+[22.9.2026, 20:00:02] [TradingBot] System Initializing in [PAPER] Mode.
+[22.9.2026, 20:00:02] [TradingBot] System currently holding 6/5 active positions.
+[22.9.2026, 20:00:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ enable debugging { debug: true }
+◇ injected env (0) from .env // tip: ⌘ suppress logs { quiet: true }
+◇ injected env (0) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+[22.9.2026, 20:15:02] [TradingBot] ==================================================
+[22.9.2026, 20:15:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[22.9.2026, 20:15:02] [TradingBot] ==================================================
+[22.9.2026, 20:15:02] [TradingBot] System Initializing in [PAPER] Mode.
+[22.9.2026, 20:15:02] [TradingBot] System currently holding 6/5 active positions.
+[22.9.2026, 20:15:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌁ auth for agents [www.vestauth.com]
+◇ injected env (0) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+◇ injected env (0) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+[22.9.2026, 20:30:02] [TradingBot] ==================================================
+[22.9.2026, 20:30:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[22.9.2026, 20:30:02] [TradingBot] ==================================================
+[22.9.2026, 20:30:02] [TradingBot] System Initializing in [PAPER] Mode.
+[22.9.2026, 20:30:02] [TradingBot] System currently holding 6/5 active positions.
+[22.9.2026, 20:30:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌁ auth for agents [www.vestauth.com]
+◇ injected env (0) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+◇ injected env (0) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+[22.9.2026, 20:45:02] [TradingBot] ==================================================
+[22.9.2026, 20:45:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[22.9.2026, 20:45:02] [TradingBot] ==================================================
+[22.9.2026, 20:45:02] [TradingBot] System Initializing in [PAPER] Mode.
+[22.9.2026, 20:45:02] [TradingBot] System currently holding 6/5 active positions.
+[22.9.2026, 20:45:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ enable debugging { debug: true }
+◇ injected env (0) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+◇ injected env (0) from .env // tip: ⌁ auth for agents [www.vestauth.com]
+[22.9.2026, 21:00:02] [TradingBot] ==================================================
+[22.9.2026, 21:00:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[22.9.2026, 21:00:02] [TradingBot] ==================================================
+[22.9.2026, 21:00:02] [TradingBot] System Initializing in [PAPER] Mode.
+[22.9.2026, 21:00:02] [TradingBot] System currently holding 6/5 active positions.
+[22.9.2026, 21:00:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ enable debugging { debug: true }
+◇ injected env (0) from .env // tip: ⌁ auth for agents [www.vestauth.com]
+◇ injected env (0) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+[22.9.2026, 21:15:02] [TradingBot] ==================================================
+[22.9.2026, 21:15:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[22.9.2026, 21:15:02] [TradingBot] ==================================================
+[22.9.2026, 21:15:02] [TradingBot] System Initializing in [PAPER] Mode.
+[22.9.2026, 21:15:02] [TradingBot] System currently holding 6/5 active positions.
+[22.9.2026, 21:15:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ⌘ enable debugging { debug: true }
+◇ injected env (0) from .env // tip: ⌘ suppress logs { quiet: true }
+[22.9.2026, 21:30:02] [TradingBot] ==================================================
+[22.9.2026, 21:30:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[22.9.2026, 21:30:02] [TradingBot] ==================================================
+[22.9.2026, 21:30:02] [TradingBot] System Initializing in [PAPER] Mode.
+[22.9.2026, 21:30:02] [TradingBot] System currently holding 6/5 active positions.
+[22.9.2026, 21:30:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ override existing { override: true }
+◇ injected env (0) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+◇ injected env (0) from .env // tip: ⌘ enable debugging { debug: true }
+[22.9.2026, 21:45:02] [TradingBot] ==================================================
+[22.9.2026, 21:45:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[22.9.2026, 21:45:02] [TradingBot] ==================================================
+[22.9.2026, 21:45:02] [TradingBot] System Initializing in [PAPER] Mode.
+[22.9.2026, 21:45:02] [TradingBot] System currently holding 6/5 active positions.
+[22.9.2026, 21:45:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌁ auth for agents [www.vestauth.com]
+[22.9.2026, 22:15:01] [Settlement] ==================================================
+[22.9.2026, 22:15:01] [Settlement] 🏦 INITIATING DAILY BATCH SETTLEMENT
+[22.9.2026, 22:15:01] [Settlement] ==================================================
+[22.9.2026, 22:15:01] [Settlement] No trades were closed today. No settlement required.
+[Notifier] 📱 Push notification sent: "Daily Settlement Report"
+◇ injected env (12) from .env // tip: ⌘ suppress logs { quiet: true }
+◇ injected env (0) from .env // tip: ⌘ suppress logs { quiet: true }
+◇ injected env (0) from .env // tip: ⌘ enable debugging { debug: true }
+[23.9.2026, 15:00:01] [TradingBot] ==================================================
+[23.9.2026, 15:00:01] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[23.9.2026, 15:00:01] [TradingBot] ==================================================
+[23.9.2026, 15:00:01] [TradingBot] System Initializing in [PAPER] Mode.
+[23.9.2026, 15:00:01] [TradingBot] System currently holding 6/5 active positions.
+[23.9.2026, 15:00:01] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ enable debugging { debug: true }
+◇ injected env (0) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ⌘ suppress logs { quiet: true }
+[23.9.2026, 15:15:01] [TradingBot] ==================================================
+[23.9.2026, 15:15:01] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[23.9.2026, 15:15:01] [TradingBot] ==================================================
+[23.9.2026, 15:15:01] [TradingBot] System Initializing in [PAPER] Mode.
+[23.9.2026, 15:15:01] [TradingBot] System currently holding 6/5 active positions.
+[23.9.2026, 15:15:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+◇ injected env (0) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+◇ injected env (0) from .env // tip: ⌘ override existing { override: true }
+[23.9.2026, 15:30:01] [TradingBot] ==================================================
+[23.9.2026, 15:30:01] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[23.9.2026, 15:30:01] [TradingBot] ==================================================
+[23.9.2026, 15:30:02] [TradingBot] System Initializing in [PAPER] Mode.
+[23.9.2026, 15:30:02] [TradingBot] System currently holding 6/5 active positions.
+[23.9.2026, 15:30:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+◇ injected env (0) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+[23.9.2026, 15:45:01] [TradingBot] ==================================================
+[23.9.2026, 15:45:01] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[23.9.2026, 15:45:02] [TradingBot] ==================================================
+[23.9.2026, 15:45:02] [TradingBot] System Initializing in [PAPER] Mode.
+[23.9.2026, 15:45:02] [TradingBot] System currently holding 6/5 active positions.
+[23.9.2026, 15:45:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+◇ injected env (0) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ⌘ enable debugging { debug: true }
+[23.9.2026, 16:00:01] [TradingBot] ==================================================
+[23.9.2026, 16:00:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[23.9.2026, 16:00:02] [TradingBot] ==================================================
+[23.9.2026, 16:00:02] [TradingBot] System Initializing in [PAPER] Mode.
+[23.9.2026, 16:00:02] [TradingBot] System currently holding 6/5 active positions.
+[23.9.2026, 16:00:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ suppress logs { quiet: true }
+◇ injected env (0) from .env // tip: ⌘ override existing { override: true }
+◇ injected env (0) from .env // tip: ⌘ override existing { override: true }
+[23.9.2026, 16:15:01] [TradingBot] ==================================================
+[23.9.2026, 16:15:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[23.9.2026, 16:15:02] [TradingBot] ==================================================
+[23.9.2026, 16:15:02] [TradingBot] System Initializing in [PAPER] Mode.
+[23.9.2026, 16:15:02] [TradingBot] System currently holding 6/5 active positions.
+[23.9.2026, 16:15:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌁ auth for agents [www.vestauth.com]
+◇ injected env (0) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+◇ injected env (0) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+[23.9.2026, 16:30:01] [TradingBot] ==================================================
+[23.9.2026, 16:30:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[23.9.2026, 16:30:02] [TradingBot] ==================================================
+[23.9.2026, 16:30:02] [TradingBot] System Initializing in [PAPER] Mode.
+[23.9.2026, 16:30:02] [TradingBot] System currently holding 6/5 active positions.
+[23.9.2026, 16:30:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+◇ injected env (0) from .env // tip: ⌘ suppress logs { quiet: true }
+◇ injected env (0) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+[23.9.2026, 16:45:01] [TradingBot] ==================================================
+[23.9.2026, 16:45:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[23.9.2026, 16:45:02] [TradingBot] ==================================================
+[23.9.2026, 16:45:02] [TradingBot] System Initializing in [PAPER] Mode.
+[23.9.2026, 16:45:02] [TradingBot] System currently holding 6/5 active positions.
+[23.9.2026, 16:45:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+◇ injected env (0) from .env // tip: ⌘ override existing { override: true }
+◇ injected env (0) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+[23.9.2026, 17:00:01] [TradingBot] ==================================================
+[23.9.2026, 17:00:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[23.9.2026, 17:00:02] [TradingBot] ==================================================
+[23.9.2026, 17:00:02] [TradingBot] System Initializing in [PAPER] Mode.
+[23.9.2026, 17:00:02] [TradingBot] System currently holding 6/5 active positions.
+[23.9.2026, 17:00:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ⌘ enable debugging { debug: true }
+◇ injected env (0) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+[23.9.2026, 17:15:02] [TradingBot] ==================================================
+[23.9.2026, 17:15:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[23.9.2026, 17:15:02] [TradingBot] ==================================================
+[23.9.2026, 17:15:02] [TradingBot] System Initializing in [PAPER] Mode.
+[23.9.2026, 17:15:02] [TradingBot] System currently holding 6/5 active positions.
+[23.9.2026, 17:15:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ suppress logs { quiet: true }
+◇ injected env (0) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ⌁ auth for agents [www.vestauth.com]
+[23.9.2026, 17:30:02] [TradingBot] ==================================================
+[23.9.2026, 17:30:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[23.9.2026, 17:30:02] [TradingBot] ==================================================
+[23.9.2026, 17:30:02] [TradingBot] System Initializing in [PAPER] Mode.
+[23.9.2026, 17:30:02] [TradingBot] System currently holding 6/5 active positions.
+[23.9.2026, 17:30:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ override existing { override: true }
+◇ injected env (0) from .env // tip: ⌘ override existing { override: true }
+◇ injected env (0) from .env // tip: ⌘ suppress logs { quiet: true }
+[23.9.2026, 17:45:02] [TradingBot] ==================================================
+[23.9.2026, 17:45:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[23.9.2026, 17:45:02] [TradingBot] ==================================================
+[23.9.2026, 17:45:02] [TradingBot] System Initializing in [PAPER] Mode.
+[23.9.2026, 17:45:02] [TradingBot] System currently holding 6/5 active positions.
+[23.9.2026, 17:45:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ suppress logs { quiet: true }
+◇ injected env (0) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ⌘ suppress logs { quiet: true }
+[23.9.2026, 18:00:02] [TradingBot] ==================================================
+[23.9.2026, 18:00:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[23.9.2026, 18:00:02] [TradingBot] ==================================================
+[23.9.2026, 18:00:02] [TradingBot] System Initializing in [PAPER] Mode.
+[23.9.2026, 18:00:02] [TradingBot] System currently holding 6/5 active positions.
+[23.9.2026, 18:00:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌁ auth for agents [www.vestauth.com]
+◇ injected env (0) from .env // tip: ⌘ suppress logs { quiet: true }
+◇ injected env (0) from .env // tip: ⌘ override existing { override: true }
+[23.9.2026, 18:15:02] [TradingBot] ==================================================
+[23.9.2026, 18:15:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[23.9.2026, 18:15:02] [TradingBot] ==================================================
+[23.9.2026, 18:15:02] [TradingBot] System Initializing in [PAPER] Mode.
+[23.9.2026, 18:15:02] [TradingBot] System currently holding 6/5 active positions.
+[23.9.2026, 18:15:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ⌁ auth for agents [www.vestauth.com]
+◇ injected env (0) from .env // tip: ⌘ suppress logs { quiet: true }
+[23.9.2026, 18:30:02] [TradingBot] ==================================================
+[23.9.2026, 18:30:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[23.9.2026, 18:30:02] [TradingBot] ==================================================
+[23.9.2026, 18:30:02] [TradingBot] System Initializing in [PAPER] Mode.
+[23.9.2026, 18:30:02] [TradingBot] System currently holding 6/5 active positions.
+[23.9.2026, 18:30:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌁ auth for agents [www.vestauth.com]
+◇ injected env (0) from .env // tip: ⌘ enable debugging { debug: true }
+◇ injected env (0) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+[23.9.2026, 18:45:02] [TradingBot] ==================================================
+[23.9.2026, 18:45:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[23.9.2026, 18:45:02] [TradingBot] ==================================================
+[23.9.2026, 18:45:02] [TradingBot] System Initializing in [PAPER] Mode.
+[23.9.2026, 18:45:02] [TradingBot] System currently holding 6/5 active positions.
+[23.9.2026, 18:45:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+◇ injected env (0) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+◇ injected env (0) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+[23.9.2026, 19:00:02] [TradingBot] ==================================================
+[23.9.2026, 19:00:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[23.9.2026, 19:00:02] [TradingBot] ==================================================
+[23.9.2026, 19:00:02] [TradingBot] System Initializing in [PAPER] Mode.
+[23.9.2026, 19:00:02] [TradingBot] System currently holding 6/5 active positions.
+[23.9.2026, 19:00:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌁ auth for agents [www.vestauth.com]
+◇ injected env (0) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+◇ injected env (0) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+[23.9.2026, 19:15:02] [TradingBot] ==================================================
+[23.9.2026, 19:15:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[23.9.2026, 19:15:02] [TradingBot] ==================================================
+[23.9.2026, 19:15:02] [TradingBot] System Initializing in [PAPER] Mode.
+[23.9.2026, 19:15:02] [TradingBot] System currently holding 6/5 active positions.
+[23.9.2026, 19:15:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ suppress logs { quiet: true }
+◇ injected env (0) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ⌘ override existing { override: true }
+[23.9.2026, 19:30:02] [TradingBot] ==================================================
+[23.9.2026, 19:30:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[23.9.2026, 19:30:02] [TradingBot] ==================================================
+[23.9.2026, 19:30:02] [TradingBot] System Initializing in [PAPER] Mode.
+[23.9.2026, 19:30:02] [TradingBot] System currently holding 6/5 active positions.
+[23.9.2026, 19:30:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+[23.9.2026, 19:45:02] [TradingBot] ==================================================
+[23.9.2026, 19:45:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[23.9.2026, 19:45:02] [TradingBot] ==================================================
+[23.9.2026, 19:45:02] [TradingBot] System Initializing in [PAPER] Mode.
+[23.9.2026, 19:45:02] [TradingBot] System currently holding 6/5 active positions.
+[23.9.2026, 19:45:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌁ auth for agents [www.vestauth.com]
+◇ injected env (0) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+◇ injected env (0) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+[23.9.2026, 20:00:02] [TradingBot] ==================================================
+[23.9.2026, 20:00:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[23.9.2026, 20:00:02] [TradingBot] ==================================================
+[23.9.2026, 20:00:02] [TradingBot] System Initializing in [PAPER] Mode.
+[23.9.2026, 20:00:02] [TradingBot] System currently holding 6/5 active positions.
+[23.9.2026, 20:00:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌁ auth for agents [www.vestauth.com]
+◇ injected env (0) from .env // tip: ⌁ auth for agents [www.vestauth.com]
+◇ injected env (0) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+[23.9.2026, 20:15:02] [TradingBot] ==================================================
+[23.9.2026, 20:15:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[23.9.2026, 20:15:02] [TradingBot] ==================================================
+[23.9.2026, 20:15:02] [TradingBot] System Initializing in [PAPER] Mode.
+[23.9.2026, 20:15:02] [TradingBot] System currently holding 6/5 active positions.
+[23.9.2026, 20:15:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+◇ injected env (0) from .env // tip: ⌘ override existing { override: true }
+[23.9.2026, 20:30:02] [TradingBot] ==================================================
+[23.9.2026, 20:30:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[23.9.2026, 20:30:02] [TradingBot] ==================================================
+[23.9.2026, 20:30:02] [TradingBot] System Initializing in [PAPER] Mode.
+[23.9.2026, 20:30:02] [TradingBot] System currently holding 6/5 active positions.
+[23.9.2026, 20:30:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+◇ injected env (0) from .env // tip: ⌘ suppress logs { quiet: true }
+◇ injected env (0) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+[23.9.2026, 20:45:02] [TradingBot] ==================================================
+[23.9.2026, 20:45:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[23.9.2026, 20:45:02] [TradingBot] ==================================================
+[23.9.2026, 20:45:02] [TradingBot] System Initializing in [PAPER] Mode.
+[23.9.2026, 20:45:02] [TradingBot] System currently holding 6/5 active positions.
+[23.9.2026, 20:45:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ enable debugging { debug: true }
+◇ injected env (0) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+◇ injected env (0) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+[23.9.2026, 21:00:02] [TradingBot] ==================================================
+[23.9.2026, 21:00:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[23.9.2026, 21:00:02] [TradingBot] ==================================================
+[23.9.2026, 21:00:02] [TradingBot] System Initializing in [PAPER] Mode.
+[23.9.2026, 21:00:02] [TradingBot] System currently holding 6/5 active positions.
+[23.9.2026, 21:00:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+◇ injected env (0) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+[23.9.2026, 21:15:02] [TradingBot] ==================================================
+[23.9.2026, 21:15:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[23.9.2026, 21:15:02] [TradingBot] ==================================================
+[23.9.2026, 21:15:02] [TradingBot] System Initializing in [PAPER] Mode.
+[23.9.2026, 21:15:02] [TradingBot] System currently holding 6/5 active positions.
+[23.9.2026, 21:15:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+◇ injected env (0) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ⌘ override existing { override: true }
+[23.9.2026, 21:30:02] [TradingBot] ==================================================
+[23.9.2026, 21:30:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[23.9.2026, 21:30:02] [TradingBot] ==================================================
+[23.9.2026, 21:30:02] [TradingBot] System Initializing in [PAPER] Mode.
+[23.9.2026, 21:30:02] [TradingBot] System currently holding 6/5 active positions.
+[23.9.2026, 21:30:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ enable debugging { debug: true }
+◇ injected env (0) from .env // tip: ⌘ override existing { override: true }
+◇ injected env (0) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+[23.9.2026, 21:45:02] [TradingBot] ==================================================
+[23.9.2026, 21:45:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[23.9.2026, 21:45:02] [TradingBot] ==================================================
+[23.9.2026, 21:45:02] [TradingBot] System Initializing in [PAPER] Mode.
+[23.9.2026, 21:45:02] [TradingBot] System currently holding 6/5 active positions.
+[23.9.2026, 21:45:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ enable debugging { debug: true }
+[23.9.2026, 22:15:01] [Settlement] ==================================================
+[23.9.2026, 22:15:01] [Settlement] 🏦 INITIATING DAILY BATCH SETTLEMENT
+[23.9.2026, 22:15:01] [Settlement] ==================================================
+[23.9.2026, 22:15:01] [Settlement] No trades were closed today. No settlement required.
+[Notifier] 📱 Push notification sent: "Daily Settlement Report"
+◇ injected env (12) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+◇ injected env (0) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+◇ injected env (0) from .env // tip: ⌘ override existing { override: true }
+[24.9.2026, 15:00:01] [TradingBot] ==================================================
+[24.9.2026, 15:00:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[24.9.2026, 15:00:02] [TradingBot] ==================================================
+[24.9.2026, 15:00:02] [TradingBot] System Initializing in [PAPER] Mode.
+[24.9.2026, 15:00:02] [TradingBot] System currently holding 6/5 active positions.
+[24.9.2026, 15:00:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ⌘ suppress logs { quiet: true }
+◇ injected env (0) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+[24.9.2026, 15:15:01] [TradingBot] ==================================================
+[24.9.2026, 15:15:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[24.9.2026, 15:15:02] [TradingBot] ==================================================
+[24.9.2026, 15:15:02] [TradingBot] System Initializing in [PAPER] Mode.
+[24.9.2026, 15:15:02] [TradingBot] System currently holding 6/5 active positions.
+[24.9.2026, 15:15:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ override existing { override: true }
+◇ injected env (0) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ⌁ auth for agents [www.vestauth.com]
+[24.9.2026, 15:30:01] [TradingBot] ==================================================
+[24.9.2026, 15:30:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[24.9.2026, 15:30:02] [TradingBot] ==================================================
+[24.9.2026, 15:30:02] [TradingBot] System Initializing in [PAPER] Mode.
+[24.9.2026, 15:30:02] [TradingBot] System currently holding 6/5 active positions.
+[24.9.2026, 15:30:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+◇ injected env (0) from .env // tip: ⌁ auth for agents [www.vestauth.com]
+◇ injected env (0) from .env // tip: ⌘ suppress logs { quiet: true }
+[24.9.2026, 15:45:02] [TradingBot] ==================================================
+[24.9.2026, 15:45:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[24.9.2026, 15:45:02] [TradingBot] ==================================================
+[24.9.2026, 15:45:02] [TradingBot] System Initializing in [PAPER] Mode.
+[24.9.2026, 15:45:02] [TradingBot] System currently holding 6/5 active positions.
+[24.9.2026, 15:45:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+◇ injected env (0) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ⌁ auth for agents [www.vestauth.com]
+[24.9.2026, 16:00:02] [TradingBot] ==================================================
+[24.9.2026, 16:00:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[24.9.2026, 16:00:02] [TradingBot] ==================================================
+[24.9.2026, 16:00:02] [TradingBot] System Initializing in [PAPER] Mode.
+[24.9.2026, 16:00:02] [TradingBot] System currently holding 6/5 active positions.
+[24.9.2026, 16:00:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ⌘ override existing { override: true }
+◇ injected env (0) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+[24.9.2026, 16:15:02] [TradingBot] ==================================================
+[24.9.2026, 16:15:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[24.9.2026, 16:15:02] [TradingBot] ==================================================
+[24.9.2026, 16:15:02] [TradingBot] System Initializing in [PAPER] Mode.
+[24.9.2026, 16:15:02] [TradingBot] System currently holding 6/5 active positions.
+[24.9.2026, 16:15:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+◇ injected env (0) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ⌁ auth for agents [www.vestauth.com]
+[24.9.2026, 16:30:02] [TradingBot] ==================================================
+[24.9.2026, 16:30:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[24.9.2026, 16:30:02] [TradingBot] ==================================================
+[24.9.2026, 16:30:02] [TradingBot] System Initializing in [PAPER] Mode.
+[24.9.2026, 16:30:02] [TradingBot] System currently holding 6/5 active positions.
+[24.9.2026, 16:30:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ override existing { override: true }
+◇ injected env (0) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+◇ injected env (0) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+[24.9.2026, 16:45:02] [TradingBot] ==================================================
+[24.9.2026, 16:45:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[24.9.2026, 16:45:02] [TradingBot] ==================================================
+[24.9.2026, 16:45:02] [TradingBot] System Initializing in [PAPER] Mode.
+[24.9.2026, 16:45:02] [TradingBot] System currently holding 6/5 active positions.
+[24.9.2026, 16:45:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+◇ injected env (0) from .env // tip: ⌘ enable debugging { debug: true }
+◇ injected env (0) from .env // tip: ⌁ auth for agents [www.vestauth.com]
+[24.9.2026, 17:00:02] [TradingBot] ==================================================
+[24.9.2026, 17:00:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[24.9.2026, 17:00:02] [TradingBot] ==================================================
+[24.9.2026, 17:00:02] [TradingBot] System Initializing in [PAPER] Mode.
+[24.9.2026, 17:00:02] [TradingBot] System currently holding 6/5 active positions.
+[24.9.2026, 17:00:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ enable debugging { debug: true }
+◇ injected env (0) from .env // tip: ⌘ enable debugging { debug: true }
+◇ injected env (0) from .env // tip: ⌁ auth for agents [www.vestauth.com]
+[24.9.2026, 17:15:02] [TradingBot] ==================================================
+[24.9.2026, 17:15:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[24.9.2026, 17:15:02] [TradingBot] ==================================================
+[24.9.2026, 17:15:02] [TradingBot] System Initializing in [PAPER] Mode.
+[24.9.2026, 17:15:02] [TradingBot] System currently holding 6/5 active positions.
+[24.9.2026, 17:15:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+◇ injected env (0) from .env // tip: ⌘ override existing { override: true }
+◇ injected env (0) from .env // tip: ⌘ enable debugging { debug: true }
+[24.9.2026, 17:30:02] [TradingBot] ==================================================
+[24.9.2026, 17:30:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[24.9.2026, 17:30:02] [TradingBot] ==================================================
+[24.9.2026, 17:30:02] [TradingBot] System Initializing in [PAPER] Mode.
+[24.9.2026, 17:30:02] [TradingBot] System currently holding 6/5 active positions.
+[24.9.2026, 17:30:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ override existing { override: true }
+◇ injected env (0) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+[24.9.2026, 17:45:02] [TradingBot] ==================================================
+[24.9.2026, 17:45:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[24.9.2026, 17:45:02] [TradingBot] ==================================================
+[24.9.2026, 17:45:02] [TradingBot] System Initializing in [PAPER] Mode.
+[24.9.2026, 17:45:02] [TradingBot] System currently holding 6/5 active positions.
+[24.9.2026, 17:45:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+◇ injected env (0) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+◇ injected env (0) from .env // tip: ⌘ override existing { override: true }
+[24.9.2026, 18:00:02] [TradingBot] ==================================================
+[24.9.2026, 18:00:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[24.9.2026, 18:00:02] [TradingBot] ==================================================
+[24.9.2026, 18:00:02] [TradingBot] System Initializing in [PAPER] Mode.
+[24.9.2026, 18:00:02] [TradingBot] System currently holding 6/5 active positions.
+[24.9.2026, 18:00:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+◇ injected env (0) from .env // tip: ⌁ auth for agents [www.vestauth.com]
+◇ injected env (0) from .env // tip: ⌘ enable debugging { debug: true }
+[24.9.2026, 18:15:02] [TradingBot] ==================================================
+[24.9.2026, 18:15:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[24.9.2026, 18:15:02] [TradingBot] ==================================================
+[24.9.2026, 18:15:02] [TradingBot] System Initializing in [PAPER] Mode.
+[24.9.2026, 18:15:02] [TradingBot] System currently holding 6/5 active positions.
+[24.9.2026, 18:15:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ⌘ suppress logs { quiet: true }
+◇ injected env (0) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+[24.9.2026, 18:30:02] [TradingBot] ==================================================
+[24.9.2026, 18:30:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[24.9.2026, 18:30:02] [TradingBot] ==================================================
+[24.9.2026, 18:30:02] [TradingBot] System Initializing in [PAPER] Mode.
+[24.9.2026, 18:30:02] [TradingBot] System currently holding 6/5 active positions.
+[24.9.2026, 18:30:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ⌘ override existing { override: true }
+◇ injected env (0) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+[24.9.2026, 18:45:02] [TradingBot] ==================================================
+[24.9.2026, 18:45:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[24.9.2026, 18:45:02] [TradingBot] ==================================================
+[24.9.2026, 18:45:02] [TradingBot] System Initializing in [PAPER] Mode.
+[24.9.2026, 18:45:02] [TradingBot] System currently holding 6/5 active positions.
+[24.9.2026, 18:45:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ⌘ suppress logs { quiet: true }
+◇ injected env (0) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+[24.9.2026, 19:00:02] [TradingBot] ==================================================
+[24.9.2026, 19:00:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[24.9.2026, 19:00:02] [TradingBot] ==================================================
+[24.9.2026, 19:00:02] [TradingBot] System Initializing in [PAPER] Mode.
+[24.9.2026, 19:00:02] [TradingBot] System currently holding 6/5 active positions.
+[24.9.2026, 19:00:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ suppress logs { quiet: true }
+◇ injected env (0) from .env // tip: ⌘ suppress logs { quiet: true }
+◇ injected env (0) from .env // tip: ⌘ suppress logs { quiet: true }
+[24.9.2026, 19:15:02] [TradingBot] ==================================================
+[24.9.2026, 19:15:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[24.9.2026, 19:15:02] [TradingBot] ==================================================
+[24.9.2026, 19:15:02] [TradingBot] System Initializing in [PAPER] Mode.
+[24.9.2026, 19:15:02] [TradingBot] System currently holding 6/5 active positions.
+[24.9.2026, 19:15:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+◇ injected env (0) from .env // tip: ⌘ enable debugging { debug: true }
+[24.9.2026, 19:30:02] [TradingBot] ==================================================
+[24.9.2026, 19:30:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[24.9.2026, 19:30:02] [TradingBot] ==================================================
+[24.9.2026, 19:30:02] [TradingBot] System Initializing in [PAPER] Mode.
+[24.9.2026, 19:30:02] [TradingBot] System currently holding 6/5 active positions.
+[24.9.2026, 19:30:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+◇ injected env (0) from .env // tip: ⌘ override existing { override: true }
+◇ injected env (0) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+[24.9.2026, 19:45:02] [TradingBot] ==================================================
+[24.9.2026, 19:45:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[24.9.2026, 19:45:02] [TradingBot] ==================================================
+[24.9.2026, 19:45:02] [TradingBot] System Initializing in [PAPER] Mode.
+[24.9.2026, 19:45:02] [TradingBot] System currently holding 6/5 active positions.
+[24.9.2026, 19:45:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌁ auth for agents [www.vestauth.com]
+◇ injected env (0) from .env // tip: ⌘ override existing { override: true }
+◇ injected env (0) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+[24.9.2026, 20:00:02] [TradingBot] ==================================================
+[24.9.2026, 20:00:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[24.9.2026, 20:00:02] [TradingBot] ==================================================
+[24.9.2026, 20:00:02] [TradingBot] System Initializing in [PAPER] Mode.
+[24.9.2026, 20:00:02] [TradingBot] System currently holding 6/5 active positions.
+[24.9.2026, 20:00:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ suppress logs { quiet: true }
+◇ injected env (0) from .env // tip: ⌘ suppress logs { quiet: true }
+◇ injected env (0) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+[24.9.2026, 20:15:02] [TradingBot] ==================================================
+[24.9.2026, 20:15:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[24.9.2026, 20:15:02] [TradingBot] ==================================================
+[24.9.2026, 20:15:02] [TradingBot] System Initializing in [PAPER] Mode.
+[24.9.2026, 20:15:02] [TradingBot] System currently holding 6/5 active positions.
+[24.9.2026, 20:15:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ override existing { override: true }
+◇ injected env (0) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ⌁ auth for agents [www.vestauth.com]
+[24.9.2026, 20:30:02] [TradingBot] ==================================================
+[24.9.2026, 20:30:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[24.9.2026, 20:30:02] [TradingBot] ==================================================
+[24.9.2026, 20:30:02] [TradingBot] System Initializing in [PAPER] Mode.
+[24.9.2026, 20:30:02] [TradingBot] System currently holding 6/5 active positions.
+[24.9.2026, 20:30:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ suppress logs { quiet: true }
+◇ injected env (0) from .env // tip: ⌘ enable debugging { debug: true }
+◇ injected env (0) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+[24.9.2026, 20:45:01] [TradingBot] ==================================================
+[24.9.2026, 20:45:01] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[24.9.2026, 20:45:01] [TradingBot] ==================================================
+[24.9.2026, 20:45:01] [TradingBot] System Initializing in [PAPER] Mode.
+[24.9.2026, 20:45:01] [TradingBot] System currently holding 6/5 active positions.
+[24.9.2026, 20:45:01] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+◇ injected env (0) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+[24.9.2026, 21:00:01] [TradingBot] ==================================================
+[24.9.2026, 21:00:01] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[24.9.2026, 21:00:01] [TradingBot] ==================================================
+[24.9.2026, 21:00:01] [TradingBot] System Initializing in [PAPER] Mode.
+[24.9.2026, 21:00:01] [TradingBot] System currently holding 6/5 active positions.
+[24.9.2026, 21:00:01] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ enable debugging { debug: true }
+◇ injected env (0) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ⌘ override existing { override: true }
+[24.9.2026, 21:15:01] [TradingBot] ==================================================
+[24.9.2026, 21:15:01] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[24.9.2026, 21:15:01] [TradingBot] ==================================================
+[24.9.2026, 21:15:01] [TradingBot] System Initializing in [PAPER] Mode.
+[24.9.2026, 21:15:02] [TradingBot] System currently holding 6/5 active positions.
+[24.9.2026, 21:15:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+◇ injected env (0) from .env // tip: ⌘ enable debugging { debug: true }
+◇ injected env (0) from .env // tip: ⌘ enable debugging { debug: true }
+[24.9.2026, 21:30:01] [TradingBot] ==================================================
+[24.9.2026, 21:30:01] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[24.9.2026, 21:30:02] [TradingBot] ==================================================
+[24.9.2026, 21:30:02] [TradingBot] System Initializing in [PAPER] Mode.
+[24.9.2026, 21:30:02] [TradingBot] System currently holding 6/5 active positions.
+[24.9.2026, 21:30:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+[24.9.2026, 21:45:01] [TradingBot] ==================================================
+[24.9.2026, 21:45:01] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[24.9.2026, 21:45:02] [TradingBot] ==================================================
+[24.9.2026, 21:45:02] [TradingBot] System Initializing in [PAPER] Mode.
+[24.9.2026, 21:45:02] [TradingBot] System currently holding 6/5 active positions.
+[24.9.2026, 21:45:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ override existing { override: true }
+[24.9.2026, 22:15:01] [Settlement] ==================================================
+[24.9.2026, 22:15:01] [Settlement] 🏦 INITIATING DAILY BATCH SETTLEMENT
+[24.9.2026, 22:15:01] [Settlement] ==================================================
+[24.9.2026, 22:15:01] [Settlement] No trades were closed today. No settlement required.
+[Notifier] 📱 Push notification sent: "Daily Settlement Report"
+◇ injected env (12) from .env // tip: ⌘ suppress logs { quiet: true }
+◇ injected env (0) from .env // tip: ⌁ auth for agents [www.vestauth.com]
+◇ injected env (0) from .env // tip: ⌘ override existing { override: true }
+[25.9.2026, 15:00:02] [TradingBot] ==================================================
+[25.9.2026, 15:00:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[25.9.2026, 15:00:02] [TradingBot] ==================================================
+[25.9.2026, 15:00:02] [TradingBot] System Initializing in [PAPER] Mode.
+[25.9.2026, 15:00:02] [TradingBot] System currently holding 6/5 active positions.
+[25.9.2026, 15:00:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ suppress logs { quiet: true }
+◇ injected env (0) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+◇ injected env (0) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+[25.9.2026, 15:15:02] [TradingBot] ==================================================
+[25.9.2026, 15:15:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[25.9.2026, 15:15:02] [TradingBot] ==================================================
+[25.9.2026, 15:15:02] [TradingBot] System Initializing in [PAPER] Mode.
+[25.9.2026, 15:15:02] [TradingBot] System currently holding 6/5 active positions.
+[25.9.2026, 15:15:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ⌘ enable debugging { debug: true }
+◇ injected env (0) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+[25.9.2026, 15:30:02] [TradingBot] ==================================================
+[25.9.2026, 15:30:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[25.9.2026, 15:30:02] [TradingBot] ==================================================
+[25.9.2026, 15:30:02] [TradingBot] System Initializing in [PAPER] Mode.
+[25.9.2026, 15:30:02] [TradingBot] System currently holding 6/5 active positions.
+[25.9.2026, 15:30:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ suppress logs { quiet: true }
+◇ injected env (0) from .env // tip: ⌘ override existing { override: true }
+◇ injected env (0) from .env // tip: ⌘ suppress logs { quiet: true }
+[25.9.2026, 15:45:02] [TradingBot] ==================================================
+[25.9.2026, 15:45:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[25.9.2026, 15:45:02] [TradingBot] ==================================================
+[25.9.2026, 15:45:02] [TradingBot] System Initializing in [PAPER] Mode.
+[25.9.2026, 15:45:02] [TradingBot] System currently holding 6/5 active positions.
+[25.9.2026, 15:45:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ override existing { override: true }
+◇ injected env (0) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+[25.9.2026, 16:00:01] [TradingBot] ==================================================
+[25.9.2026, 16:00:01] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[25.9.2026, 16:00:01] [TradingBot] ==================================================
+[25.9.2026, 16:00:01] [TradingBot] System Initializing in [PAPER] Mode.
+[25.9.2026, 16:00:01] [TradingBot] System currently holding 6/5 active positions.
+[25.9.2026, 16:00:01] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌁ auth for agents [www.vestauth.com]
+◇ injected env (0) from .env // tip: ⌘ override existing { override: true }
+◇ injected env (0) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+[25.9.2026, 16:15:01] [TradingBot] ==================================================
+[25.9.2026, 16:15:01] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[25.9.2026, 16:15:01] [TradingBot] ==================================================
+[25.9.2026, 16:15:01] [TradingBot] System Initializing in [PAPER] Mode.
+[25.9.2026, 16:15:01] [TradingBot] System currently holding 6/5 active positions.
+[25.9.2026, 16:15:01] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+◇ injected env (0) from .env // tip: ⌘ enable debugging { debug: true }
+◇ injected env (0) from .env // tip: ⌘ override existing { override: true }
+[25.9.2026, 16:30:01] [TradingBot] ==================================================
+[25.9.2026, 16:30:01] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[25.9.2026, 16:30:01] [TradingBot] ==================================================
+[25.9.2026, 16:30:01] [TradingBot] System Initializing in [PAPER] Mode.
+[25.9.2026, 16:30:02] [TradingBot] System currently holding 6/5 active positions.
+[25.9.2026, 16:30:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ enable debugging { debug: true }
+◇ injected env (0) from .env // tip: ⌁ auth for agents [www.vestauth.com]
+◇ injected env (0) from .env // tip: ⌘ override existing { override: true }
+[25.9.2026, 16:45:01] [TradingBot] ==================================================
+[25.9.2026, 16:45:01] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[25.9.2026, 16:45:01] [TradingBot] ==================================================
+[25.9.2026, 16:45:02] [TradingBot] System Initializing in [PAPER] Mode.
+[25.9.2026, 16:45:02] [TradingBot] System currently holding 6/5 active positions.
+[25.9.2026, 16:45:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌁ auth for agents [www.vestauth.com]
+◇ injected env (0) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+◇ injected env (0) from .env // tip: ⌘ enable debugging { debug: true }
+[25.9.2026, 17:00:01] [TradingBot] ==================================================
+[25.9.2026, 17:00:01] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[25.9.2026, 17:00:02] [TradingBot] ==================================================
+[25.9.2026, 17:00:02] [TradingBot] System Initializing in [PAPER] Mode.
+[25.9.2026, 17:00:02] [TradingBot] System currently holding 6/5 active positions.
+[25.9.2026, 17:00:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ suppress logs { quiet: true }
+◇ injected env (0) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+◇ injected env (0) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+[25.9.2026, 17:15:01] [TradingBot] ==================================================
+[25.9.2026, 17:15:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[25.9.2026, 17:15:02] [TradingBot] ==================================================
+[25.9.2026, 17:15:02] [TradingBot] System Initializing in [PAPER] Mode.
+[25.9.2026, 17:15:02] [TradingBot] System currently holding 6/5 active positions.
+[25.9.2026, 17:15:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ enable debugging { debug: true }
+◇ injected env (0) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ⌘ override existing { override: true }
+[25.9.2026, 17:30:01] [TradingBot] ==================================================
+[25.9.2026, 17:30:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[25.9.2026, 17:30:02] [TradingBot] ==================================================
+[25.9.2026, 17:30:02] [TradingBot] System Initializing in [PAPER] Mode.
+[25.9.2026, 17:30:02] [TradingBot] System currently holding 6/5 active positions.
+[25.9.2026, 17:30:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ suppress logs { quiet: true }
+◇ injected env (0) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+[25.9.2026, 17:45:01] [TradingBot] ==================================================
+[25.9.2026, 17:45:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[25.9.2026, 17:45:02] [TradingBot] ==================================================
+[25.9.2026, 17:45:02] [TradingBot] System Initializing in [PAPER] Mode.
+[25.9.2026, 17:45:02] [TradingBot] System currently holding 6/5 active positions.
+[25.9.2026, 17:45:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+◇ injected env (0) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ⌘ override existing { override: true }
+[25.9.2026, 18:00:01] [TradingBot] ==================================================
+[25.9.2026, 18:00:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[25.9.2026, 18:00:02] [TradingBot] ==================================================
+[25.9.2026, 18:00:02] [TradingBot] System Initializing in [PAPER] Mode.
+[25.9.2026, 18:00:02] [TradingBot] System currently holding 6/5 active positions.
+[25.9.2026, 18:00:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+◇ injected env (0) from .env // tip: ⌘ override existing { override: true }
+◇ injected env (0) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+[25.9.2026, 18:15:02] [TradingBot] ==================================================
+[25.9.2026, 18:15:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[25.9.2026, 18:15:02] [TradingBot] ==================================================
+[25.9.2026, 18:15:02] [TradingBot] System Initializing in [PAPER] Mode.
+[25.9.2026, 18:15:02] [TradingBot] System currently holding 6/5 active positions.
+[25.9.2026, 18:15:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌁ auth for agents [www.vestauth.com]
+◇ injected env (0) from .env // tip: ⌘ override existing { override: true }
+◇ injected env (0) from .env // tip: ⌘ override existing { override: true }
+[25.9.2026, 18:30:02] [TradingBot] ==================================================
+[25.9.2026, 18:30:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[25.9.2026, 18:30:02] [TradingBot] ==================================================
+[25.9.2026, 18:30:02] [TradingBot] System Initializing in [PAPER] Mode.
+[25.9.2026, 18:30:02] [TradingBot] System currently holding 6/5 active positions.
+[25.9.2026, 18:30:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+◇ injected env (0) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+[25.9.2026, 18:45:02] [TradingBot] ==================================================
+[25.9.2026, 18:45:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[25.9.2026, 18:45:02] [TradingBot] ==================================================
+[25.9.2026, 18:45:02] [TradingBot] System Initializing in [PAPER] Mode.
+[25.9.2026, 18:45:02] [TradingBot] System currently holding 6/5 active positions.
+[25.9.2026, 18:45:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌁ auth for agents [www.vestauth.com]
+◇ injected env (0) from .env // tip: ⌁ auth for agents [www.vestauth.com]
+◇ injected env (0) from .env // tip: ⌘ suppress logs { quiet: true }
+[25.9.2026, 19:00:02] [TradingBot] ==================================================
+[25.9.2026, 19:00:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[25.9.2026, 19:00:02] [TradingBot] ==================================================
+[25.9.2026, 19:00:02] [TradingBot] System Initializing in [PAPER] Mode.
+[25.9.2026, 19:00:02] [TradingBot] System currently holding 6/5 active positions.
+[25.9.2026, 19:00:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ override existing { override: true }
+◇ injected env (0) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+[25.9.2026, 19:15:02] [TradingBot] ==================================================
+[25.9.2026, 19:15:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[25.9.2026, 19:15:02] [TradingBot] ==================================================
+[25.9.2026, 19:15:02] [TradingBot] System Initializing in [PAPER] Mode.
+[25.9.2026, 19:15:02] [TradingBot] System currently holding 6/5 active positions.
+[25.9.2026, 19:15:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+◇ injected env (0) from .env // tip: ⌘ suppress logs { quiet: true }
+◇ injected env (0) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+[25.9.2026, 19:30:02] [TradingBot] ==================================================
+[25.9.2026, 19:30:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[25.9.2026, 19:30:02] [TradingBot] ==================================================
+[25.9.2026, 19:30:02] [TradingBot] System Initializing in [PAPER] Mode.
+[25.9.2026, 19:30:02] [TradingBot] System currently holding 6/5 active positions.
+[25.9.2026, 19:30:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ override existing { override: true }
+◇ injected env (0) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+◇ injected env (0) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+[25.9.2026, 19:45:02] [TradingBot] ==================================================
+[25.9.2026, 19:45:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[25.9.2026, 19:45:02] [TradingBot] ==================================================
+[25.9.2026, 19:45:02] [TradingBot] System Initializing in [PAPER] Mode.
+[25.9.2026, 19:45:02] [TradingBot] System currently holding 6/5 active positions.
+[25.9.2026, 19:45:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ suppress logs { quiet: true }
+◇ injected env (0) from .env // tip: ⌘ enable debugging { debug: true }
+◇ injected env (0) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+[25.9.2026, 20:00:02] [TradingBot] ==================================================
+[25.9.2026, 20:00:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[25.9.2026, 20:00:02] [TradingBot] ==================================================
+[25.9.2026, 20:00:02] [TradingBot] System Initializing in [PAPER] Mode.
+[25.9.2026, 20:00:02] [TradingBot] System currently holding 6/5 active positions.
+[25.9.2026, 20:00:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ⌁ auth for agents [www.vestauth.com]
+◇ injected env (0) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+[25.9.2026, 20:15:02] [TradingBot] ==================================================
+[25.9.2026, 20:15:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[25.9.2026, 20:15:02] [TradingBot] ==================================================
+[25.9.2026, 20:15:02] [TradingBot] System Initializing in [PAPER] Mode.
+[25.9.2026, 20:15:02] [TradingBot] System currently holding 6/5 active positions.
+[25.9.2026, 20:15:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+◇ injected env (0) from .env // tip: ⌘ suppress logs { quiet: true }
+[25.9.2026, 20:30:02] [TradingBot] ==================================================
+[25.9.2026, 20:30:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[25.9.2026, 20:30:02] [TradingBot] ==================================================
+[25.9.2026, 20:30:02] [TradingBot] System Initializing in [PAPER] Mode.
+[25.9.2026, 20:30:02] [TradingBot] System currently holding 6/5 active positions.
+[25.9.2026, 20:30:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ suppress logs { quiet: true }
+◇ injected env (0) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ⌘ suppress logs { quiet: true }
+[25.9.2026, 20:45:02] [TradingBot] ==================================================
+[25.9.2026, 20:45:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[25.9.2026, 20:45:02] [TradingBot] ==================================================
+[25.9.2026, 20:45:02] [TradingBot] System Initializing in [PAPER] Mode.
+[25.9.2026, 20:45:02] [TradingBot] System currently holding 6/5 active positions.
+[25.9.2026, 20:45:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+◇ injected env (0) from .env // tip: ⌘ enable debugging { debug: true }
+◇ injected env (0) from .env // tip: ⌘ enable debugging { debug: true }
+[25.9.2026, 21:00:02] [TradingBot] ==================================================
+[25.9.2026, 21:00:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[25.9.2026, 21:00:02] [TradingBot] ==================================================
+[25.9.2026, 21:00:02] [TradingBot] System Initializing in [PAPER] Mode.
+[25.9.2026, 21:00:02] [TradingBot] System currently holding 6/5 active positions.
+[25.9.2026, 21:00:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
+◇ injected env (0) from .env // tip: ⌁ auth for agents [www.vestauth.com]
+[25.9.2026, 21:15:02] [TradingBot] ==================================================
+[25.9.2026, 21:15:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[25.9.2026, 21:15:02] [TradingBot] ==================================================
+[25.9.2026, 21:15:02] [TradingBot] System Initializing in [PAPER] Mode.
+[25.9.2026, 21:15:02] [TradingBot] System currently holding 6/5 active positions.
+[25.9.2026, 21:15:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ◈ secrets for agents [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
+◇ injected env (0) from .env // tip: ⌁ auth for agents [www.vestauth.com]
+[25.9.2026, 21:30:02] [TradingBot] ==================================================
+[25.9.2026, 21:30:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[25.9.2026, 21:30:02] [TradingBot] ==================================================
+[25.9.2026, 21:30:02] [TradingBot] System Initializing in [PAPER] Mode.
+[25.9.2026, 21:30:02] [TradingBot] System currently holding 6/5 active positions.
+[25.9.2026, 21:30:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+◇ injected env (0) from .env // tip: ⌁ auth for agents [www.vestauth.com]
+◇ injected env (0) from .env // tip: ◈ encrypted .env [www.dotenvx.com]
+[25.9.2026, 21:45:02] [TradingBot] ==================================================
+[25.9.2026, 21:45:02] [TradingBot] 🚀 INITIATING OOP TRADING BOT (OCO BRACKET ARCHITECTURE)
+[25.9.2026, 21:45:02] [TradingBot] ==================================================
+[25.9.2026, 21:45:02] [TradingBot] System Initializing in [PAPER] Mode.
+[25.9.2026, 21:45:02] [TradingBot] System currently holding 6/5 active positions.
+[25.9.2026, 21:45:02] [TradingBot] Portfolio is at maximum capacity. Standing down.
+◇ injected env (12) from .env // tip: ⌘ suppress logs { quiet: true }
+[25.9.2026, 22:15:02] [Settlement] ==================================================
+[25.9.2026, 22:15:02] [Settlement] 🏦 INITIATING DAILY BATCH SETTLEMENT
+[25.9.2026, 22:15:02] [Settlement] ==================================================
+[25.9.2026, 22:15:02] [Settlement] No trades were closed today. No settlement required.
+[Notifier] 📱 Push notification sent: "Daily Settlement Report"

@@ -84,7 +84,19 @@ async function runTradingCycle() {
                     stops.takeProfitPrice, 
                     stops.stopLossPrice
                 );
-                
+
+                // The broker cancels an entry that doesn't fill, so there is no
+                // position to record. Writing a row here anyway is what used to
+                // put the ledger out of step with the account.
+                if (!orderResult.filled) {
+                    await logger.log(`Entry for ${decision.target_symbol} did not fill (status: ${orderResult.status}). Order cancelled, nothing recorded.`);
+                    continue;
+                }
+
+                // buy_price MUST be Alpaca's real filled_avg_price. Logging the
+                // screener's quote instead is what generated the fabricated P&L
+                // (e.g. the -$2,454.01 reconciliation) - real sells were being
+                // measured against prices we never actually paid.
                 await db.client.query(
                     `INSERT INTO trade_analytics (symbol, action, qty, buy_price, status) 
                      VALUES ($1, $2, $3, $4, 'OPEN')`,
