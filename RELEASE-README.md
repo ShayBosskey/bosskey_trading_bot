@@ -118,3 +118,12 @@ Schema: `Date (Timestamp) | Title | Description | New Features`
 - **Escalation**: the bridge (`:3100`) and FastAGI (`:4573`) are confirmed loopback-only and unreachable via Tailscale. Missing or wrong tokens get 403, the 64-char token matches on both sides, and the AMI/HTTP interfaces are disabled.
 - **Watchdog (`src/ExitEngineWatchdog.js`, PM2 every 2 min)**: a stale exit-engine heartbeat with open crypto positions sends an urgent push plus a SHEFA voice call. It also warns when the SIP client isn't registered with Asterisk.
 - **Greeting**: "Good evening Sir, this is SHEFA." (morning/afternoon vary by time of day).
+
+**2026-11-10 (00:25 CET)** | Crypto Book Live on Paper | Final security fixes, auditor scope change, atomic settlement, and go-live. |
+- **ntfy**: alerts moved to a private 32-character random topic (`NTFY_TOPIC_URL` in `.env`, redacted from logs). A move notice was posted to the old topic.
+- **Dashboard**: the Vite dev server now binds only to the Tailscale IP `100.82.40.78` (`--strictPort`, exponential restart backoff for boot ordering). It is no longer reachable from the home LAN or localhost.
+- **Agent B scope**: both auditor prompts judge sentiment, catalysts and technical trend only. Position size, book depth and cost-vs-reward were removed (the 8B fallback model misread them). These limits are hard gates in code: crypto in `CryptoTradingBot`; equities get a new ≤1%-of-20-day-average-volume gate in `TradingBot.js`, which fails closed when the average is unknown.
+- **Settlement**: `trade_analytics.settled_at` (migration `2026-11-10_settled_at.sql`; the 38 existing closed rows are backfilled as settled, verified 0 closed since the last run). Settlement sweeps every unsettled CLOSED row in one transaction (`FOR UPDATE`; pots + stamps commit together, ROLLBACK on error, push only after COMMIT). Cron now runs it daily, weekends included.
+- **PositionsSync**: equities only. Crypto rows and crypto broker positions (`BTCUSD` vs `BTC/USD`) are left to the crypto engine; otherwise every crypto position would have been flagged on every run.
+- **Tests**: Jest uses a temporary notifier state file (`Systest/setupEnv.js`); previously, test pushes could mute real alerts for 90 minutes.
+- **Go-live**: `crypto-exit-engine` is LIVE (paper; `args: []` is explicit, because PM2 kept the stale `--dry-run` across a reload). `crypto-trading-bot` runs every 15 min. Both are saved in PM2.
