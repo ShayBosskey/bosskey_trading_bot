@@ -2,6 +2,15 @@ const path = require('path');
 require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
 const { Alpaca } = require('@alpacahq/alpaca-trade-api');
 const Config = require('./Config');
+const RiskEngine = require('./RiskEngine');
+
+const CRYPTO_DATA_URL = 'https://data.alpaca.markets/v1beta3/crypto/us';
+const CRYPTO_BENCHMARK = 'BTC/USD';
+const CRYPTO_EXCLUDED_BASES = ['USDC', 'USDT', 'USDG', 'DAI', 'PYUSD', 'TUSD', 'USDP', 'PAXG', 'XAUT'];
+const CRYPTO_MAX_SPREAD_BPS = 30;
+// Bid depth within 1% of mid must cover this multiple of the largest position, so
+// a market-sell stop doesn't walk the book.
+const CRYPTO_MIN_DEPTH_MULTIPLE = 2;
 
 class BrokerClient {
     constructor() {
@@ -123,6 +132,193 @@ class BrokerClient {
         }
     }
 
+    // ---------- Crypto (Alpaca /v1beta3/crypto/us) ----------
+    //
+    // Alpaca's crypto venue is thin: 24h volume on most pairs is a few thousand
+    // dollars and spreads run 20-100 bps. So the scanner gates on spread and on
+    // bid-side order book depth (what a market-sell stop actually hits), and the
+    // venue volume is passed to the agents labelled as Alpaca-only.
+
+    async #cryptoData(pathAndQuery) {
+        const response = await fetch(`${CRYPTO_DATA_URL}${pathAndQuery}`, {
+            headers: { ...this.#authHeaders(), accept: 'application/json' },
+            signal: AbortSignal.timeout(10000)
+        });
+        if (!response.ok) throw new Error(`Alpaca Crypto Data API Error: ${response.status} on ${pathAndQuery.split('?')[0]}`);
+        return await response.json();
+    }
+
+    // Tradable USD pairs, minus stablecoins and gold tokens (no momentum to trade).
+    async getCryptoAssets() {
+        const response = await fetch(`${this.#getBaseUrl()}/v2/assets?asset_class=crypto&status=active`, {
+            headers: this.#authHeaders(),
+            signal: AbortSignal.timeout(10000)
+        });
+        if (!response.ok) throw new Error(`Alpaca Assets API Error: ${response.status}`);
+        const assets = await response.json();
+        return assets.filter(a =>
+            a.tradable &&
+            a.symbol.endsWith('/USD') &&
+            !CRYPTO_EXCLUDED_BASES.includes(a.symbol.split('/')[0])
+        );
+    }
+
+    async getCryptoHourlyBars(symbols, hours = 72) {
+        const start = new Date(Date.now() - hours * 3600 * 1000).toISOString();
+        const bars = {};
+        let pageToken = null;
+        // `limit` is shared across all symbols, so a multi-symbol request pages.
+        do {
+            const page = await this.#cryptoData(
+                `/bars?symbols=${encodeURIComponent(symbols.join(','))}&timeframe=1Hour&start=${start}&limit=10000` +
+                (pageToken ? `&page_token=${pageToken}` : '')
+            );
+            for (const [symbol, list] of Object.entries(page.bars || {})) {
+                (bars[symbol] = bars[symbol] || []).push(...list);
+            }
+            pageToken = page.next_page_token;
+        } while (pageToken);
+        return bars;
+    }
+
+    async getCryptoSnapshots(symbols) {
+        const body = await this.#cryptoData(`/snapshots?symbols=${encodeURIComponent(symbols.join(','))}`);
+        return body.snapshots || {};
+    }
+
+    async getCryptoOrderbooks(symbols) {
+        const body = await this.#cryptoData(`/latest/orderbooks?symbols=${encodeURIComponent(symbols.join(','))}`);
+        return body.orderbooks || {};
+    }
+
+    // USD resting within `pct` of mid on one side of the book.
+    static bookDepthUsd(levels, mid, pct, side) {
+        const limit = side === 'bid' ? mid * (1 - pct) : mid * (1 + pct);
+        return (levels || [])
+            .filter(l => (side === 'bid' ? l.p >= limit : l.p <= limit))
+            .reduce((sum, l) => sum + l.p * l.s, 0);
+    }
+
+    // Hourly log-return standard deviation scaled to a day, in percent.
+    static realizedVolPct(closes) {
+        if (closes.length < 3) return null;
+        const returns = closes.slice(1).map((c, i) => Math.log(c / closes[i]));
+        const mean = returns.reduce((a, b) => a + b, 0) / returns.length;
+        const variance = returns.reduce((a, r) => a + (r - mean) ** 2, 0) / (returns.length - 1);
+        return Math.sqrt(variance) * Math.sqrt(24) * 100;
+    }
+
+    // Returns up to `neededSlots` candidates with everything both agents and the
+    // entry gates need. `maxNotional` is the largest position the bot could size,
+    // used to demand enough bid depth for a stop to exit through.
+    async scanCryptoMarket(heldSymbols, neededSlots, { maxNotional, maxSpreadBps = CRYPTO_MAX_SPREAD_BPS, minDepthMultiple = CRYPTO_MIN_DEPTH_MULTIPLE } = {}) {
+        const assets = (await this.getCryptoAssets()).filter(a => !heldSymbols.includes(a.symbol));
+        const symbols = assets.map(a => a.symbol);
+        if (!symbols.includes(CRYPTO_BENCHMARK)) symbols.push(CRYPTO_BENCHMARK);
+        console.log(`[Broker] Scanning ${assets.length} crypto pairs for ${neededSlots} setup(s)...`);
+
+        const [snapshots, bars, books] = await Promise.all([
+            this.getCryptoSnapshots(symbols),
+            this.getCryptoHourlyBars(symbols),
+            this.getCryptoOrderbooks(symbols)
+        ]);
+
+        const change24h = list => list.length >= 24 ? (list[list.length - 1].c / list[list.length - 24].o - 1) * 100 : null;
+        const btcChange = change24h(bars[CRYPTO_BENCHMARK] || []);
+
+        const setups = [];
+        for (const asset of assets) {
+            const symbol = asset.symbol;
+            const quote = snapshots[symbol]?.latestQuote;
+            const hourly = bars[symbol] || [];
+            if (!quote || !(quote.bp > 0) || !(quote.ap > 0) || hourly.length < 25) continue;
+
+            const mid = (quote.ap + quote.bp) / 2;
+            const spreadBps = (quote.ap - quote.bp) / mid * 10000;
+            const book = books[symbol] || {};
+            const bidDepth = BrokerClient.bookDepthUsd(book.b, mid, 0.01, 'bid');
+            const askDepth = BrokerClient.bookDepthUsd(book.a, mid, 0.01, 'ask');
+
+            if (spreadBps > maxSpreadBps) continue;
+            if (Number.isFinite(maxNotional) && bidDepth < maxNotional * minDepthMultiple) continue;
+
+            const closes = hourly.map(b => b.c);
+            const last24 = hourly.slice(-24);
+            const atr = RiskEngine.calculateATR(hourly, 14);
+
+            setups.push({
+                symbol,
+                assetClass: 'crypto',
+                price: quote.ap,             // a buy pays the ask
+                bid: quote.bp,
+                ask: quote.ap,
+                spread_bps: Number(spreadBps.toFixed(1)),
+                change_24h: Number(change24h(hourly).toFixed(2)),
+                venue_volume_24h_usd: Math.round(last24.reduce((sum, b) => sum + b.v * (b.vw || b.c), 0)),
+                bid_depth_1pct_usd: Math.round(bidDepth),
+                ask_depth_1pct_usd: Math.round(askDepth),
+                realized_vol_24h_pct: Number(BrokerClient.realizedVolPct(closes.slice(-25)).toFixed(2)),
+                atr_1h: atr,
+                atr_1h_pct: Number((atr / mid * 100).toFixed(3)),
+                sma_20h: this.calculateSMA(closes, 20),
+                rsi_14h: this.calculateRSI(closes, 14),
+                btc_change_24h: btcChange === null ? null : Number(btcChange.toFixed(2)),
+                min_order_size: parseFloat(asset.min_order_size),
+                min_trade_increment: parseFloat(asset.min_trade_increment),
+                price_increment: parseFloat(asset.price_increment),
+                rawBars: hourly
+            });
+        }
+
+        // Strongest 24h momentum first; the agents decide whether it is tradeable.
+        setups.sort((a, b) => b.change_24h - a.change_24h);
+        console.log(`[Broker] ${setups.length} crypto pair(s) passed spread/depth gates.`);
+        return setups.slice(0, neededSlots);
+    }
+
+    // Fractional, long-only crypto entry. No bracket: Alpaca has none for crypto,
+    // so the exit levels go in the ledger and CryptoExitEngine enforces them.
+    // A marketable limit (ask + buffer) caps slippage on a thin book.
+    async executeCryptoBuy(setup, qty, options = {}) {
+        const { slippageBufferPct = 0.005, fillTimeoutMs = 20000, pollIntervalMs = 1000 } = options;
+
+        if (!Number.isFinite(qty) || qty <= 0 || qty < setup.min_order_size) {
+            throw new Error(`Crypto qty ${qty} for ${setup.symbol} is below the minimum order size ${setup.min_order_size}.`);
+        }
+
+        const decimals = Math.max(0, Math.min(9, Math.round(-Math.log10(setup.price_increment || 1e-9))));
+        const limitPrice = (Math.ceil(setup.ask * (1 + slippageBufferPct) * 10 ** decimals) / 10 ** decimals).toFixed(decimals);
+        const qtyString = qty.toFixed(9).replace(/\.?0+$/, '');
+
+        console.log(`[Broker] Crypto BUY ${qtyString} ${setup.symbol} (limit $${limitPrice}, GTC, no bracket)...`);
+        const response = await fetch(`${this.#getBaseUrl()}/v2/orders`, {
+            method: 'POST',
+            headers: { ...this.#authHeaders(), 'content-type': 'application/json' },
+            body: JSON.stringify({
+                symbol: setup.symbol,
+                qty: qtyString,
+                side: 'buy',
+                type: 'limit',
+                limit_price: limitPrice,
+                time_in_force: 'gtc'
+            })
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(`Alpaca Crypto Order API Error: ${errorData.message || response.status}`);
+        }
+
+        const order = await response.json();
+        const settled = await this.#awaitFill(order.id, { fillTimeoutMs, pollIntervalMs });
+        if (!settled.filled) {
+            return { filled: false, orderId: order.id, status: settled.status, symbol: setup.symbol };
+        }
+
+        console.log(`[Broker] ${setup.symbol} crypto entry filled: ${settled.qty} @ $${settled.filledAvgPrice}.`);
+        return { filled: true, orderId: order.id, symbol: setup.symbol, qty: settled.qty, filled_avg_price: settled.filledAvgPrice };
+    }
+
     // Alpaca will not honour GTC on a bracket whose entry is a *market* order: the
     // parent and both protective legs silently come back as `day`. At 16:00 ET the
     // take-profit leg expires, OCO cancels the stop-loss along with it, and the
@@ -239,7 +435,7 @@ class BrokerClient {
             if (order.status === 'filled') {
                 return {
                     filled: true,
-                    qty: parseInt(order.filled_qty, 10),
+                    qty: parseFloat(order.filled_qty),
                     filledAvgPrice: parseFloat(order.filled_avg_price),
                     status: order.status
                 };
@@ -258,7 +454,8 @@ class BrokerClient {
 
         // A fill can land in the gap between the timeout and the cancel taking
         // effect, in which case the position is real and must still be recorded.
-        const filledQty = parseInt(order.filled_qty, 10);
+        // parseFloat, not parseInt: crypto fills are fractional.
+        const filledQty = parseFloat(order.filled_qty);
         if (filledQty > 0 && order.filled_avg_price) {
             return {
                 filled: true,

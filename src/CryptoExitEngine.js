@@ -1,4 +1,5 @@
 const path = require('path');
+const fs = require('fs');
 require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
 const { Pool } = require('pg');
 const Config = require('./Config');
@@ -41,6 +42,10 @@ const HTTP_TIMEOUT_MS = 8000;
 const FILL_POLL_MS = 1000;
 const FILL_TIMEOUT_MS = 30000;
 const PENDING_PREFIX = 'pending:';
+// Written every watchdog tick. The crypto entry loop refuses to open a position
+// unless this is fresh and not a dry run - with no broker-side stops, a position
+// opened while this engine is down would have no protection at all.
+const HEARTBEAT_FILE = path.resolve(__dirname, '../run/crypto-exit-engine.heartbeat.json');
 
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -435,7 +440,19 @@ class CryptoExitEngine {
         this.outageAlerted = false;
     }
 
+    #writeHeartbeat() {
+        const beat = { at: new Date().toISOString(), pid: process.pid, dryRun: this.dryRun, streamHealthy: this.#isHealthy(), guarding: this.rows.size };
+        try {
+            fs.mkdirSync(path.dirname(HEARTBEAT_FILE), { recursive: true });
+            fs.writeFileSync(`${HEARTBEAT_FILE}.tmp`, JSON.stringify(beat));
+            fs.renameSync(`${HEARTBEAT_FILE}.tmp`, HEARTBEAT_FILE); // atomic: readers never see a half-written file
+        } catch (err) {
+            this.logger.log(`Heartbeat write failed: ${err.message}`);
+        }
+    }
+
     #watchdog() {
+        this.#writeHeartbeat();
         if (this.ws && this.authenticated && !this.#isHealthy()) {
             this.logger.log(`No stream data for ${STALE_AFTER_MS}ms; assuming a dead link.`);
             this.#dropSocket();
@@ -501,3 +518,4 @@ if (require.main === module) {
 }
 
 module.exports = CryptoExitEngine;
+module.exports.HEARTBEAT_FILE = HEARTBEAT_FILE;

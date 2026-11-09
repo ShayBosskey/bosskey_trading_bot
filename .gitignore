@@ -16,3 +16,6 @@ execution.log
 # OS generated files
 .DS_Store
 Thumbs.db
+
+# Runtime state (exit engine heartbeat)
+run/

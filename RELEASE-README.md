@@ -105,4 +105,5 @@ Schema: `Date (Timestamp) | Title | Description | New Features`
 - **Settlement**: on a net-winning day, 20% of the day's net goes to `shefa_fund` first and the remaining 80% is split 50/20/20/10 as before. A losing day gives the fund nothing.
 - **News (`src/NewsClient.js`)**: Alpaca News API (symbol + macro/sector feed) injected into both agents as fenced, untrusted data. News is a veto gate only, enforced in code. Finnhub, `FundamentalClient.js` and the unused `fetchFundamentals`/yahoo fallback were removed.
 - **SHEFA persona**: agent prompts, escalation call scripts and caller ID; Piper voice `en_GB-alan-medium` → `en_GB-alba-medium`.
-- **Draft, not deployed**: `src/CryptoExitEngine.js`, a 24/7 WebSocket exit engine with self-healing reconnects and REST fallback.
+- **Crypto engine (Phase 2)**: `CryptoTradingBot.js` entry loop with the `/v1beta3/crypto/us` scanner, crypto agent payloads and hard gates, plus fractional sizing (`RiskEngine.calculateCryptoPositionSize`). `CryptoExitEngine` runs under PM2 (`ecosystem.config.js`) in **dry-run**, saved to the boot list. The entry loop is built and dry-run tested, but not scheduled.
+- **Gemini 402**: the Gemini key returns 402 Payment Required, so every call runs on the OpenRouter fallback. A 402 now reroutes immediately instead of burning ~7s of backoff.

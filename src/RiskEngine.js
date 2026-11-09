@@ -1,3 +1,6 @@
+// Alpaca crypto tier-1 taker fee, in percent of notional.
+const CRYPTO_TAKER_FEE_PCT = 0.25;
+
 class RiskEngine {
     static calculateATR(bars, period = 14) {
         if (!bars || bars.length < period + 1) return null;
@@ -29,6 +32,21 @@ class RiskEngine {
         return { allocation, shares };
     }
 
+    // Crypto trades in fractions: qty is floored to the asset's min_trade_increment
+    // instead of whole shares. Same allocation rule as equities.
+    static calculateCryptoPositionSize(activeCapital, confidenceScore, price, minTradeIncrement = 1e-9) {
+        const allocation = activeCapital * ((confidenceScore / 100) * 0.15);
+        const increment = minTradeIncrement > 0 ? minTradeIncrement : 1e-9;
+        const qty = Number((Math.floor(allocation / price / increment) * increment).toFixed(9));
+        return { allocation, qty, notional: qty * price };
+    }
+
+    // Round-trip cost of a crypto trade in percent: Alpaca's taker fee on both legs
+    // (entry is marketable, stop exits are market orders) plus the bid/ask spread.
+    static cryptoRoundTripCostPct(spreadBps, takerFeePct = CRYPTO_TAKER_FEE_PCT) {
+        return takerFeePct * 2 + spreadBps / 100;
+    }
+
     static calculateDynamicStops(currentPrice, atr) {
         // Volatility-adjusted parameters
         const stopLossPrice = currentPrice - (atr * 2.0);
@@ -42,3 +60,4 @@ class RiskEngine {
 }
 
 module.exports = RiskEngine;
+module.exports.CRYPTO_TAKER_FEE_PCT = CRYPTO_TAKER_FEE_PCT;

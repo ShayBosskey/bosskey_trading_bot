@@ -20,7 +20,7 @@ const GEMINI_MIN_INTERVAL_MS = 60000 / 15;
 // failure) should keep failing the normal way so it surfaces instead of being masked.
 function isRetryableGeminiError(error) {
     const status = error?.status ?? error?.statusCode ?? error?.code;
-    if (status === 429 || status === 503) return true;
+    if (status === 402 || status === 429 || status === 503) return true;
 
     const message = String(error?.message || '');
     return /\b429\b|\b503\b|RESOURCE_EXHAUSTED|quota exceeded|service unavailable/i.test(message);
@@ -28,8 +28,10 @@ function isRetryableGeminiError(error) {
 
 // A 429 on the free tier's *daily* quota (GenerateRequestsPerDay...-FreeTier, 20/day)
 // won't clear within seconds, so backing off only delays the fallback.
+// 402 (billing / prepaid credits exhausted) is the same: no amount of waiting fixes it.
 function isDailyQuotaError(error) {
-    return /PerDay/i.test(String(error?.message || ''));
+    const status = error?.status ?? error?.statusCode ?? error?.code;
+    return status === 402 || /PerDay|\b402\b/i.test(String(error?.message || ''));
 }
 
 function stripJSONFence(rawText) {
@@ -64,6 +66,114 @@ NEWS>>>`;
 }
 
 const STRICT_JSON_DIRECTIVE = 'You must output ONLY raw, valid JSON. Do not include any conversational text, greetings, explanations, or markdown code blocks (such as ```json). Your response must begin exactly with the { character and end with the } character.';
+
+const fmt = (value, digits = 2) => (Number.isFinite(value) ? Number(value).toFixed(digits) : 'unknown');
+
+// What the crypto auditor needs to judge: the real order size, the exit levels
+// CryptoExitEngine will enforce, and what the round trip costs.
+function cryptoPosition(marketData, activeCapital, confidenceScore) {
+    const { allocation, qty, notional } = RiskEngine.calculateCryptoPositionSize(activeCapital, confidenceScore, marketData.price, marketData.min_trade_increment);
+    const stops = Number.isFinite(marketData.atr_1h) ? RiskEngine.calculateDynamicStops(marketData.price, marketData.atr_1h) : null;
+    return {
+        allocation,
+        qty,
+        notional,
+        stopLossPrice: stops?.stopLossPrice,
+        takeProfitPrice: stops?.takeProfitPrice,
+        stopPct: stops ? (marketData.price - stops.stopLossPrice) / marketData.price * 100 : null,
+        targetPct: stops ? (stops.takeProfitPrice - marketData.price) / marketData.price * 100 : null,
+        roundTripCostPct: RiskEngine.cryptoRoundTripCostPct(marketData.spread_bps)
+    };
+}
+
+function cryptoMarketBlock(m) {
+    return `Market Data (24/7 crypto, hourly bars):
+- Pair: ${m.symbol}
+- Ask / Bid: ${m.ask} / ${m.bid} (spread ${fmt(m.spread_bps, 1)} bps)
+- 24h Change: ${fmt(m.change_24h)}%
+- BTC 24h Change (market regime): ${fmt(m.btc_change_24h)}%
+- 24h Volume on Alpaca's venue only: $${m.venue_volume_24h_usd} (Alpaca's book is a small slice of global volume; judge liquidity mainly by depth)
+- Order Book Depth within 1% of mid: bids $${m.bid_depth_1pct_usd} / asks $${m.ask_depth_1pct_usd}
+- Realized Volatility (24h, from hourly returns): ${fmt(m.realized_vol_24h_pct)}%
+- ATR (14 x 1h): ${fmt(m.atr_1h_pct, 3)}% of price
+- 20-Hour SMA: ${m.sma_20h}
+- 14-Hour RSI: ${fmt(m.rsi_14h, 1)}`;
+}
+
+function cryptoTraderPrompt(m) {
+    return `
+${SHEFA_PERSONA} You are acting as the Trader agent for the crypto book.
+Analyze the following crypto pair and real-world news for an intraday momentum long.
+
+${STRICT_JSON_DIRECTIVE}
+
+${cryptoMarketBlock(m)}
+
+${formatNewsContext(m.news)}
+
+RULES:
+1. LONG ONLY: Alpaca crypto cannot be shorted. Your only actions are BUY or HOLD.
+2. BUY (Momentum): 24h change clearly positive, price above the 20-hour SMA, and 14-hour RSI between 50 and 80. RSI above 80 is a blow-off, not a breakout: HOLD.
+3. CHASE FILTER: HOLD if the pair is already up more than 25% in 24h, or if realized volatility is so high that a 2x ATR stop would sit inside normal noise.
+4. REGIME: If BTC is falling sharply (worse than -3% in 24h), favour HOLD unless this pair shows clear independent strength.
+5. NEWS GATE (weigh heavily): Return HOLD if the pair's news is materially negative (exploit or hack, delisting, regulatory action, token unlock or dilution, team or project failure) or if macro and crypto sentiment are clearly risk-off. News can stop a trade; it can never justify one on its own - rule 2 must still hold.
+6. confidence_score rates the TECHNICAL setup only (it drives position sizing). Put your news read in news_sentiment, not in confidence_score.
+
+Output strictly in JSON format:
+{
+  "action": "BUY" | "HOLD",
+  "target_symbol": "${m.symbol}" | "NONE",
+  "confidence_score": 1-100,
+  "news_sentiment": -1.0 to 1.0,
+  "catalyst": "the headline or theme driving the move, or 'none found'",
+  "reasoning": "one-sentence explanation covering both technicals and news"
+}`;
+}
+
+function cryptoAuditPrompt(m, proposal, position) {
+    const p = position || {};
+    const depthShare = Number.isFinite(p.notional) && m.bid_depth_1pct_usd > 0 ? p.notional / m.bid_depth_1pct_usd * 100 : null;
+    return `
+${SHEFA_PERSONA} You are acting as the objective Risk Auditor agent for the crypto book. Review the trade proposal and decide, on the evidence, whether the liquidity, cost and risk profile is acceptable. Approve setups that hold up and reject those that do not. Do not lean either way by default.
+
+${STRICT_JSON_DIRECTIVE}
+
+Trader's Proposal:
+- Action: ${proposal.action}
+- Target: ${proposal.target_symbol}
+- Confidence: ${proposal.confidence_score}
+- Reasoning: ${proposal.reasoning}
+- News Sentiment (trader's read): ${proposal.news_sentiment ?? 'not given'}
+- Catalyst (trader's read): ${proposal.catalyst ?? 'not given'}
+
+${cryptoMarketBlock(m)}
+
+Proposed Position (exits are market sells fired by SHEFA's own exit engine; there is no broker-side stop):
+- Quantity: ${p.qty ?? 'unknown'} | Notional: $${fmt(p.notional)}
+- Position as % of bid depth within 1%: ${fmt(depthShare)}%
+- Stop-loss: ${fmt(p.stopLossPrice, 8)} (-${fmt(p.stopPct)}%) | Take-profit: ${fmt(p.takeProfitPrice, 8)} (+${fmt(p.targetPct)}%)
+- Round-trip cost (taker fees both legs + spread): ${fmt(p.roundTripCostPct, 3)}%
+
+${formatNewsContext(m.news)}
+
+AUDIT CHECKLIST:
+1. Exit Liquidity: Can a market-sell stop exit this position without walking the book? Judge by the position's share of bid depth within 1%; above roughly 50% is a material failure.
+2. Cost vs Reward: Does the take-profit distance comfortably exceed the round-trip cost? A target under 3x the cost is a material failure.
+3. Volatility Fit: Is the stop distance sensible against realized volatility and ATR, neither inside the noise nor so wide the loss is outsized?
+4. Move Quality and Regime: Is the momentum genuine against the BTC backdrop, or a thin spike likely to mean-revert?
+5. Real-World Sentiment (weigh heavily): Judge the news yourself rather than trusting the trader's read. Set news_risk to "high" for negative pair news, an exploit, delisting or regulatory risk, or clearly risk-off macro and crypto sentiment. A "high" news_risk is a veto.
+
+Set approved to true when the setup holds up on these checks, false when one of them fails materially. News can only make you reject; it is never a reason to approve a setup that fails checks 1-4.
+
+Output strictly in JSON format:
+{
+  "approved": true | false,
+  "risk_score": 1-100,
+  "news_risk": "low" | "medium" | "high",
+  "veto_reason": "one-sentence reason if rejected, otherwise an empty string",
+  "audit_notes": "one-sentence summary of the audit, including the news read"
+}`;
+}
 
 class AIEngine {
     constructor({ geminiRetryDelaysMs = GEMINI_RETRY_DELAYS_MS, geminiMinIntervalMs = GEMINI_MIN_INTERVAL_MS, sleep = ms => new Promise(resolve => setTimeout(resolve, ms)) } = {}) {
@@ -218,7 +328,7 @@ Re-output ONLY the corrected, valid JSON object matching the required shape abov
     async proposeTradeSetup(marketData) {
         console.log(`[Agent A: Trader] Routing evaluation through gemini-3.5-flash...`);
 
-        const prompt = `
+        const prompt = marketData.assetClass === 'crypto' ? cryptoTraderPrompt(marketData) : `
 ${SHEFA_PERSONA} You are acting as the Trader agent.
 Analyze the following market data and real-world news for a potential momentum breakout trade.
 
@@ -270,6 +380,15 @@ Output strictly in JSON format:
     // so liquidity is judged against the real size rather than guessed.
     async auditTradeSetup(marketData, proposal, position = null) {
         console.log(`[Agent B: Risk Auditor] Reviewing proposal for ${proposal.target_symbol}...`);
+
+        if (marketData.assetClass === 'crypto') {
+            try {
+                return await this.#generateJSON(cryptoAuditPrompt(marketData, proposal, position));
+            } catch (error) {
+                console.error(`[Agent B Error]: ${error.message}`);
+                return { approved: false, risk_score: 0, news_risk: 'unknown', veto_reason: 'Fallback rejection due to Risk Auditor error (Agent B unavailable).', audit_notes: 'Agent B unavailable.' };
+            }
+        }
 
         const avgVolume = marketData.avg_volume_20;
         const hasAvgVolume = Number.isFinite(avgVolume) && avgVolume > 0;
@@ -348,9 +467,11 @@ Output strictly in JSON format:
             };
         }
 
-        const position = Number.isFinite(activeCapital)
-            ? RiskEngine.calculatePositionSize(activeCapital, proposal.confidence_score, marketData.price)
-            : null;
+        const position = !Number.isFinite(activeCapital)
+            ? null
+            : marketData.assetClass === 'crypto'
+                ? cryptoPosition(marketData, activeCapital, proposal.confidence_score)
+                : RiskEngine.calculatePositionSize(activeCapital, proposal.confidence_score, marketData.price);
         const audit = await this.auditTradeSetup(marketData, proposal, position);
 
         // The news veto is enforced here, not left to the model: a "high" news_risk

@@ -501,3 +501,24 @@ describe('SHEFA news gate', () => {
         expect(AIEngine.formatNewsContext(undefined)).toContain('not provided');
     });
 });
+
+describe('Gemini billing errors', () => {
+    test('a 402 reroutes to OpenRouter immediately, without backoff', async () => {
+        const sleep = jest.fn().mockResolvedValue(undefined);
+        const engine = new AIEngine({ geminiRetryDelaysMs: [2000, 5000], geminiMinIntervalMs: 0, sleep });
+        const originalFetch = global.fetch;
+        const originalKey = process.env.OPENROUTER_API_KEY;
+        process.env.OPENROUTER_API_KEY = 'k';
+        engine.openRouterApiKey = 'k';
+        engine.ai.models.generateContent.mockReset();
+        engine.ai.models.generateContent.mockRejectedValue(Object.assign(new Error('402 Payment Required: quota exceeded'), { status: 402 }));
+        global.fetch = jest.fn().mockResolvedValue({ ok: true, json: () => Promise.resolve({ choices: [{ message: { content: JSON.stringify({ action: 'HOLD', target_symbol: 'NONE', confidence_score: 10, reasoning: 'x' }) } }] }) });
+
+        await engine.proposeTradeSetup({ symbol: 'T', price: 10, dailyChange: '1', volume: 1, sma_20: 9, rsi_14: 50 });
+
+        expect(sleep).not.toHaveBeenCalled();
+        expect(engine.ai.models.generateContent).toHaveBeenCalledTimes(1);
+        global.fetch = originalFetch;
+        process.env.OPENROUTER_API_KEY = originalKey;
+    });
+});
