@@ -4,7 +4,8 @@
 // an error message (an SDK echoing a URL, a connection string in a pg error)
 // is masked instead of published.
 
-const SECRET_NAME = /KEY|SECRET|PASSWORD|TOKEN/i;
+// NTFY_TOPIC: the topic name is the only thing protecting the alert feed.
+const SECRET_NAME = /KEY|SECRET|PASSWORD|TOKEN|NTFY_TOPIC/i;
 const MIN_SECRET_LENGTH = 8;
 const MASK = '[REDACTED]';
 

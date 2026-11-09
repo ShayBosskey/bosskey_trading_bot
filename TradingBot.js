@@ -10,6 +10,10 @@ const Capacity = require('./src/Capacity');
 const NewsClient = require('./src/NewsClient');
 const attachGlobalErrorLogger = require('./src/ErrorHandler');
 
+// Hard liquidity limit (enforced here, not by Agent B): a position may be at most
+// this share of the symbol's 20-day average daily volume.
+const MAX_SHARE_OF_AVG_VOLUME = 0.01;
+
 // Gap between symbol evaluations, keeping Gemini calls spread out under its
 // requests-per-minute limit.
 const SYMBOL_PACING_MS = 5000;
@@ -18,7 +22,7 @@ const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 // Runs the Agent A -> Agent B debate for one candidate and trades it if approved.
 // Returns the active capital left after any fill.
 async function processCandidate(marketData, { aiEngine, broker, db, logger, notifier, activeCapital }) {
-    const decision = await aiEngine.evaluateBatch(marketData, { activeCapital });
+    const decision = await aiEngine.evaluateBatch(marketData);
 
     await logger.log(`--- AI TRADE DECISION FOR ${marketData.symbol} ---`);
     await logger.log(`Action: ${decision.action} | Confidence: ${decision.confidence_score}`);
@@ -44,7 +48,14 @@ async function processCandidate(marketData, { aiEngine, broker, db, logger, noti
             return activeCapital;
         }
 
-        const { allocation: tradeAllocation } = RiskEngine.calculatePositionSize(activeCapital, decision.confidence_score, marketData.price);
+        const { allocation: tradeAllocation, shares } = RiskEngine.calculatePositionSize(activeCapital, decision.confidence_score, marketData.price);
+
+        // Fails closed when the average is unknown: no liquidity data, no trade.
+        const avgVolume = marketData.avg_volume_20;
+        if (!(avgVolume > 0) || shares / avgVolume > MAX_SHARE_OF_AVG_VOLUME) {
+            await logger.log(`Trade for ${decision.target_symbol} blocked by hard gate: ${shares} shares vs 20-day avg volume ${avgVolume ?? 'unknown'} (max ${MAX_SHARE_OF_AVG_VOLUME * 100}%).`);
+            return activeCapital;
+        }
 
         // === DYNAMIC RISK CALCULATION ===
         const atr = RiskEngine.calculateATR(marketData.rawBars, 14);

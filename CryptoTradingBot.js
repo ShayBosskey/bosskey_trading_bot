@@ -61,7 +61,7 @@ function hardGateFailure(setup, position) {
 }
 
 async function processCandidate(setup, { aiEngine, broker, db, logger, notifier, activeCapital, dryRun }) {
-    const decision = await aiEngine.evaluateBatch(setup, { activeCapital });
+    const decision = await aiEngine.evaluateBatch(setup);
 
     await logger.log(`--- AI CRYPTO DECISION FOR ${setup.symbol} ---`);
     await logger.log(`Action: ${decision.action} | Confidence: ${decision.confidence_score} | Reasoning: ${decision.reasoning}`);

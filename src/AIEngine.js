@@ -1,5 +1,4 @@
 const { GoogleGenAI } = require('@google/genai');
-const RiskEngine = require('./RiskEngine');
 
 const OPENROUTER_ENDPOINT = 'https://openrouter.ai/api/v1/chat/completions';
 const OPENROUTER_FALLBACK_MODEL = process.env.OPENROUTER_FALLBACK_MODEL || 'meta-llama/llama-3.1-8b-instruct';
@@ -69,30 +68,13 @@ const STRICT_JSON_DIRECTIVE = 'You must output ONLY raw, valid JSON. Do not incl
 
 const fmt = (value, digits = 2) => (Number.isFinite(value) ? Number(value).toFixed(digits) : 'unknown');
 
-// What the crypto auditor needs to judge: the real order size, the exit levels
-// CryptoExitEngine will enforce, and what the round trip costs.
-function cryptoPosition(marketData, activeCapital, confidenceScore) {
-    const { allocation, qty, notional } = RiskEngine.calculateCryptoPositionSize(activeCapital, confidenceScore, marketData.price, marketData.min_trade_increment);
-    const stops = Number.isFinite(marketData.atr_1h) ? RiskEngine.calculateDynamicStops(marketData.price, marketData.atr_1h) : null;
-    return {
-        allocation,
-        qty,
-        notional,
-        stopLossPrice: stops?.stopLossPrice,
-        takeProfitPrice: stops?.takeProfitPrice,
-        stopPct: stops ? (marketData.price - stops.stopLossPrice) / marketData.price * 100 : null,
-        targetPct: stops ? (stops.takeProfitPrice - marketData.price) / marketData.price * 100 : null,
-        roundTripCostPct: RiskEngine.cryptoRoundTripCostPct(marketData.spread_bps)
-    };
-}
-
 function cryptoMarketBlock(m) {
     return `Market Data (24/7 crypto, hourly bars):
 - Pair: ${m.symbol}
 - Ask / Bid: ${m.ask} / ${m.bid} (spread ${fmt(m.spread_bps, 1)} bps)
 - 24h Change: ${fmt(m.change_24h)}%
 - BTC 24h Change (market regime): ${fmt(m.btc_change_24h)}%
-- 24h Volume on Alpaca's venue only: $${m.venue_volume_24h_usd} (Alpaca's book is a small slice of global volume; judge liquidity mainly by depth)
+- 24h Volume on Alpaca's venue only: $${m.venue_volume_24h_usd} (Alpaca's book is a small slice of global volume)
 - Order Book Depth within 1% of mid: bids $${m.bid_depth_1pct_usd} / asks $${m.ask_depth_1pct_usd}
 - Realized Volatility (24h, from hourly returns): ${fmt(m.realized_vol_24h_pct)}%
 - ATR (14 x 1h): ${fmt(m.atr_1h_pct, 3)}% of price
@@ -130,11 +112,12 @@ Output strictly in JSON format:
 }`;
 }
 
-function cryptoAuditPrompt(m, proposal, position) {
-    const p = position || {};
-    const depthShare = Number.isFinite(p.notional) && m.bid_depth_1pct_usd > 0 ? p.notional / m.bid_depth_1pct_usd * 100 : null;
+// Agent B judges sentiment, catalysts and trend only. Position size, book depth
+// and cost-vs-reward are enforced in code (CryptoTradingBot hard gates): the
+// fallback model misread those numbers, so it is never asked to compute them.
+function cryptoAuditPrompt(m, proposal) {
     return `
-${SHEFA_PERSONA} You are acting as the objective Risk Auditor agent for the crypto book. Review the trade proposal and decide, on the evidence, whether the liquidity, cost and risk profile is acceptable. Approve setups that hold up and reject those that do not. Do not lean either way by default.
+${SHEFA_PERSONA} You are acting as the objective Risk Auditor agent for the crypto book. Review the trade proposal and decide, on the evidence, whether the market sentiment, news catalysts and technical trend support it. Approve setups that hold up and reject those that do not. Do not lean either way by default. Position size, liquidity and costs are checked separately by the system - do not assess them.
 
 ${STRICT_JSON_DIRECTIVE}
 
@@ -148,22 +131,15 @@ Trader's Proposal:
 
 ${cryptoMarketBlock(m)}
 
-Proposed Position (exits are market sells fired by SHEFA's own exit engine; there is no broker-side stop):
-- Quantity: ${p.qty ?? 'unknown'} | Notional: $${fmt(p.notional)}
-- Position as % of bid depth within 1%: ${fmt(depthShare)}%
-- Stop-loss: ${fmt(p.stopLossPrice, 8)} (-${fmt(p.stopPct)}%) | Take-profit: ${fmt(p.takeProfitPrice, 8)} (+${fmt(p.targetPct)}%)
-- Round-trip cost (taker fees both legs + spread): ${fmt(p.roundTripCostPct, 3)}%
-
 ${formatNewsContext(m.news)}
 
 AUDIT CHECKLIST:
-1. Exit Liquidity: Can a market-sell stop exit this position without walking the book? Judge by the position's share of bid depth within 1%; above roughly 50% is a material failure.
-2. Cost vs Reward: Does the take-profit distance comfortably exceed the round-trip cost? A target under 3x the cost is a material failure.
-3. Volatility Fit: Is the stop distance sensible against realized volatility and ATR, neither inside the noise nor so wide the loss is outsized?
-4. Move Quality and Regime: Is the momentum genuine against the BTC backdrop, or a thin spike likely to mean-revert?
-5. Real-World Sentiment (weigh heavily): Judge the news yourself rather than trusting the trader's read. Set news_risk to "high" for negative pair news, an exploit, delisting or regulatory risk, or clearly risk-off macro and crypto sentiment. A "high" news_risk is a veto.
+1. Technical Trend: Is the momentum genuine - price holding above its 20-hour SMA with RSI confirming - or a thin spike or blow-off likely to mean-revert?
+2. Market Regime: Does the BTC backdrop support a long here, or is the wider crypto market turning against it?
+3. Confidence Sanity: Does the trader's confidence roughly match the technical evidence?
+4. Real-World Sentiment and Catalysts (weigh heavily): Judge the news yourself rather than trusting the trader's read. Set news_risk to "high" for negative pair news, an exploit, delisting or regulatory risk, a token unlock, or clearly risk-off macro and crypto sentiment. A "high" news_risk is a veto.
 
-Set approved to true when the setup holds up on these checks, false when one of them fails materially. News can only make you reject; it is never a reason to approve a setup that fails checks 1-4.
+Set approved to true when the setup holds up on these checks, false when one of them fails materially. News can only make you reject; it is never a reason to approve a setup that fails checks 1-3.
 
 Output strictly in JSON format:
 {
@@ -374,16 +350,15 @@ Output strictly in JSON format:
         }
     }
 
-    // Agent B: critiques Agent A's proposal for slippage, volume, and false-breakout risk.
-    // Must explicitly approve before TradingBot is allowed to submit a bracket order.
-    // `position` is the order TradingBot would actually place ({ allocation, shares }),
-    // so liquidity is judged against the real size rather than guessed.
-    async auditTradeSetup(marketData, proposal, position = null) {
+    // Agent B: critiques Agent A's proposal on sentiment, catalysts and trend.
+    // Must explicitly approve before either loop may place an order. It is never
+    // given position size or cost math: those limits are hard gates in the loops.
+    async auditTradeSetup(marketData, proposal) {
         console.log(`[Agent B: Risk Auditor] Reviewing proposal for ${proposal.target_symbol}...`);
 
         if (marketData.assetClass === 'crypto') {
             try {
-                return await this.#generateJSON(cryptoAuditPrompt(marketData, proposal, position));
+                return await this.#generateJSON(cryptoAuditPrompt(marketData, proposal));
             } catch (error) {
                 console.error(`[Agent B Error]: ${error.message}`);
                 return { approved: false, risk_score: 0, news_risk: 'unknown', veto_reason: 'Fallback rejection due to Risk Auditor error (Agent B unavailable).', audit_notes: 'Agent B unavailable.' };
@@ -393,11 +368,9 @@ Output strictly in JSON format:
         const avgVolume = marketData.avg_volume_20;
         const hasAvgVolume = Number.isFinite(avgVolume) && avgVolume > 0;
         const volumeRatio = hasAvgVolume ? (marketData.volume / avgVolume).toFixed(2) : 'unknown';
-        const hasPosition = position && Number.isFinite(position.allocation) && Number.isFinite(position.shares);
-        const shareOfAvgVolume = hasPosition && hasAvgVolume ? ((position.shares / avgVolume) * 100).toFixed(4) : 'unknown';
 
         const prompt = `
-${SHEFA_PERSONA} You are acting as the objective Risk Auditor agent. Review the trade proposal from the trading agent and decide, on the evidence, whether the liquidity and risk profile is acceptable. Approve setups that hold up and reject those that do not. Do not lean either way by default.
+${SHEFA_PERSONA} You are acting as the objective Risk Auditor agent. Review the trade proposal from the trading agent and decide, on the evidence, whether the market sentiment, news catalysts and technical trend support it. Approve setups that hold up and reject those that do not. Do not lean either way by default. Position size and liquidity are checked separately by the system - do not assess them.
 
 ${STRICT_JSON_DIRECTIVE}
 
@@ -419,20 +392,14 @@ Market Data:
 - 20-Day SMA: ${marketData.sma_20}
 - 14-Day RSI: ${marketData.rsi_14}
 
-Proposed Position:
-- Shares: ${hasPosition ? position.shares : 'unknown'}
-- Notional: ${hasPosition ? '$' + position.allocation.toFixed(2) : 'unknown'}
-- Position as % of Average Daily Volume: ${shareOfAvgVolume}%
-
 ${formatNewsContext(marketData.news)}
 
 AUDIT CHECKLIST:
-1. Liquidity: Can this specific position size be filled without meaningful slippage? Judge it by the position's share of average daily volume, not by the raw volume number alone. A position well under 1% of average daily volume is normally easy to fill.
-2. Move Quality: Is today's move backed by volume above its average, or is it a thin spike likely to mean-revert? Weigh RSI together with volume confirmation, not in isolation.
-3. Confidence Sanity: Does the trader's confidence score roughly match the evidence?
-4. Real-World Sentiment (weigh heavily): Judge the news yourself rather than trusting the trader's read. Is there negative symbol news, an imminent earnings or binary event, or macro/sector rotation running against this trade? Is the move explained by a one-off headline likely to fade? Set news_risk to "high" for any of these. A "high" news_risk is a veto.
+1. Technical Trend: Is today's move backed by volume above its average and price above its 20-day SMA, or is it a thin spike likely to mean-revert? Weigh RSI together with volume confirmation, not in isolation.
+2. Confidence Sanity: Does the trader's confidence score roughly match the evidence?
+3. Real-World Sentiment and Catalysts (weigh heavily): Judge the news yourself rather than trusting the trader's read. Is there negative symbol news, an imminent earnings or binary event, or macro/sector rotation running against this trade? Is the move explained by a one-off headline likely to fade? Set news_risk to "high" for any of these. A "high" news_risk is a veto.
 
-Set approved to true when the setup holds up on these checks, false when one of them fails materially. News can only make you reject; it is never a reason to approve a setup that fails checks 1-3.
+Set approved to true when the setup holds up on these checks, false when one of them fails materially. News can only make you reject; it is never a reason to approve a setup that fails checks 1-2.
 
 Output strictly in JSON format:
 {
@@ -454,8 +421,7 @@ Output strictly in JSON format:
 
     // Runs the full Agent A -> Agent B debate. Agent B's approval is required
     // before the caller may treat the decision as tradeable (decision.riskApproved).
-    // `activeCapital` lets Agent B see the position size TradingBot would really place.
-    async evaluateBatch(marketData, { activeCapital } = {}) {
+    async evaluateBatch(marketData) {
         const proposal = await this.proposeTradeSetup(marketData);
         console.log(`[Agent A: Trader] Proposal for ${marketData.symbol}: ${proposal.action} (confidence ${proposal.confidence_score})`);
 
@@ -467,12 +433,7 @@ Output strictly in JSON format:
             };
         }
 
-        const position = !Number.isFinite(activeCapital)
-            ? null
-            : marketData.assetClass === 'crypto'
-                ? cryptoPosition(marketData, activeCapital, proposal.confidence_score)
-                : RiskEngine.calculatePositionSize(activeCapital, proposal.confidence_score, marketData.price);
-        const audit = await this.auditTradeSetup(marketData, proposal, position);
+        const audit = await this.auditTradeSetup(marketData, proposal);
 
         // The news veto is enforced here, not left to the model: a "high" news_risk
         // blocks the trade even if the auditor's approved flag disagrees.

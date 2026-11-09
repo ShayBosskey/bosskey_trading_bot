@@ -79,14 +79,14 @@ describe('crypto agent payloads', () => {
         sma_20h: 97, rsi_14h: 64, min_trade_increment: 1e-9, news: { available: true, symbol: [], macro: [] }
     };
 
-    test('both agents see 24h volume, depth, spread, volatility and the exit plan', async () => {
+    test('both agents see 24h volume, depth, spread and volatility; the auditor gets no sizing math', async () => {
         const engine = new AIEngine({ geminiMinIntervalMs: 0 });
         const gen = engine.ai.models.generateContent;
         gen.mockReset();
         gen.mockResolvedValueOnce({ text: JSON.stringify({ action: 'BUY', target_symbol: 'ETH/USD', confidence_score: 80, news_sentiment: 0.2, catalyst: 'ETF flows', reasoning: 'ok' }) })
            .mockResolvedValueOnce({ text: JSON.stringify({ approved: true, risk_score: 30, news_risk: 'low', veto_reason: '', audit_notes: 'ok' }) });
 
-        const decision = await engine.evaluateBatch(setup, { activeCapital: 10000 });
+        const decision = await engine.evaluateBatch(setup);
 
         const [traderPrompt, auditPrompt] = gen.mock.calls.map(c => c[0].contents);
         for (const prompt of [traderPrompt, auditPrompt]) {
@@ -98,9 +98,9 @@ describe('crypto agent payloads', () => {
         }
         expect(traderPrompt).toContain('LONG ONLY');
         expect(traderPrompt).not.toContain('PENNY STOCK');
-        expect(auditPrompt).toContain('Quantity: 12 | Notional: $1200.00');      // fractional sizing, $1200 at $100
-        expect(auditPrompt).toContain('Position as % of bid depth within 1%: 2.40%');
-        expect(auditPrompt).toContain('Round-trip cost (taker fees both legs + spread): 0.600%');
+        // Agent B judges sentiment and trend only; depth/cost math is a hard gate in code.
+        expect(auditPrompt).not.toMatch(/Quantity:|Notional|share of bid depth|Round-trip cost|3x the cost|50%/);
+        expect(auditPrompt).toContain('Position size, liquidity and costs are checked separately by the system');
         expect(decision.riskApproved).toBe(true);
     });
 });

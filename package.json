@@ -21,5 +21,10 @@
   "devDependencies": {
     "jest": "^30.4.2",
     "oxlint": "^1.83.0"
+  },
+  "jest": {
+    "setupFiles": [
+      "./Systest/setupEnv.js"
+    ]
   }
 }

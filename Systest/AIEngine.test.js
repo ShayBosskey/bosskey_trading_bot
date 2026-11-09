@@ -402,31 +402,26 @@ describe('Agent B audit inputs', () => {
             .mockResolvedValueOnce({ text: JSON.stringify({ approved: true, risk_score: 30, veto_reason: '', audit_notes: 'ok' }) });
     });
 
-    test('gives Agent B the average volume and the real position size TradingBot would place', async () => {
-        await engine.evaluateBatch(marketData, { activeCapital: 50000 });
+    test('gives Agent B trend inputs (volume vs average) but never position-size math', async () => {
+        await engine.evaluateBatch(marketData);
 
         const auditPrompt = generateContentMock.mock.calls[1][0].contents;
-        // 50000 * 0.80 * 0.15 = $6000 -> 600 shares at $10 -> 0.06% of 1,000,000 ADV
         expect(auditPrompt).toContain('20-Day Average Daily Volume: 1000000');
         expect(auditPrompt).toContain("Today's Volume vs Average: 3.00x");
-        expect(auditPrompt).toContain('Shares: 600');
-        expect(auditPrompt).toContain('Notional: $6000.00');
-        expect(auditPrompt).toContain('Position as % of Average Daily Volume: 0.0600%');
+        expect(auditPrompt).not.toMatch(/Shares:|Notional|Position as % of Average Daily Volume/);
+        expect(auditPrompt).toContain('Position size and liquidity are checked separately by the system');
     });
 
     test('no longer primes Agent B to assume the trader is overconfident', async () => {
-        await engine.evaluateBatch(marketData, { activeCapital: 50000 });
+        await engine.evaluateBatch(marketData);
 
         const auditPrompt = generateContentMock.mock.calls[1][0].contents;
         expect(auditPrompt).not.toMatch(/assume the trader is overconfident|CHALLENGE, not rubber-stamp/i);
         expect(auditPrompt).toMatch(/objective risk auditor/i);
     });
 
-    test('still audits (with unknown sizing) when no capital figure is passed', async () => {
+    test('approval flows through without any capital figure', async () => {
         const decision = await engine.evaluateBatch(marketData);
-
-        const auditPrompt = generateContentMock.mock.calls[1][0].contents;
-        expect(auditPrompt).toContain('Shares: unknown');
         expect(decision.riskApproved).toBe(true);
     });
 });

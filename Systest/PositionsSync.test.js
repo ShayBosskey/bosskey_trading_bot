@@ -195,3 +195,27 @@ describe('PositionsSync (replacement exit-ledger engine)', () => {
         expect(sync.db.client.query.mock.calls.some(c => c[0].includes("SET status = 'CLOSED'"))).toBe(false);
     });
 });
+
+describe('PositionsSync leaves crypto to the crypto engine', () => {
+    afterEach(() => jest.restoreAllMocks());
+
+    test('a held crypto position is neither untracked nor flagged, and crypto rows are not queried', async () => {
+        const sync = new PositionsSync();
+        const queries = [];
+        sync.db.client.query.mockImplementation((sql) => {
+            queries.push(sql);
+            return Promise.resolve({ rows: [] }); // DB filter excludes crypto rows
+        });
+        jest.spyOn(BrokerClient.prototype, 'getPositions').mockResolvedValue([
+            { symbol: 'BTCUSD', asset_class: 'crypto', qty: '0.016' }
+        ]);
+        const history = jest.spyOn(BrokerClient.prototype, 'getOrderHistory');
+
+        const report = await sync.run({ dryRun: true });
+
+        expect(report.flagged).toEqual([]);
+        expect(report.untracked || []).toEqual([]);
+        expect(history).not.toHaveBeenCalled();
+        expect(queries.find(q => q.includes("status = 'OPEN'"))).toContain("symbol NOT LIKE '%/%'");
+    });
+});

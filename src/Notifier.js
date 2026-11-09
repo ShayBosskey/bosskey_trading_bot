@@ -25,7 +25,7 @@ function fingerprint(title, message) {
 }
 
 class Notifier {
-    constructor({ topicUrl = process.env.NTFY_TOPIC_URL || DEFAULT_TOPIC_URL, stateFile = STATE_FILE, now = () => Date.now(), fetchImpl = (...args) => fetch(...args) } = {}) {
+    constructor({ topicUrl = process.env.NTFY_TOPIC_URL || DEFAULT_TOPIC_URL, stateFile = process.env.NOTIFIER_STATE_FILE || STATE_FILE, now = () => Date.now(), fetchImpl = (...args) => fetch(...args) } = {}) {
         this.topicUrl = topicUrl;
         this.stateFile = stateFile;
         this.now = now;

@@ -4,15 +4,19 @@
 //   pm2 start ecosystem.config.js --only crypto-exit-engine,crypto-exit-watchdog
 //   pm2 save            # so the pm2-adminbosskey systemd unit resurrects it on boot
 //
-// Going live (paper) = drop '--dry-run' from the exit engine args, `pm2 reload`,
-// then start crypto-trading-bot. The entry loop refuses to trade while the exit
-// engine is in dry-run or its heartbeat is stale, so the order matters.
+// Changing args needs `pm2 reload ecosystem.config.js --only <app>` (a plain
+// `pm2 reload <app>` keeps the args PM2 stored), and the new value must be set
+// explicitly - a removed key is not applied. Start the exit engine
+// before crypto-trading-bot: entries are refused while its heartbeat is stale
+// or it is in dry-run.
 module.exports = {
     apps: [
         {
             name: 'crypto-exit-engine',
             script: 'src/CryptoExitEngine.js',
-            args: '--dry-run',
+            // LIVE (paper) since 2026-11-10. Set args: ['--dry-run'] to stop it selling.
+            // Explicit empty list: omitting the key would let PM2 keep stale args.
+            args: [],
             cwd: __dirname,
             autorestart: true,
             // Back off 100ms -> 15s on a crash loop instead of hammering Alpaca.

@@ -123,10 +123,14 @@ class PositionsSync {
         try {
             await this.db.connect();
 
-            const livePositions = await this.broker.getPositions();
+            // Equities only. Crypto rows have no bracket legs and are opened and
+            // closed by CryptoTradingBot/CryptoExitEngine; Alpaca also reports them as
+            // "BTCUSD" while the ledger says "BTC/USD", so syncing them here would flag
+            // every crypto position as untracked on every run.
+            const livePositions = (await this.broker.getPositions()).filter(p => p.asset_class !== 'crypto');
             const liveBySymbol = new Map(livePositions.map(p => [p.symbol, p]));
 
-            const res = await this.db.client.query("SELECT * FROM trade_analytics WHERE status = 'OPEN' ORDER BY id");
+            const res = await this.db.client.query("SELECT * FROM trade_analytics WHERE status = 'OPEN' AND symbol NOT LIKE '%/%' ORDER BY id");
             const openTrades = res.rows;
 
             await this.logger.log(`DB reports ${openTrades.length} OPEN row(s); Alpaca holds ${livePositions.length} position(s).`);
