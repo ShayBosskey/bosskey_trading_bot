@@ -1,19 +1,27 @@
 const Notifier = require('./Notifier');
 const VoiceEscalator = require('./VoiceEscalator');
+const { redact } = require('./Redactor');
 
 function attachGlobalErrorLogger(scriptName) {
     const notifier = new Notifier();
     const voiceEscalator = new VoiceEscalator();
 
+    let handling = false;
+
     const handleCriticalError = async (errorType, err) => {
+        // A second error while the first is still alerting must not double-push
+        // or race the exit.
+        if (handling) return;
+        handling = true;
+
         // Format the local Swiss time
         const timestamp = new Date().toLocaleString('de-CH', { timeZone: 'Europe/Zurich' });
-        const errorMessage = err instanceof Error ? err.message : String(err);
+        const errorMessage = redact(err instanceof Error ? err.message : String(err));
         
         console.error(`\n[CRITICAL SYSTEM FAILURE] ${timestamp}`);
         console.error(`Script: ${scriptName} | Type: ${errorType}`);
         console.error(`Error: ${errorMessage}`);
-        if (err instanceof Error) console.error(err.stack);
+        if (err instanceof Error) console.error(redact(err.stack));
 
         const pushBody = `Script: ${scriptName}\nTime: ${timestamp}\nError: ${errorMessage}`;
         

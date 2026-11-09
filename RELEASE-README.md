@@ -107,3 +107,14 @@ Schema: `Date (Timestamp) | Title | Description | New Features`
 - **SHEFA persona**: agent prompts, escalation call scripts and caller ID; Piper voice `en_GB-alan-medium` → `en_GB-alba-medium`.
 - **Crypto engine (Phase 2)**: `CryptoTradingBot.js` entry loop with the `/v1beta3/crypto/us` scanner, crypto agent payloads and hard gates, plus fractional sizing (`RiskEngine.calculateCryptoPositionSize`). `CryptoExitEngine` runs under PM2 (`ecosystem.config.js`) in **dry-run**, saved to the boot list. The entry loop is built and dry-run tested, but not scheduled.
 - **Gemini 402**: the Gemini key returns 402 Payment Required, so every call runs on the OpenRouter fallback. A 402 now reroutes immediately instead of burning ~7s of backoff.
+
+**2026-11-09 (23:10 CET)** | Notification Throttling, Security Hardening, Escalation Watchdog | Audit of the crypto engine, PM2 setup and alert paths before go-live. |
+- **Throttling (`src/Notifier.js`)**: identical alerts (same title and text, numbers ignored) are muted for 90 min, with mute state kept in `run/notifier-state.json` so it holds across cron processes. Critical alerts (`rotating_light`) push at urgent priority and only collapse a 10-min burst. The next push after a mute reports how many repeats were muted. A failed send is never recorded as sent. The topic can be moved off the public default via `NTFY_TOPIC_URL`.
+- **Secret redaction (`src/Redactor.js`)**: applied in Logger (PM2 logs and the dashboard's `system_logs`), Notifier, ErrorHandler and VoiceEscalator. A scan of existing logs and the PM2 dump found no leaked secrets.
+- **Permissions**: `.env` and `~/.pm2/dump.pm2` changed from 664 (world-readable) to 600.
+- **Dashboard API**: now binds `127.0.0.1` (was all interfaces, with unauthenticated `/portfolio` and `/logs`). The dashboard is unaffected, as it uses the Vite `/api` proxy.
+- **Prompt-injection guard (`TradingBot.js`)**: an agent `target_symbol` that differs from the evaluated candidate is a HOLD.
+- **SQL**: every query was audited; all are parameterized.
+- **Escalation**: the bridge (`:3100`) and FastAGI (`:4573`) are confirmed loopback-only and unreachable via Tailscale. Missing or wrong tokens get 403, the 64-char token matches on both sides, and the AMI/HTTP interfaces are disabled.
+- **Watchdog (`src/ExitEngineWatchdog.js`, PM2 every 2 min)**: a stale exit-engine heartbeat with open crypto positions sends an urgent push plus a SHEFA voice call. It also warns when the SIP client isn't registered with Asterisk.
+- **Greeting**: "Good evening Sir, this is SHEFA." (morning/afternoon vary by time of day).

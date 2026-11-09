@@ -60,7 +60,7 @@ describe('EscalationService', () => {
     test('alert text uses a time-of-day greeting and drops stack frames', () => {
         const { service } = setup(); // 18:00 UTC = 20:00 Zurich
         const text = service.composeAlert({ title: 'TradingBot crashed', message: 'TypeError: x is undefined\n    at foo (a.js:1:1)\n    at bar (b.js:2:2)' });
-        expect(text).toMatch(/^Good evening, sir\. This is SHEFA, your trading assistant\./);
+        expect(text).toMatch(/^Good evening Sir, this is SHEFA\. I am so sorry/);
         expect(text).toContain('TypeError: x is undefined');
         expect(text).not.toContain('a.js');
     });

@@ -1,11 +1,14 @@
 const DatabaseClient = require('./DatabaseClient');
+const { redact } = require('./Redactor');
 
 class Logger {
     constructor(processName) {
         this.processName = processName;
     }
 
-    async log(message) {
+    async log(rawMessage) {
+        // Goes to PM2 logs and to system_logs, which the dashboard serves.
+        const message = redact(rawMessage);
         const now = new Date().toLocaleString('de-CH', { timeZone: 'Europe/Zurich' });
         console.log(`[${now}] [${this.processName}] ${message}`);
 

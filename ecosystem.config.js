@@ -1,7 +1,7 @@
 // PM2 apps for SHEFA's 24/7 crypto book. bosskey-api and bosskey-dashboard are
 // managed separately and are deliberately not listed here.
 //
-//   pm2 start ecosystem.config.js --only crypto-exit-engine
+//   pm2 start ecosystem.config.js --only crypto-exit-engine,crypto-exit-watchdog
 //   pm2 save            # so the pm2-adminbosskey systemd unit resurrects it on boot
 //
 // Going live (paper) = drop '--dry-run' from the exit engine args, `pm2 reload`,
@@ -19,6 +19,16 @@ module.exports = {
             exp_backoff_restart_delay: 100,
             max_memory_restart: '200M',
             kill_timeout: 10000,          // time for the SIGTERM handler to close the socket and DB pool
+            time: true,
+        },
+        {
+            // Outside check on the exit engine: crashes that bypass its own error
+            // handler (SIGKILL, OOM, hang, PM2 giving up) still ring the phone.
+            name: 'crypto-exit-watchdog',
+            script: 'src/ExitEngineWatchdog.js',
+            cwd: __dirname,
+            cron_restart: '*/2 * * * *',
+            autorestart: false,
             time: true,
         },
         {

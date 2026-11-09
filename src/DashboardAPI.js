@@ -9,6 +9,10 @@ const Config = require('./Config');
 
 const app = express();
 const PORT = process.env.API_PORT || 3000;
+// Loopback only. The dashboard reaches the API through Vite's /api proxy on the
+// same host, so nothing needs it on the LAN or Tailscale - and /portfolio and
+// /logs carry positions and P&L without a token.
+const HOST = process.env.API_HOST || '127.0.0.1';
 
 // `cors()` with no options reflects ANY origin, which let any page the browser
 // happened to load drive this API. Restricted to an explicit allowlist.
@@ -159,8 +163,8 @@ app.use((err, req, res, next) => {
 });
 
 if (require.main === module) {
-    app.listen(PORT, () => {
-        console.log(`[Dashboard API] Server securely running and listening on port ${PORT}`);
+    app.listen(PORT, HOST, () => {
+        console.log(`[Dashboard API] Server securely running and listening on ${HOST}:${PORT}`);
     });
 }
 

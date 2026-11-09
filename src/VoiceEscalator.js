@@ -1,4 +1,5 @@
 require('dotenv').config({ path: require('path').resolve(__dirname, '../.env') });
+const { redact } = require('./Redactor');
 
 // Asks the local voice-escalation bridge (escalation/ docker stack) to phone the
 // owner about a critical failure. The bridge does the TTS, the Asterisk .call
@@ -25,7 +26,7 @@ class VoiceEscalator {
             const res = await fetch(`${this.url}/escalate`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${this.token}` },
-                body: JSON.stringify({ title, message }),
+                body: JSON.stringify({ title: redact(title), message: redact(message) }),
                 signal: AbortSignal.timeout(this.timeoutMs)
             });
 

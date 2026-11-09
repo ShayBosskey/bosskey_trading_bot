@@ -31,6 +31,13 @@ async function processCandidate(marketData, { aiEngine, broker, db, logger, noti
     }
 
     // Agent B (Risk Auditor) must explicitly approve before any capital is deployed.
+    // The model's target_symbol must be the candidate it was shown. Headlines are
+    // untrusted text in the prompt, so a model steered to name another ticker is a HOLD.
+    if (decision.action === 'BUY' && decision.target_symbol !== 'NONE' && decision.target_symbol !== marketData.symbol) {
+        await logger.log(`Trade blocked: agent named ${decision.target_symbol} while evaluating ${marketData.symbol}.`);
+        return activeCapital;
+    }
+
     if (decision.action === 'BUY' && decision.target_symbol !== 'NONE' && decision.riskApproved) {
         if (!(await Capacity.hasFreeSlot(db.client, 'equity'))) {
             await logger.log(`Trade for ${decision.target_symbol} skipped: equity book is full (${Capacity.LIMITS.equity} max).`);
