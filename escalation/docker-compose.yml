@@ -1,4 +1,4 @@
-# Bosskey voice escalation stack.
+# Bosskey voice escalation stack - SHEFA's voice.
 #
 #   trading bot (host, PM2/cron) --POST /escalate--> bridge --.call file--> asterisk --SIP/Tailscale--> your phone
 #                                                      |  ^                    |
@@ -38,7 +38,7 @@ services:
       PUID: 1000
       PGID: 1000
       TZ: ${TZ}
-      PIPER_VOICE: ${PIPER_VOICE}   # en_GB-alan-medium = British male, the butler
+      PIPER_VOICE: ${PIPER_VOICE:-en_GB-alba-medium}   # en_GB-alba-medium = British female, SHEFA's voice
       PIPER_LENGTH: "1.1"           # slightly slower, more measured delivery
     volumes:
       - piper_data:/config          # downloaded voice models are cached here
@@ -87,7 +87,7 @@ services:
       BOT_API_URL: ${BOT_API_URL}
       BOT_ADMIN_TOKEN: ${BOT_ADMIN_TOKEN}
       OLLAMA_MODEL: ${OLLAMA_MODEL}
-      PIPER_VOICE: ${PIPER_VOICE}     # only used to invalidate cached prompts when you change voice
+      PIPER_VOICE: ${PIPER_VOICE:-en_GB-alba-medium}     # only used to invalidate cached prompts when you change voice
       SIP_USERNAME: ${SIP_USERNAME}
       CALL_COOLDOWN_MINUTES: ${CALL_COOLDOWN_MINUTES}
       PIPER_HOST: piper

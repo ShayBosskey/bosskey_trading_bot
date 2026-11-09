@@ -9,7 +9,7 @@ const path = require('path');
 // tmp/ on the same volume and rename() it across - a rename within one
 // filesystem is atomic.
 class CallFileWriter {
-    constructor({ spoolDir, endpoint, callerId = '"Bosskey Butler" <900>', maxRetries = 2, retryTime = 60, waitTime = 45 }) {
+    constructor({ spoolDir, endpoint, callerId = '"SHEFA" <900>', maxRetries = 2, retryTime = 60, waitTime = 45 }) {
         if (!spoolDir) throw new Error('CallFileWriter requires spoolDir.');
         if (!/^[A-Za-z0-9_-]+$/.test(endpoint || '')) throw new Error(`Invalid SIP endpoint name: ${endpoint}`);
 

@@ -3,16 +3,16 @@ const path = require('path');
 const { HangupError } = require('./AgiChannel');
 const { ACTIONS } = require('./CommandParser');
 
-// The conversation, after the dialplan has already played the alert:
+// SHEFA's side of the conversation, after the dialplan has already played the alert:
 //   menu -> record your reply -> transcribe -> classify -> confirm with keypad -> act.
 // Nothing that changes the bot's state happens without you pressing 1.
 const LINES = {
     menu: 'How would you like me to proceed, sir? After the tone, you may say: halt trading, switch to paper, status report, or acknowledge.',
     retry: 'I beg your pardon, sir, I did not quite catch that. Please say: halt trading, switch to paper, status report, or acknowledge.',
-    moment: 'One moment, sir.',
+    moment: 'One moment please, sir.',
     anythingElse: 'Is there anything else, sir? Please speak after the tone.',
-    giveUp: 'I am afraid I could not understand your instructions. I shall leave everything as it is and send the details to your phone. Goodbye, sir.',
-    acknowledged: 'Very good, sir. I shall leave everything exactly as it is. Goodbye.',
+    giveUp: 'I am afraid I could not understand your instructions. I shall leave everything as it is and send the details to your phone. This is SHEFA, signing off. Goodbye, sir.',
+    acknowledged: 'Very good, sir. I shall leave everything exactly as it is, and keep a close eye on things. Goodbye.',
     cancelled: 'Very well, sir. Nothing has been changed. Goodbye.',
     confirm: {
         [ACTIONS.HALT_TRADING]: 'You wish me to halt all trading. The bot will be placed in construction mode. Existing positions and their stop orders will remain in place. Press 1 to confirm, or any other key to cancel.',

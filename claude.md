@@ -2,7 +2,7 @@
 
 ## System Overview
 * Backend: Node.js application running on a Raspberry Pi via PM2.
-* Broker & Data: Alpaca Markets (Trading API), Finnhub (Fundamentals), yahoo-finance2 (Fallback).
+* Broker & Data: Alpaca Markets (Trading API, market data, and News API for SHEFA's real-world sentiment context).
 * Database: PostgreSQL database named `bosskey_trading`. Core tables include `system_logs`, `trade_analytics`, and `capital_pots`.
 * Dashboard: React/Vite dashboard running on port 5173 with Recharts components, mobile-responsive Tailwind CSS, and a Safe State Switcher for `.env` modes.
 * Modes: `SYSTEM_MODE` can be `CONSTRUCTION`, `PAPER`, or `PRODUCTION`.

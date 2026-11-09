@@ -21,6 +21,14 @@ class RiskEngine {
         return atr;
     }
 
+    // Single source of truth for sizing: TradingBot places this order, and Agent B
+    // audits the same numbers.
+    static calculatePositionSize(activeCapital, confidenceScore, price) {
+        const allocation = activeCapital * ((confidenceScore / 100) * 0.15);
+        const shares = Math.floor(allocation / price);
+        return { allocation, shares };
+    }
+
     static calculateDynamicStops(currentPrice, atr) {
         // Volatility-adjusted parameters
         const stopLossPrice = currentPrice - (atr * 2.0);

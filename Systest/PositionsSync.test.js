@@ -32,16 +32,28 @@ describe('PositionsSync (replacement exit-ledger engine)', () => {
         opened_at: '2026-08-24T18:23:59Z', ...over
     });
 
-    test('closes a DB-OPEN row once the broker is flat, using the real sell fill', async () => {
+    // A bracket entry as Alpaca returns it with nested=true: TP/SL legs rolled up.
+    const entryOrder = (legs, over = {}) => ({
+        id: 'entry-1', side: 'buy', status: 'filled', order_class: 'bracket',
+        filled_qty: '368', filled_avg_price: '24.70', filled_at: '2026-08-24T18:23:40Z',
+        legs, ...over
+    });
+    const leg = (over = {}) => ({
+        id: 'leg-tp', side: 'sell', status: 'filled',
+        filled_qty: '368', filled_avg_price: '17.91', filled_at: '2026-08-25T14:02:00Z', ...over
+    });
+    const canceledLeg = (id, side = 'sell') => ({ id, side, status: 'canceled', filled_qty: '0', filled_avg_price: null, filled_at: null });
+
+    test('closes a DB-OPEN row once the broker is flat, using its own bracket leg fill', async () => {
         sync.__openTrades = [trade()];
         BrokerClient.prototype.getPositions.mockResolvedValue([]);
         BrokerClient.prototype.getOrderHistory.mockResolvedValue([
-            { side: 'buy', status: 'filled', filled_qty: '368', filled_avg_price: '24.70', filled_at: '2026-08-24T18:24:00Z' },
-            { side: 'sell', status: 'filled', filled_qty: '368', filled_avg_price: '17.91', filled_at: '2026-08-25T14:02:00Z' }
+            entryOrder([leg({ id: 'leg-sl' }), canceledLeg('leg-tp')])
         ]);
 
         const report = await sync.run({ dryRun: false });
 
+        expect(BrokerClient.prototype.getOrderHistory).toHaveBeenCalledWith('SDOT', { nested: true });
         expect(report.closed).toHaveLength(1);
         expect(report.closed[0].sellPrice).toBe(17.91);
         expect(report.closed[0].netProfit).toBe(parseFloat(((17.91 - 24.70) * 368).toFixed(2)));
@@ -62,25 +74,49 @@ describe('PositionsSync (replacement exit-ledger engine)', () => {
         expect(sync.db.client.query.mock.calls.some(c => c[0].includes("SET status = 'CLOSED'"))).toBe(false);
     });
 
-    test('combines partial exit fills into one weighted-average close', async () => {
+    test('combines a partially filled exit leg into one weighted-average close', async () => {
         sync.__openTrades = [trade({ qty: 300 })];
         BrokerClient.prototype.getPositions.mockResolvedValue([]);
         BrokerClient.prototype.getOrderHistory.mockResolvedValue([
-            { side: 'sell', status: 'filled', filled_qty: '100', filled_avg_price: '20.00', filled_at: '2026-08-25T14:00:00Z' },
-            { side: 'sell', status: 'filled', filled_qty: '200', filled_avg_price: '26.00', filled_at: '2026-08-25T14:05:00Z' }
+            entryOrder([
+                leg({ id: 'leg-tp', filled_qty: '100', filled_avg_price: '20.00', filled_at: '2026-08-25T14:00:00Z', status: 'canceled' }),
+                leg({ id: 'leg-sl', filled_qty: '200', filled_avg_price: '26.00', filled_at: '2026-08-25T14:05:00Z' })
+            ], { filled_qty: '300' })
         ]);
 
         const report = await sync.run({ dryRun: false });
 
         expect(report.closed).toHaveLength(1);
         expect(report.closed[0].sellPrice).toBe(24); // (100*20 + 200*26) / 300
+        expect(report.closed[0].closedAt).toBe('2026-08-25T14:05:00Z');
     });
 
-    test('ignores a sell that predates the row and flags it instead of inventing a close', async () => {
+    test('ignores other trades in the same symbol (the WETO 1657-vs-549 mismatch)', async () => {
+        sync.__openTrades = [trade({ symbol: 'WETO', qty: 549, buy_price: '30.65', opened_at: '2026-08-18T14:43:28Z' })];
+        BrokerClient.prototype.getPositions.mockResolvedValue([]);
+        BrokerClient.prototype.getOrderHistory.mockResolvedValue([
+            // An earlier, unrelated WETO round trip.
+            entryOrder([leg({ id: 'old-tp', filled_qty: '554', filled_avg_price: '28.00', filled_at: '2026-08-18T13:00:00Z' })],
+                { id: 'old-entry', filled_qty: '554', filled_avg_price: '27.00', filled_at: '2026-08-18T12:00:00Z' }),
+            // This row's entry, exited by its stop-loss leg.
+            entryOrder([canceledLeg('tp'), leg({ id: 'sl', filled_qty: '549', filled_avg_price: '29.10', filled_at: '2026-08-19T15:00:00Z' })],
+                { id: 'row-entry', filled_qty: '549', filled_avg_price: '30.65', filled_at: '2026-08-18T14:43:10Z' }),
+            // A later, separate manual sell in the same symbol.
+            { id: 'manual', side: 'sell', status: 'filled', filled_qty: '554', filled_avg_price: '31.00', filled_at: '2026-08-20T15:00:00Z' }
+        ]);
+
+        const report = await sync.run({ dryRun: false });
+
+        expect(report.flagged).toEqual([]);
+        expect(report.closed).toHaveLength(1);
+        expect(report.closed[0].sellPrice).toBe(29.1);
+    });
+
+    test('flags rather than closes when the exit legs do not add up to the row', async () => {
         sync.__openTrades = [trade()];
         BrokerClient.prototype.getPositions.mockResolvedValue([]);
         BrokerClient.prototype.getOrderHistory.mockResolvedValue([
-            { side: 'sell', status: 'filled', filled_qty: '368', filled_avg_price: '40.00', filled_at: '2026-08-01T14:00:00Z' }
+            entryOrder([leg({ filled_qty: '100' })])
         ]);
 
         const report = await sync.run({ dryRun: false });
@@ -89,11 +125,24 @@ describe('PositionsSync (replacement exit-ledger engine)', () => {
         expect(report.flagged).toEqual(['SDOT']);
     });
 
-    test('flags rather than closes when exit quantity does not match the row', async () => {
+    test('flags when no entry order matches the row, instead of guessing from loose sells', async () => {
         sync.__openTrades = [trade()];
         BrokerClient.prototype.getPositions.mockResolvedValue([]);
         BrokerClient.prototype.getOrderHistory.mockResolvedValue([
-            { side: 'sell', status: 'filled', filled_qty: '100', filled_avg_price: '17.91', filled_at: '2026-08-25T14:02:00Z' }
+            { id: 'loose', side: 'sell', status: 'filled', filled_qty: '368', filled_avg_price: '40.00', filled_at: '2026-08-25T14:00:00Z' }
+        ]);
+
+        const report = await sync.run({ dryRun: false });
+
+        expect(report.closed).toHaveLength(0);
+        expect(report.flagged).toEqual(['SDOT']);
+    });
+
+    test('flags when the entry exists but no bracket leg filled (closed outside the bracket)', async () => {
+        sync.__openTrades = [trade()];
+        BrokerClient.prototype.getPositions.mockResolvedValue([]);
+        BrokerClient.prototype.getOrderHistory.mockResolvedValue([
+            entryOrder([canceledLeg('leg-tp'), canceledLeg('leg-sl')])
         ]);
 
         const report = await sync.run({ dryRun: false });
@@ -115,20 +164,19 @@ describe('PositionsSync (replacement exit-ledger engine)', () => {
     test('never writes to capital_pots - Settlement.js owns pot distribution', async () => {
         sync.__openTrades = [trade()];
         BrokerClient.prototype.getPositions.mockResolvedValue([]);
-        BrokerClient.prototype.getOrderHistory.mockResolvedValue([
-            { side: 'sell', status: 'filled', filled_qty: '368', filled_avg_price: '17.91', filled_at: '2026-08-25T14:02:00Z' }
-        ]);
+        BrokerClient.prototype.getOrderHistory.mockResolvedValue([entryOrder([leg()])]);
 
         await sync.run({ dryRun: false });
 
         expect(sync.db.client.query.mock.calls.some(c => c[0].includes('capital_pots'))).toBe(false);
     });
 
-    test('a short closes profitably when bought back below the entry', async () => {
+    test('a short closes profitably when its buy-to-cover leg fills below the entry', async () => {
         sync.__openTrades = [trade({ symbol: 'SHRT', action: 'SELL_SHORT', buy_price: '50.00', qty: 10 })];
         BrokerClient.prototype.getPositions.mockResolvedValue([]);
         BrokerClient.prototype.getOrderHistory.mockResolvedValue([
-            { side: 'buy', status: 'filled', filled_qty: '10', filled_avg_price: '40.00', filled_at: '2026-08-25T14:02:00Z' }
+            entryOrder([leg({ side: 'buy', filled_qty: '10', filled_avg_price: '40.00' })],
+                { side: 'sell', filled_qty: '10', filled_avg_price: '50.00' })
         ]);
 
         const report = await sync.run({ dryRun: false });
@@ -139,9 +187,7 @@ describe('PositionsSync (replacement exit-ledger engine)', () => {
     test('dry run reports the close without writing it', async () => {
         sync.__openTrades = [trade()];
         BrokerClient.prototype.getPositions.mockResolvedValue([]);
-        BrokerClient.prototype.getOrderHistory.mockResolvedValue([
-            { side: 'sell', status: 'filled', filled_qty: '368', filled_avg_price: '17.91', filled_at: '2026-08-25T14:02:00Z' }
-        ]);
+        BrokerClient.prototype.getOrderHistory.mockResolvedValue([entryOrder([leg()])]);
 
         const report = await sync.run({ dryRun: true });
 

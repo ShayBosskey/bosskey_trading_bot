@@ -6,6 +6,12 @@ const Logger = require('./Logger');
 const Notifier = require('./Notifier');
 const attachGlobalErrorLogger = require('./ErrorHandler');
 
+// Window around a row's opened_at in which its entry order's fill must land. The
+// row is written after #awaitFill (up to ~20s) plus the DB insert, so the fill
+// normally precedes opened_at by seconds; the small "after" margin covers clock skew.
+const ENTRY_MATCH_BEFORE_MS = 10 * 60 * 1000;
+const ENTRY_MATCH_AFTER_MS = 60 * 1000;
+
 // Replaces the exit engine deleted in 8caf045 (src/Liquidator.js), which was
 // removed when execution moved to broker-side OCO brackets. Nothing took over
 // its bookkeeping job: when a bracket leg fired, Alpaca closed the position but
@@ -31,37 +37,61 @@ class PositionsSync {
         return trade.action === 'SELL_SHORT' ? 'buy' : 'sell';
     }
 
-    // Reconstructs the real exit from Alpaca's order history: every filled
-    // closing-side order at or after this row was opened. Summed rather than
-    // taking the latest single order, so a position exited in partial fills
-    // still resolves to one correct quantity and one weighted average price.
-    async #resolveExit(trade) {
-        const history = await this.broker.getOrderHistory(trade.symbol);
+    // Finds the bracket entry order that opened this row. TradingBot inserts the row
+    // right after the entry fills, so the match is the filled entry-side order with
+    // the row's exact qty whose fill landed closest before opened_at.
+    #findEntryOrder(trade, history) {
         const openedAt = new Date(trade.opened_at).getTime();
-        const side = this.#closingSide(trade);
+        const entrySide = trade.action === 'SELL_SHORT' ? 'sell' : 'buy';
+        const qty = parseInt(trade.qty, 10);
 
-        const exits = history.filter(o =>
-            o.side === side &&
-            o.status === 'filled' &&
+        const candidates = history.filter(o => {
+            if (o.side !== entrySide || !o.filled_at || parseInt(o.filled_qty, 10) !== qty) return false;
+            const filledAt = new Date(o.filled_at).getTime();
+            return filledAt <= openedAt + ENTRY_MATCH_AFTER_MS && filledAt >= openedAt - ENTRY_MATCH_BEFORE_MS;
+        });
+
+        candidates.sort((a, b) =>
+            Math.abs(openedAt - new Date(a.filled_at).getTime()) - Math.abs(openedAt - new Date(b.filled_at).getTime())
+        );
+        return candidates[0] || null;
+    }
+
+    // Reconstructs the real exit from THIS row's own bracket: the filled
+    // take-profit/stop-loss legs of its entry order. Other trades in the same
+    // symbol are never counted, which is what used to make a re-traded ticker
+    // (WETO: 1657 sold vs 549 held) mismatch forever. Legs are summed, so a
+    // partially filled exit still resolves to one quantity and weighted price.
+    async #resolveExit(trade) {
+        const history = await this.broker.getOrderHistory(trade.symbol, { nested: true });
+
+        const entry = this.#findEntryOrder(trade, history);
+        if (!entry) return { unresolved: `no filled entry order for ${trade.qty} shares found near ${trade.opened_at}` };
+
+        const closingSide = this.#closingSide(trade);
+        const exits = (entry.legs || []).filter(o =>
+            o.side === closingSide &&
             o.filled_at &&
             o.filled_avg_price &&
-            new Date(o.filled_at).getTime() >= openedAt
+            parseInt(o.filled_qty, 10) > 0
         );
 
-        if (exits.length === 0) return null;
+        if (exits.length === 0) return { unresolved: `entry order ${entry.id} has no filled bracket exit leg` };
+
+        exits.sort((a, b) => new Date(a.filled_at).getTime() - new Date(b.filled_at).getTime());
 
         let qty = 0;
         let notional = 0;
         for (const o of exits) {
             const q = parseInt(o.filled_qty, 10);
             const p = parseFloat(o.filled_avg_price);
-            if (!Number.isFinite(q) || !Number.isFinite(p)) return null;
+            if (!Number.isFinite(q) || !Number.isFinite(p)) return { unresolved: `exit leg ${o.id} has an unreadable fill` };
             qty += q;
             notional += q * p;
         }
 
         if (qty !== parseInt(trade.qty, 10)) {
-            return { mismatch: true, qty };
+            return { mismatch: true, qty, entryOrderId: entry.id };
         }
 
         return {
@@ -121,15 +151,15 @@ class PositionsSync {
                 // for how much, from Alpaca's own record.
                 const exit = await this.#resolveExit(trade);
 
-                if (!exit) {
+                if (exit.unresolved) {
                     report.flagged.push(trade.symbol);
-                    await this.logger.log(`⚠️ ${trade.symbol} (id=${trade.id}) is OPEN in the DB but absent from Alpaca, with no verifiable closing fill since ${trade.opened_at}. Needs manual review.`);
+                    await this.logger.log(`⚠️ ${trade.symbol} (id=${trade.id}) is OPEN in the DB but absent from Alpaca, and its exit can't be verified: ${exit.unresolved}. Needs manual review.`);
                     continue;
                 }
 
                 if (exit.mismatch) {
                     report.flagged.push(trade.symbol);
-                    await this.logger.log(`⚠️ ${trade.symbol} (id=${trade.id}) closing fills total ${exit.qty} shares but the row records ${trade.qty}. Needs manual review.`);
+                    await this.logger.log(`⚠️ ${trade.symbol} (id=${trade.id}) bracket exit legs of entry ${exit.entryOrderId} total ${exit.qty} shares but the row records ${trade.qty}. Needs manual review.`);
                     continue;
                 }
 

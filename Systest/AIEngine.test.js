@@ -20,7 +20,7 @@ describe('Agent Debate Engine (Trader vs Risk Auditor)', () => {
     };
 
     beforeEach(() => {
-        engine = new AIEngine();
+        engine = new AIEngine({ geminiMinIntervalMs: 0 });
         generateContentMock = engine.ai.models.generateContent;
         generateContentMock.mockReset();
     });
@@ -100,7 +100,7 @@ describe('OpenRouter fallback routing', () => {
 
     beforeEach(() => {
         process.env.OPENROUTER_API_KEY = 'test_openrouter_key';
-        engine = new AIEngine();
+        engine = new AIEngine({ geminiRetryDelaysMs: [], geminiMinIntervalMs: 0 });
         generateContentMock = engine.ai.models.generateContent;
         generateContentMock.mockReset();
     });
@@ -199,7 +199,7 @@ describe('Malformed JSON repair', () => {
 
     beforeEach(() => {
         process.env.OPENROUTER_API_KEY = 'test_openrouter_key';
-        engine = new AIEngine();
+        engine = new AIEngine({ geminiRetryDelaysMs: [], geminiMinIntervalMs: 0 });
         generateContentMock = engine.ai.models.generateContent;
         generateContentMock.mockReset();
     });
@@ -261,5 +261,243 @@ describe('Malformed JSON repair', () => {
 
         await expect(engine.proposeTradeSetup(marketData)).rejects.toThrow('Agent A (Trader) unavailable');
         expect(global.fetch).toHaveBeenCalledTimes(2);
+    });
+});
+
+describe('Gemini backoff before fallback', () => {
+    let engine;
+    let generateContentMock;
+    let sleep;
+    const originalFetch = global.fetch;
+    const originalApiKey = process.env.OPENROUTER_API_KEY;
+
+    const marketData = { symbol: 'TEST', price: 10, dailyChange: '5.00', volume: 1000000, sma_20: 9, rsi_14: 65 };
+    const rateLimit = () => Object.assign(new Error('Quota exceeded'), { status: 429 });
+
+    beforeEach(() => {
+        process.env.OPENROUTER_API_KEY = 'test_openrouter_key';
+        sleep = jest.fn().mockResolvedValue(undefined);
+        engine = new AIEngine({ geminiRetryDelaysMs: [2000, 5000], geminiMinIntervalMs: 0, sleep });
+        generateContentMock = engine.ai.models.generateContent;
+        generateContentMock.mockReset();
+    });
+
+    afterEach(() => {
+        global.fetch = originalFetch;
+        process.env.OPENROUTER_API_KEY = originalApiKey;
+    });
+
+    test('waits and retries Gemini after a 429, without touching OpenRouter when the retry succeeds', async () => {
+        generateContentMock
+            .mockRejectedValueOnce(rateLimit())
+            .mockResolvedValueOnce({ text: JSON.stringify({ action: 'HOLD', target_symbol: 'NONE', confidence_score: 40, reasoning: 'Retry worked.' }) });
+        global.fetch = jest.fn();
+
+        const proposal = await engine.proposeTradeSetup(marketData);
+
+        expect(sleep).toHaveBeenCalledWith(2000);
+        expect(generateContentMock).toHaveBeenCalledTimes(2);
+        expect(global.fetch).not.toHaveBeenCalled();
+        expect(proposal.reasoning).toBe('Retry worked.');
+    });
+
+    test('backs off with growing delays, then falls through to OpenRouter once retries are exhausted', async () => {
+        generateContentMock.mockRejectedValue(rateLimit());
+        global.fetch = jest.fn().mockResolvedValueOnce({
+            ok: true,
+            json: async () => ({ choices: [{ message: { content: JSON.stringify({ action: 'HOLD', target_symbol: 'NONE', confidence_score: 10, reasoning: 'Fallback.' }) } }] })
+        });
+
+        const proposal = await engine.proposeTradeSetup(marketData);
+
+        expect(sleep.mock.calls.map(c => c[0])).toEqual([2000, 5000]);
+        expect(generateContentMock).toHaveBeenCalledTimes(3);
+        expect(global.fetch).toHaveBeenCalledTimes(1);
+        expect(proposal.reasoning).toBe('Fallback.');
+    });
+
+    test('skips the backoff and falls back immediately when the daily free-tier quota is exhausted', async () => {
+        generateContentMock.mockRejectedValueOnce(Object.assign(
+            new Error('Quota exceeded for metric: generate_content_free_tier_requests, quotaId: GenerateRequestsPerDayPerProjectPerModel-FreeTier'),
+            { status: 429 }
+        ));
+        global.fetch = jest.fn().mockResolvedValueOnce({
+            ok: true,
+            json: async () => ({ choices: [{ message: { content: JSON.stringify({ action: 'HOLD', target_symbol: 'NONE', confidence_score: 10, reasoning: 'Fallback.' }) } }] })
+        });
+
+        await engine.proposeTradeSetup(marketData);
+
+        expect(sleep).not.toHaveBeenCalled();
+        expect(generateContentMock).toHaveBeenCalledTimes(1);
+        expect(global.fetch).toHaveBeenCalledTimes(1);
+    });
+
+    test('does not back off on a non-retryable Gemini error', async () => {
+        generateContentMock.mockRejectedValueOnce(new Error('Invalid API key'));
+
+        await expect(engine.proposeTradeSetup(marketData)).rejects.toThrow('Agent A (Trader) unavailable');
+        expect(sleep).not.toHaveBeenCalled();
+    });
+});
+
+describe('OpenRouter JSON mode and prompt hygiene', () => {
+    let engine;
+    let generateContentMock;
+    const originalFetch = global.fetch;
+    const originalApiKey = process.env.OPENROUTER_API_KEY;
+
+    const marketData = { symbol: 'TEST', price: 10, dailyChange: '5.00', volume: 1000000, sma_20: 9, rsi_14: 65 };
+
+    beforeEach(() => {
+        process.env.OPENROUTER_API_KEY = 'test_openrouter_key';
+        engine = new AIEngine({ geminiRetryDelaysMs: [], geminiMinIntervalMs: 0 });
+        generateContentMock = engine.ai.models.generateContent;
+        generateContentMock.mockReset();
+    });
+
+    afterEach(() => {
+        global.fetch = originalFetch;
+        process.env.OPENROUTER_API_KEY = originalApiKey;
+    });
+
+    test('requests json_object output from OpenRouter', async () => {
+        generateContentMock.mockRejectedValueOnce(Object.assign(new Error('Service Unavailable'), { status: 503 }));
+        global.fetch = jest.fn().mockResolvedValueOnce({
+            ok: true,
+            json: async () => ({ choices: [{ message: { content: JSON.stringify({ action: 'HOLD', target_symbol: 'NONE', confidence_score: 10, reasoning: 'ok' }) } }] })
+        });
+
+        await engine.proposeTradeSetup(marketData);
+
+        const body = JSON.parse(global.fetch.mock.calls[0][1].body);
+        expect(body.response_format).toEqual({ type: 'json_object' });
+    });
+
+    test('neither agent prompt tells the model to avoid quotation marks (it caused unquoted JSON values)', async () => {
+        generateContentMock
+            .mockResolvedValueOnce({ text: JSON.stringify({ action: 'BUY', target_symbol: 'TEST', confidence_score: 80, reasoning: 'Breakout.' }) })
+            .mockResolvedValueOnce({ text: JSON.stringify({ approved: false, risk_score: 50, veto_reason: 'x', audit_notes: 'x' }) });
+
+        await engine.evaluateBatch(marketData);
+
+        for (const [{ contents }] of generateContentMock.mock.calls) {
+            expect(contents).not.toMatch(/quotation marks|internal quotes/i);
+        }
+    });
+});
+
+describe('Agent B audit inputs', () => {
+    let engine;
+    let generateContentMock;
+
+    const marketData = { symbol: 'TEST', price: 10, dailyChange: '12.00', volume: 3000000, avg_volume_20: 1000000, sma_20: 9, rsi_14: 72 };
+
+    beforeEach(() => {
+        engine = new AIEngine({ geminiRetryDelaysMs: [], geminiMinIntervalMs: 0 });
+        generateContentMock = engine.ai.models.generateContent;
+        generateContentMock.mockReset();
+        generateContentMock
+            .mockResolvedValueOnce({ text: JSON.stringify({ action: 'BUY', target_symbol: 'TEST', confidence_score: 80, reasoning: 'Breakout.' }) })
+            .mockResolvedValueOnce({ text: JSON.stringify({ approved: true, risk_score: 30, veto_reason: '', audit_notes: 'ok' }) });
+    });
+
+    test('gives Agent B the average volume and the real position size TradingBot would place', async () => {
+        await engine.evaluateBatch(marketData, { activeCapital: 50000 });
+
+        const auditPrompt = generateContentMock.mock.calls[1][0].contents;
+        // 50000 * 0.80 * 0.15 = $6000 -> 600 shares at $10 -> 0.06% of 1,000,000 ADV
+        expect(auditPrompt).toContain('20-Day Average Daily Volume: 1000000');
+        expect(auditPrompt).toContain("Today's Volume vs Average: 3.00x");
+        expect(auditPrompt).toContain('Shares: 600');
+        expect(auditPrompt).toContain('Notional: $6000.00');
+        expect(auditPrompt).toContain('Position as % of Average Daily Volume: 0.0600%');
+    });
+
+    test('no longer primes Agent B to assume the trader is overconfident', async () => {
+        await engine.evaluateBatch(marketData, { activeCapital: 50000 });
+
+        const auditPrompt = generateContentMock.mock.calls[1][0].contents;
+        expect(auditPrompt).not.toMatch(/assume the trader is overconfident|CHALLENGE, not rubber-stamp/i);
+        expect(auditPrompt).toMatch(/objective risk auditor/i);
+    });
+
+    test('still audits (with unknown sizing) when no capital figure is passed', async () => {
+        const decision = await engine.evaluateBatch(marketData);
+
+        const auditPrompt = generateContentMock.mock.calls[1][0].contents;
+        expect(auditPrompt).toContain('Shares: unknown');
+        expect(decision.riskApproved).toBe(true);
+    });
+});
+
+describe('Gemini 15 RPM pacing', () => {
+    test('spaces consecutive Gemini requests at least 4s apart', async () => {
+        const sleep = jest.fn().mockResolvedValue(undefined);
+        const engine = new AIEngine({ geminiRetryDelaysMs: [], sleep });
+        const reply = { text: JSON.stringify({ action: 'HOLD', target_symbol: 'NONE', confidence_score: 40, reasoning: 'Paced.' }) };
+        engine.ai.models.generateContent.mockReset();
+        engine.ai.models.generateContent.mockResolvedValue(reply);
+        const marketData = { symbol: 'TEST', price: 10, dailyChange: '5.00', volume: 1000000, sma_20: 9, rsi_14: 65 };
+
+        await engine.proposeTradeSetup(marketData);
+        expect(sleep).not.toHaveBeenCalled();
+
+        await engine.proposeTradeSetup(marketData);
+        expect(sleep).toHaveBeenCalledTimes(1);
+        expect(sleep.mock.calls[0][0]).toBeGreaterThan(3900);
+        expect(sleep.mock.calls[0][0]).toBeLessThanOrEqual(4000);
+    });
+});
+
+describe('SHEFA news gate', () => {
+    let engine;
+    let generateContentMock;
+    const news = {
+        available: true,
+        symbol: [{ at: '2026-11-09T18:00:00Z', headline: 'TEST announces $200M share offering', summary: 'Dilutive raise.' }],
+        macro: [{ at: '2026-11-09T17:00:00Z', headline: 'Utilities rally on grid demand', summary: '' }],
+    };
+    const marketData = { symbol: 'TEST', price: 10, dailyChange: '5.00', volume: 1000000, avg_volume_20: 800000, sma_20: 9, rsi_14: 65, news };
+    const buy = { action: 'BUY', target_symbol: 'TEST', confidence_score: 80, news_sentiment: -0.4, catalyst: 'offering', reasoning: 'Breakout.' };
+    const promptOf = call => call[0].contents;
+
+    beforeEach(() => {
+        engine = new AIEngine({ geminiMinIntervalMs: 0 });
+        generateContentMock = engine.ai.models.generateContent;
+        generateContentMock.mockReset();
+    });
+
+    test('both agents receive the SHEFA persona and the fenced headlines', async () => {
+        generateContentMock
+            .mockResolvedValueOnce({ text: JSON.stringify(buy) })
+            .mockResolvedValueOnce({ text: JSON.stringify({ approved: true, risk_score: 30, news_risk: 'low', veto_reason: '', audit_notes: 'ok' }) });
+
+        await engine.evaluateBatch(marketData);
+
+        for (const call of generateContentMock.mock.calls) {
+            expect(promptOf(call)).toContain('You are SHEFA');
+            expect(promptOf(call)).toContain('<<<NEWS');
+            expect(promptOf(call)).toContain('TEST announces $200M share offering');
+            expect(promptOf(call)).toContain('Utilities rally on grid demand');
+        }
+        expect(promptOf(generateContentMock.mock.calls[1])).toContain('News Sentiment (trader\'s read): -0.4');
+    });
+
+    test('a high news_risk is a veto even if the auditor says approved', async () => {
+        generateContentMock
+            .mockResolvedValueOnce({ text: JSON.stringify(buy) })
+            .mockResolvedValueOnce({ text: JSON.stringify({ approved: true, risk_score: 30, news_risk: 'high', veto_reason: '', audit_notes: 'offering' }) });
+
+        const decision = await engine.evaluateBatch(marketData);
+
+        expect(decision.riskApproved).toBe(false);
+        expect(decision.action).toBe('HOLD');
+        expect(decision.reasoning).toContain('High real-world news risk');
+    });
+
+    test('formatNewsContext flags an unavailable feed instead of going silent', () => {
+        expect(AIEngine.formatNewsContext({ available: false, symbol: [], macro: [] })).toContain('unavailable');
+        expect(AIEngine.formatNewsContext(undefined)).toContain('not provided');
     });
 });

@@ -1,9 +1,4 @@
-jest.mock('yahoo-finance2', () => ({
-    default: { quote: jest.fn() }
-}));
-
 const BrokerClient = require('../src/BrokerClient');
-const yahooFinance = require('yahoo-finance2').default;
 
 // Mock the global fetch function
 global.fetch = jest.fn(() =>
@@ -173,6 +168,7 @@ describe('BrokerClient Market Scanner', () => {
 
         expect(setups).toHaveLength(1);
         expect(setups[0].volume).toBe(1019); // the last bar's `v`, not `mover.volume` (undefined)
+        expect(setups[0].avg_volume_20).toBe(1009); // mean of the prior bars 1000..1018, today's excluded
     });
 });
 
@@ -236,54 +232,14 @@ describe('BrokerClient Position Reconciliation Support', () => {
             expect.any(Object)
         );
         expect(result).toEqual(orders);
-    });
-});
-
-describe('BrokerClient Fundamental Data Fallback', () => {
-    let broker;
-
-    beforeEach(() => {
-        broker = new BrokerClient();
-        fetch.mockClear();
-        yahooFinance.quote.mockReset();
+        expect(global.fetch.mock.calls[0][0]).not.toContain('nested=true');
     });
 
-    test('fetchFundamentals returns the Finnhub payload directly when Finnhub is reachable', async () => {
-        fetch.mockResolvedValueOnce({
-            ok: true,
-            json: () => Promise.resolve({ c: 150.25, d: 1.5, dp: 1.01 })
-        });
+    test('getOrderHistory can ask Alpaca to nest bracket legs under their entry order', async () => {
+        global.fetch = jest.fn(() => Promise.resolve({ ok: true, json: () => Promise.resolve([]) }));
 
-        const result = await broker.fetchFundamentals('AAPL');
+        await broker.getOrderHistory('WETO', { nested: true });
 
-        expect(yahooFinance.quote).not.toHaveBeenCalled();
-        expect(result).toEqual({ c: 150.25, d: 1.5, dp: 1.01 });
-    });
-
-    test('fetchFundamentals falls back to yahoo-finance2 and matches Finnhub JSON shape when Finnhub errors', async () => {
-        fetch.mockResolvedValueOnce({ ok: false, status: 500 });
-        yahooFinance.quote.mockResolvedValueOnce({
-            regularMarketPrice: 150.25,
-            regularMarketChange: 1.5,
-            regularMarketChangePercent: 1.01
-        });
-
-        const result = await broker.fetchFundamentals('AAPL');
-
-        expect(yahooFinance.quote).toHaveBeenCalledWith('AAPL');
-        expect(result).toEqual({ c: 150.25, d: 1.5, dp: 1.01 });
-    });
-
-    test('fetchFundamentals falls back to yahoo-finance2 when the Finnhub request itself throws', async () => {
-        fetch.mockRejectedValueOnce(new Error('network down'));
-        yahooFinance.quote.mockResolvedValueOnce({
-            regularMarketPrice: 200,
-            regularMarketChange: -2,
-            regularMarketChangePercent: -0.99
-        });
-
-        const result = await broker.fetchFundamentals('MSFT');
-
-        expect(result).toEqual({ c: 200, d: -2, dp: -0.99 });
+        expect(global.fetch.mock.calls[0][0]).toContain('nested=true');
     });
 });

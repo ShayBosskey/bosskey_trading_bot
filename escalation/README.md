@@ -1,7 +1,7 @@
 # Voice Escalation Stack
 
-When the trading bot crashes, this stack **phones you** over Tailscale. A British
-butler voice reads you the error, you say what to do, and after you confirm on the
+When the trading bot crashes, this stack **phones you** over Tailscale. SHEFA, the
+bot's British assistant voice, introduces herself and reads you the error, you say what to do, and after you confirm on the
 keypad it carries out the command. Everything runs locally on the Pi; nothing here
 costs money or calls a paid API.
 
@@ -21,7 +21,7 @@ bot crashes ─► ErrorHandler ─► VoiceEscalator ──POST /escalate──
 | Service    | Image                                   | Job                                      | Reachable at                         |
 |------------|-----------------------------------------|------------------------------------------|--------------------------------------|
 | `asterisk` | built from `asterisk/` (Alpine, Ast. 20)| SIP server, dials your phone             | Tailscale IP, UDP 5060 + 10000–10100 |
-| `piper`    | `lscr.io/linuxserver/piper`             | Text → speech (`en_GB-alan-medium`)      | internal only (Wyoming, 10200)       |
+| `piper`    | `lscr.io/linuxserver/piper`             | Text → speech (`en_GB-alba-medium`)      | internal only (Wyoming, 10200)       |
 | `whisper`  | built from `whisper/` (whisper.cpp v1.9.4)| Speech → text                          | internal only (HTTP, 8080)           |
 | `ollama`   | `ollama/ollama`                         | Maps free-form speech to one action      | internal only (HTTP, 11434)          |
 | `bridge`   | built from `bridge/` (Node 22)          | Glue: HTTP API, .call files, the call    | `127.0.0.1:3100` (API), `127.0.0.1:4573` (AGI) |
@@ -105,7 +105,7 @@ ESCALATION_TOKEN=<same value as in escalation/.env>
 ```
 
 `ADMIN_API_TOKEN` in the bot's `.env` must be set (32+ chars), otherwise the Dashboard API
-refuses the halt command and the butler will tell you so on the call.
+refuses the halt command and SHEFA will tell you so on the call.
 
 ### Step 3 — Launch
 
@@ -189,7 +189,7 @@ waits for the Tailscale IP to come up before it binds SIP.
 |---------|-------|
 | Phone never rings | `pjsip show contacts` (above) must list the phone. If it doesn't: is Tailscale connected on the phone, is the SIP password correct, is the app allowed to run in the background? |
 | Rings, but silence / one-way audio | The phone must reach UDP 10000–10100 on the Tailscale IP. Dial 600 to test. Make sure the SIP app isn't forcing TCP/TLS or SRTP. |
-| Butler says "an error has occurred" | Piper or whisper isn't ready: `docker compose logs piper whisper`. |
+| SHEFA says "an error has occurred" | Piper or whisper isn't ready: `docker compose logs piper whisper`. |
 | `whisper` keeps restarting with exit code 132 | SIGILL: the binary uses CPU instructions the Pi lacks. That's why `whisper/Dockerfile` compiles whisper.cpp on the Pi (`GGML_NATIVE=ON`) instead of using the upstream `main-arm64` image, which needs ARMv8.2+ (a Pi 4 is ARMv8.0). If you move the stack to another machine, rebuild it there with `docker compose build whisper`. |
 | Long pause after you speak | Normal on a Pi 4 (roughly 5–15 s for whisper plus, when needed, the LLM). For speed, use `WHISPER_MODEL=tiny.en` and/or `OLLAMA_MODEL=qwen2.5:0.5b`, then `docker compose up -d`. |
 | "The bot refused the command" | `BOT_ADMIN_TOKEN` must equal the bot's `ADMIN_API_TOKEN`, and `bosskey-api` must be running under PM2 (`pm2 ls`). |

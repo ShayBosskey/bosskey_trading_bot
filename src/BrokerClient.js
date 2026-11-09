@@ -1,8 +1,6 @@
 const path = require('path');
 require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
 const { Alpaca } = require('@alpacahq/alpaca-trade-api');
-const FundamentalClient = require('./FundamentalClient');
-const yahooFinance = require('yahoo-finance2').default;
 const Config = require('./Config');
 
 class BrokerClient {
@@ -97,20 +95,17 @@ class BrokerClient {
                     const sma_20 = this.calculateSMA(closePrices, 20);
                     
                     if (sma_20 >= 5.00) {
-
-			const fundamentalClient = new FundamentalClient();
-                        const earningsRisk = await fundamentalClient.hasUpcomingEarnings(mover.symbol);
-                        
-                        if (earningsRisk) {
-                            console.log(`[Broker] Discarding ${mover.symbol} due to impending earnings report.`);
-                            continue; // Skip this stock and move to the next one
-                        }
+                        // Baseline excludes today's bar, so a spike day is compared
+                        // against normal volume rather than inflating its own average.
+                        const priorBars = bars.slice(-21, -1);
+                        const avgVolume20 = priorBars.reduce((sum, bar) => sum + bar.v, 0) / priorBars.length;
 
                         validSetups.push({
                             symbol: mover.symbol,
                             price: mover.price,
                             dailyChange: mover.percent_change.toFixed(2),
                             volume: bars[bars.length - 1].v,
+                            avg_volume_20: Math.round(avgVolume20),
                             sma_20: sma_20,
                             rsi_14: this.calculateRSI(closePrices, 14),
 			    rawBars: bars
@@ -125,22 +120,6 @@ class BrokerClient {
         } catch (err) {
             console.error(`[Broker Error]: ${err.message}`);
             throw err;
-        }
-    }
-
-    async fetchFundamentals(symbol) {
-        try {
-            const response = await fetch(`https://finnhub.io/api/v1/quote?symbol=${symbol}&token=${process.env.FINNHUB_API_KEY}`);
-            if (!response.ok) throw new Error('Finnhub fetch failed.');
-            return await response.json();
-        } catch (error) {
-            console.log(`[Fundamental Warning] Finnhub unavailable for ${symbol}. Routing to Yahoo Finance fallback...`);
-            const quote = await yahooFinance.quote(symbol);
-            return {
-                c: quote.regularMarketPrice,
-                d: quote.regularMarketChange,
-                dp: quote.regularMarketChangePercent
-            };
         }
     }
 
@@ -354,9 +333,10 @@ class BrokerClient {
 
     // Full order history (every status, all time) for one symbol. Used to fully
     // reconstruct what actually happened to a position before repairing a row -
-    // never inferred from just the most recent order.
-    async getOrderHistory(symbol) {
-        const url = `${this.#getBaseUrl()}/v2/orders?status=all&symbols=${symbol}&limit=500&direction=asc`;
+    // never inferred from just the most recent order. With `nested`, Alpaca rolls
+    // bracket take-profit/stop-loss legs up under their entry order's `legs`.
+    async getOrderHistory(symbol, { nested = false } = {}) {
+        const url = `${this.#getBaseUrl()}/v2/orders?status=all&symbols=${symbol}&limit=500&direction=asc${nested ? '&nested=true' : ''}`;
         const response = await fetch(url, { headers: this.#authHeaders() });
 
         if (!response.ok) throw new Error(`Alpaca Orders API Error: ${response.status}`);

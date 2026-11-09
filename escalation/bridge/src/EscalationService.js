@@ -59,7 +59,8 @@ class EscalationService {
         const hour = Number(new Intl.DateTimeFormat('en-GB', { hour: 'numeric', hourCycle: 'h23', timeZone: this.timeZone }).format(new Date(this.now())));
         const greeting = hour < 12 ? 'Good morning' : hour < 18 ? 'Good afternoon' : 'Good evening';
 
-        return `${greeting}, sir. I regret to inform you that the trading system has reported a critical failure. ` +
+        return `${greeting}, sir. This is SHEFA, your trading assistant. I am so sorry to trouble you, ` +
+            `but the trading system has reported a critical failure. ` +
             `${EscalationService.speakable(title, 120)}. ${EscalationService.speakable(message, 300)}`;
     }
 

@@ -18,3 +18,11 @@ describe('Dynamic Risk Engine (ATR)', () => {
         expect(stops.takeProfitPrice).toBe(130); 
     });
 });
+
+describe('Position sizing', () => {
+    test('sizes a position at confidence x 15% of active capital, in whole shares', () => {
+        const { allocation, shares } = RiskEngine.calculatePositionSize(50000, 80, 10);
+        expect(allocation).toBeCloseTo(6000);
+        expect(shares).toBe(600);
+    });
+});
