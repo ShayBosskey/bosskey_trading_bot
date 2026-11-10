@@ -119,12 +119,39 @@ describe('ExitEngineWatchdog', () => {
 
 describe('SIP registration check', () => {
     const { checkSipRegistration } = require('../src/ExitEngineWatchdog');
+    const os = require('os');
+    let stateFile;
+    beforeEach(() => {
+        stateFile = path.join(os.tmpdir(), `sip-state-test-${process.pid}-${Math.random()}.json`);
+    });
+    afterEach(() => fs.rmSync(stateFile, { force: true }));
 
-    test('a registered phone is silent; an unregistered one pushes a warning', async () => {
+    test('a registered phone is silent', async () => {
         const notifier = { push: jest.fn() };
-        expect(await checkSipRegistration({ notifier, registered: true })).toBe('registered');
+        expect(await checkSipRegistration({ notifier, registered: true, stateFile })).toBe('registered');
         expect(notifier.push).not.toHaveBeenCalled();
-        expect(await checkSipRegistration({ notifier, registered: false })).toBe('unregistered');
+    });
+
+    test('one failed check is a blip: no push until the second consecutive failure', async () => {
+        const notifier = { push: jest.fn() };
+        expect(await checkSipRegistration({ notifier, registered: false, stateFile })).toBe('pending');
+        expect(notifier.push).not.toHaveBeenCalled();
+        expect(await checkSipRegistration({ notifier, registered: false, stateFile })).toBe('unregistered');
         expect(notifier.push.mock.calls[0][0]).toBe('Voice Escalation Unreachable');
+    });
+
+    test('a success in between resets the count', async () => {
+        const notifier = { push: jest.fn() };
+        await checkSipRegistration({ notifier, registered: false, stateFile });
+        await checkSipRegistration({ notifier, registered: true, stateFile });
+        expect(await checkSipRegistration({ notifier, registered: false, stateFile })).toBe('pending');
+        expect(notifier.push).not.toHaveBeenCalled();
+    });
+
+    test('an un-queryable Asterisk is also debounced, then reported as unknown', async () => {
+        const notifier = { push: jest.fn() };
+        expect(await checkSipRegistration({ notifier, registered: null, stateFile })).toBe('pending');
+        expect(await checkSipRegistration({ notifier, registered: null, stateFile })).toBe('unknown');
+        expect(notifier.push).toHaveBeenCalledTimes(1);
     });
 });

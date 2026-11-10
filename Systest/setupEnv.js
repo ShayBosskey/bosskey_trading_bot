@@ -4,6 +4,7 @@
 const os = require('os');
 const path = require('path');
 
+process.env.SIP_CHECK_STATE_FILE = path.join(os.tmpdir(), `sip-check-state-test-${process.pid}-${process.env.JEST_WORKER_ID || 0}.json`);
 process.env.NOTIFIER_STATE_FILE = path.join(os.tmpdir(), `notifier-state-test-${process.pid}-${process.env.JEST_WORKER_ID || 0}.json`);
 
 // Tests must never reach the real phone. Reconciliation/PositionsSync tests build

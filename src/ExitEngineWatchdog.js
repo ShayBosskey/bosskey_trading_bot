@@ -15,6 +15,11 @@ const { HEARTBEAT_FILE } = require('./CryptoExitEngine');
 
 const STALE_AFTER_MS = 3 * 60 * 1000;
 const SIP_ENDPOINT = process.env.SIP_USERNAME || 'mobile';
+// The watchdog runs every 2 min as a fresh process, so the failure streak lives
+// on disk. One missed qualify ping is usually a Tailscale/cellular blip that heals
+// within 30 s; only SIP_FAILS_BEFORE_ALERT consecutive failures push an alert.
+const SIP_FAILS_BEFORE_ALERT = 2;
+const SIP_STATE_FILE = process.env.SIP_CHECK_STATE_FILE || path.resolve(__dirname, '../run/sip-check-state.json');
 
 // The voice call can only ring a phone that is registered with Asterisk. A
 // restart of the asterisk container drops registrations until the phone app
@@ -80,9 +85,37 @@ async function runWatchdog({ notifier = new Notifier(), escalator = new VoiceEsc
     return 'down-exposed';
 }
 
-async function checkSipRegistration({ notifier = new Notifier(), registered } = {}) {
+function readSipFailures(file) {
+    try {
+        return JSON.parse(fs.readFileSync(file, 'utf8')).consecutiveFailures || 0;
+    } catch {
+        return 0;
+    }
+}
+
+function writeSipFailures(file, consecutiveFailures) {
+    try {
+        fs.mkdirSync(path.dirname(file), { recursive: true });
+        fs.writeFileSync(file, JSON.stringify({ consecutiveFailures, at: new Date().toISOString() }));
+    } catch (err) {
+        console.error(`[Watchdog] Could not save SIP check state: ${err.message}`);
+    }
+}
+
+async function checkSipRegistration({ notifier = new Notifier(), registered, stateFile = SIP_STATE_FILE } = {}) {
     const state = registered !== undefined ? registered : await sipClientRegistered();
-    if (state === true) return 'registered';
+    if (state === true) {
+        writeSipFailures(stateFile, 0);
+        return 'registered';
+    }
+
+    const failures = readSipFailures(stateFile) + 1;
+    writeSipFailures(stateFile, failures);
+    if (failures < SIP_FAILS_BEFORE_ALERT) {
+        console.log(`[Watchdog] SIP check failed (${failures}/${SIP_FAILS_BEFORE_ALERT}); waiting for the next check before alerting.`);
+        return 'pending';
+    }
+
     const detail = state === null
         ? 'Could not query Asterisk (is the escalation stack running?).'
         : `Your SIP client (${SIP_ENDPOINT}) is not registered with Asterisk.`;
