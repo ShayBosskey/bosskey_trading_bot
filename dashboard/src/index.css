@@ -2,7 +2,27 @@
 @tailwind components;
 @tailwind utilities;
 
+/* SHEFA "Royal Violet" theme. One place to retune the whole dashboard: Tailwind's
+   shefa-* colors read these channels (see tailwind.config.js), so opacity
+   modifiers like bg-shefa-accent/10 keep working.
+   - violet  #7851A9  brand: fills, borders, primary buttons (3.1:1 on panel - never body text)
+   - accent  #B39DDB  text and icons on dark surfaces (7.6:1 on panel)
+   - bg/panel        violet-tinted near-blacks */
+:root {
+  --shefa-bg: 14 11 20;        /* #0E0B14 */
+  --shefa-panel: 24 19 31;     /* #18131F */
+  --shefa-violet: 120 81 169;  /* #7851A9 */
+  --shefa-accent: 179 157 219; /* #B39DDB */
+  --shefa-glow: 120 81 169;
+  color-scheme: dark;
+}
+
 body {
-  background-color: #0B1115;
+  background-color: rgb(var(--shefa-bg));
   color: #ffffff;
+}
+
+/* Jarvis-style halo for the SHEFA wordmark and live indicators. */
+.shefa-glow {
+  text-shadow: 0 0 18px rgb(var(--shefa-glow) / 0.65);
 }

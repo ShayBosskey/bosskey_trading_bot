@@ -6,6 +6,8 @@ const express = require('express');
 const cors = require('cors');
 const DatabaseClient = require('./DatabaseClient');
 const Config = require('./Config');
+const SystemHealth = require('./SystemHealth');
+const PotSplit = require('./PotSplit');
 
 const app = express();
 const PORT = process.env.API_PORT || 3000;
@@ -89,7 +91,10 @@ app.get('/api/v1/portfolio', async (req, res) => {
             openPositions: positionsRes.rows,
             tradeHistory: historyQuery.rows,
             activeSlotCount: positionsRes.rows.length,
-            maxSlots: 5
+            maxSlots: 5,
+            // The split Settlement applies on a winning day, as effective shares
+            // of the day's net, so the Capital Pots panel can't drift from it.
+            potShares: PotSplit.effectiveShares()
         });
     } catch (error) {
         console.error(`[API Error]: ${error.message}`);
@@ -108,6 +113,50 @@ app.get('/api/v1/logs', async (req, res) => {
         res.json(logsRes.rows);
     } catch (error) {
         res.status(500).json({ error: 'Internal Server Error fetching logs.' });
+    } finally {
+        await db.disconnect();
+    }
+});
+
+// Endpoint 3b: Host telemetry (CPU, RAM, root disk, SoC temperature). Read-only
+// and dependency-free; see SystemHealth.js.
+app.get('/api/v1/system/health', async (req, res) => {
+    try {
+        res.json(await SystemHealth.snapshot());
+    } catch (error) {
+        console.error(`[API Error]: system health failed: ${error.message}`);
+        res.status(500).json({ error: 'Internal Server Error reading system health.' });
+    }
+});
+
+// Endpoint 3c: SHEFA's calendar - the active goal, the fund's progress toward it,
+// and her daily milestones (last ~6 weeks of verdicts plus the planned horizon).
+app.get('/api/v1/milestones', async (req, res) => {
+    const db = new DatabaseClient();
+    try {
+        await db.connect();
+        const [goalRes, potsRes, rowsRes] = await Promise.all([
+            db.client.query(`SELECT id, title, target_usd::float8 AS target_usd, deadline::text AS deadline
+                               FROM shefa_goals WHERE active LIMIT 1`),
+            db.client.query('SELECT shefa_fund::float8 AS shefa_fund FROM capital_pots WHERE id = 1'),
+            db.client.query(`SELECT target_date::text AS date, target_net_profit::float8 AS target_net,
+                                    target_fund_total::float8 AS target_fund, pace_weight::float8 AS weight, focus,
+                                    actual_net_profit::float8 AS actual_net, actual_fund_total::float8 AS actual_fund,
+                                    status, self_evaluation, model, evaluated_at
+                               FROM shefa_milestones
+                              WHERE target_date BETWEEN (now() AT TIME ZONE 'Europe/Zurich')::date - 42
+                                                    AND (now() AT TIME ZONE 'Europe/Zurich')::date + 31
+                              ORDER BY target_date`),
+        ]);
+        res.json({
+            goal: goalRes.rows[0] || null,
+            fund: potsRes.rows[0]?.shefa_fund ?? 0,
+            fundShare: PotSplit.SHEFA_FUND_SHARE,
+            milestones: rowsRes.rows,
+        });
+    } catch (error) {
+        console.error(`[API Error]: milestones failed: ${error.message}`);
+        res.status(500).json({ error: 'Internal Server Error fetching milestones.' });
     } finally {
         await db.disconnect();
     }
@@ -163,6 +212,7 @@ app.use((err, req, res, next) => {
 });
 
 if (require.main === module) {
+    require('./Banner').printBanner('Dashboard API');
     app.listen(PORT, HOST, () => {
         console.log(`[Dashboard API] Server securely running and listening on ${HOST}:${PORT}`);
     });

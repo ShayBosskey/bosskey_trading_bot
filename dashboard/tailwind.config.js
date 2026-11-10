@@ -1,4 +1,6 @@
 /** @type {import('tailwindcss').Config} */
+const fromVar = (name) => `rgb(var(--${name}) / <alpha-value>)`;
+
 export default {
   content: [
     "./index.html",
@@ -6,10 +8,12 @@ export default {
   ],
   theme: {
     extend: {
+      // Values live as CSS variables in src/index.css.
       colors: {
-        'bosskey-dark': '#0B1115',
-        'bosskey-panel': '#161D22',
-        'bosskey-green': '#A1E533',
+        'shefa-bg': fromVar('shefa-bg'),
+        'shefa-panel': fromVar('shefa-panel'),
+        'shefa-violet': fromVar('shefa-violet'),
+        'shefa-accent': fromVar('shefa-accent'),
       }
     },
   },

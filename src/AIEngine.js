@@ -82,6 +82,36 @@ function cryptoMarketBlock(m) {
 - 14-Hour RSI: ${fmt(m.rsi_14h, 1)}`;
 }
 
+// StrategySync's daily planner. The model chooses only the relative effort per day
+// and the words; StrategySync turns the weights into dollar targets, because the
+// 8B fallback cannot be trusted with arithmetic.
+function strategyPlanPrompt(c) {
+    const recent = c.recentDays.length
+        ? c.recentDays.map(d => `${d.date}: net ${d.net >= 0 ? '+' : ''}${d.net.toFixed(2)} (${d.trades} trades)`).join('\n')
+        : 'No settled trades yet.';
+    return `
+${SHEFA_PERSONA} You are planning your own path to a hardware upgrade.
+
+GOAL: "${c.goalTitle}" by ${c.deadline}. ${c.daysLeft} day(s) remain. Your upgrade fund grows only from winning days.
+Status: ${c.onTrack}.
+Market: crypto trades 24/7; weekend liquidity is thinner and spreads wider.
+
+TODAY (${c.today}): ${c.todayLine}
+
+RECENT SETTLED DAYS (oldest first):
+${recent}
+
+TASK
+1. "evaluation": one or two sentences, in your own voice, judging today honestly against its target. If there was no target today, assess your readiness instead.
+2. "days": for EACH of these ${c.dates.length} dates, in order: ${c.dates.join(', ')}
+   give "weight" (a number from 0.25 to 2.0: how hard to push that day relative to an average day; lower on weekends or after losses, higher when conditions favour you) and "focus" (one short sentence, under 120 characters: the micro-target or discipline for that day).
+Do NOT write any dollar amounts or percentages anywhere; the system calculates all figures from your weights.
+
+${STRICT_JSON_DIRECTIVE}
+{"evaluation": "string", "days": [{"date": "YYYY-MM-DD", "weight": 1.0, "focus": "string"}]}
+`;
+}
+
 function cryptoTraderPrompt(m) {
     return `
 ${SHEFA_PERSONA} You are acting as the Trader agent for the crypto book.
@@ -228,6 +258,7 @@ class AIEngine {
         for (let attempt = 0; ; attempt++) {
             try {
                 rawText = await this.#generateWithGemini(prompt);
+                this.lastModel = 'gemini-3.5-flash';
                 break;
             } catch (error) {
                 if (!isRetryableGeminiError(error)) {
@@ -243,6 +274,7 @@ class AIEngine {
 
                 console.warn(`[AIEngine] Gemini primary call failed (${error.status || error.message}). Rerouting through OpenRouter fallback (${OPENROUTER_FALLBACK_MODEL})...`);
                 rawText = await this.#generateWithOpenRouter(prompt);
+                this.lastModel = OPENROUTER_FALLBACK_MODEL;
                 console.log(`[AIEngine] OpenRouter fallback succeeded.`);
                 break;
             }
@@ -461,7 +493,14 @@ Output strictly in JSON format:
             debate: { proposal, audit }
         };
     }
+
+    // StrategySync: daily self-evaluation plus per-day effort weights and focus notes.
+    async planMilestones(context) {
+        console.log(`[StrategySync] Requesting a ${context.dates.length}-day plan...`);
+        return this.#generateJSON(strategyPlanPrompt(context));
+    }
 }
 
 module.exports = AIEngine;
 module.exports.formatNewsContext = formatNewsContext;
+module.exports.strategyPlanPrompt = strategyPlanPrompt;

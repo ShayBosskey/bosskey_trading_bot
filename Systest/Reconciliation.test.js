@@ -119,6 +119,58 @@ describe('Position Reconciliation', () => {
         expect(updateTradeCall[1][1]).toBeCloseTo(-1787.52, 2);
         expect(updatePotsCall[1][0]).toBeCloseTo(-1787.52, 2);
     });
+
+    test('a winning reconciliation funds SHEFA via PotSplit and stamps settled_at so Settlement cannot book it twice', async () => {
+        reconciliation.__fixtureOpenTrades = [
+            { id: 31, symbol: 'WINR', buy_price: '10.00', qty: 100, action: 'BUY' }
+        ];
+        BrokerClient.prototype.getPositions.mockResolvedValue([]);
+        BrokerClient.prototype.getLastFilledOrder.mockResolvedValue({
+            side: 'sell', status: 'filled', filled_avg_price: '11.00', filled_at: '2026-11-10T14:00:00Z'
+        });
+
+        await reconciliation.run({ dryRun: false });
+
+        const calls = reconciliation.db.client.query.mock.calls;
+        const sqls = calls.map(([sql]) => sql.trim());
+        const firstWrite = sqls.findIndex(q => q.startsWith('UPDATE'));
+        expect(sqls.indexOf('BEGIN')).toBeGreaterThan(-1);
+        expect(sqls.indexOf('BEGIN')).toBeLessThan(firstWrite);
+        expect(sqls.indexOf('COMMIT')).toBeGreaterThan(firstWrite);
+
+        const closeCall = calls.find(([sql]) => sql.includes('UPDATE trade_analytics'));
+        expect(closeCall[0]).toContain('settled_at = NOW()');
+
+        const potsCall = calls.find(([sql]) => sql.includes('UPDATE capital_pots'));
+        expect(potsCall[0]).toContain('shefa_fund = shefa_fund + $5');
+        const [active, emergency, tax, personal, shefa] = potsCall[1];
+        const net = closeCall[1][1];
+        expect(net).toBeGreaterThan(0);
+        expect(shefa).toBeCloseTo(net * 0.10, 6);
+        expect(active + emergency + tax + personal + shefa).toBeCloseTo(net, 6);
+    });
+
+    test('a failed write rolls back and leaves capital_pots untouched', async () => {
+        reconciliation.__fixtureOpenTrades = [
+            { id: 32, symbol: 'FAIL', buy_price: '10.00', qty: 1, action: 'BUY' }
+        ];
+        BrokerClient.prototype.getPositions.mockResolvedValue([]);
+        BrokerClient.prototype.getLastFilledOrder.mockResolvedValue({
+            side: 'sell', status: 'filled', filled_avg_price: '12.00', filled_at: '2026-11-10T14:00:00Z'
+        });
+        const original = reconciliation.db.client.query.getMockImplementation();
+        reconciliation.db.client.query.mockImplementation((sql, params) => {
+            if (sql.includes('UPDATE trade_analytics')) return Promise.reject(new Error('disk full'));
+            return original ? original(sql, params) : Promise.resolve({ rows: [] });
+        });
+
+        await expect(reconciliation.run({ dryRun: false })).rejects.toThrow('disk full');
+
+        const sqls = reconciliation.db.client.query.mock.calls.map(([sql]) => sql.trim());
+        expect(sqls).toContain('ROLLBACK');
+        expect(sqls).not.toContain('COMMIT');
+        expect(sqls.some(s => s.includes('UPDATE capital_pots'))).toBe(false);
+    });
 });
 
 describe('Ghost row repair (fabricated CLOSED rows with no sell_price)', () => {

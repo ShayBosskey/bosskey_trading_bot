@@ -27,7 +27,7 @@ export default function ModeConfirmModal({ mode, current, pending, error, onConf
         role="alertdialog"
         aria-modal="true"
         aria-labelledby="mode-confirm-title"
-        className="w-full max-w-md bg-bosskey-panel border border-gray-800 rounded-2xl shadow-2xl p-5 md:p-6"
+        className="w-full max-w-md bg-shefa-panel border border-gray-800 rounded-2xl shadow-2xl p-5 md:p-6"
       >
         <div className="flex items-start justify-between gap-4 mb-4">
           <div className="flex items-center gap-3">
@@ -77,7 +77,7 @@ export default function ModeConfirmModal({ mode, current, pending, error, onConf
           <button
             onClick={onCancel}
             disabled={pending}
-            className="px-4 py-2 rounded-lg font-semibold text-gray-300 bg-bosskey-dark border border-gray-800 hover:text-white hover:border-gray-700 transition-colors disabled:opacity-40"
+            className="px-4 py-2 rounded-lg font-semibold text-gray-300 bg-shefa-bg border border-gray-800 hover:text-white hover:border-gray-700 transition-colors disabled:opacity-40"
           >
             Cancel
           </button>
@@ -85,7 +85,7 @@ export default function ModeConfirmModal({ mode, current, pending, error, onConf
             ref={confirmRef}
             onClick={onConfirm}
             disabled={pending}
-            className="px-4 py-2 rounded-lg font-bold text-bosskey-dark bg-bosskey-green hover:brightness-110 transition-all disabled:opacity-60 disabled:cursor-wait"
+            className="px-4 py-2 rounded-lg font-bold text-shefa-bg bg-shefa-accent hover:brightness-110 transition-all disabled:opacity-60 disabled:cursor-wait"
           >
             {pending ? 'Switching...' : `Switch to ${mode.id}`}
           </button>

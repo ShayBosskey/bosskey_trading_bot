@@ -514,6 +514,7 @@ class CryptoExitEngine {
 
 if (require.main === module) {
     attachGlobalErrorLogger('CryptoExitEngine');
+    require('./Banner').printBanner('Crypto Exit Engine');
     new CryptoExitEngine({ dryRun: process.argv.includes('--dry-run') }).start();
 }
 

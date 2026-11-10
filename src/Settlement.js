@@ -4,6 +4,7 @@ const DatabaseClient = require('./DatabaseClient');
 const Logger = require('./Logger');
 const Notifier = require('./Notifier');
 const attachGlobalErrorLogger = require('./ErrorHandler');
+const { SHEFA_FUND_SHARE, splitWinningDay } = require('./PotSplit');
 
 class Settlement {
     constructor() {
@@ -77,15 +78,15 @@ class Settlement {
             // 3. Pot Distribution Logic
             let report;
             if (dailyNetProfit > 0) {
-                // Winning Day: SHEFA's upgrade fund takes 20% of the day's net first,
-                // then the remaining 80% is split 50/20/20/10 so the tax and emergency
-                // vaults stay funded. A losing day gives the fund nothing.
-                const shefaAddition = dailyNetProfit * 0.20;
-                const distributable = dailyNetProfit - shefaAddition;
-                const activeAddition = distributable * 0.50;
-                const emergencyAddition = distributable * 0.20;
-                const taxAddition = distributable * 0.20;
-                const personalAddition = distributable * 0.10;
+                // Winning Day: SHEFA's upgrade fund takes its share (PotSplit, 10%) of
+                // the day's net first, then the remainder is split 50/20/20/10 so the
+                // tax and emergency vaults stay funded. A losing day gives the fund nothing.
+                const split = splitWinningDay(dailyNetProfit);
+                const shefaAddition = split.shefa_fund;
+                const activeAddition = split.active_capital;
+                const emergencyAddition = split.emergency_reserve;
+                const taxAddition = split.tax_vault;
+                const personalAddition = split.personal_payout;
 
                 await this.db.client.query(`
                     UPDATE capital_pots 
@@ -98,7 +99,7 @@ class Settlement {
                     WHERE id = 1
                 `, [activeAddition, emergencyAddition, taxAddition, personalAddition, shefaAddition]);
 
-                await this.logger.log(`Profit distributed: 20% SHEFA Fund, then 80% split 50% Active, 20% Emergency, 20% Tax, 10% Personal.`);
+                await this.logger.log(`Profit distributed: ${SHEFA_FUND_SHARE * 100}% SHEFA Fund, then the remaining ${100 - SHEFA_FUND_SHARE * 100}% split 50% Active, 20% Emergency, 20% Tax, 10% Personal.`);
 
                 report = [
                     "🟢 Winning Day Settled!",

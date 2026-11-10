@@ -3,6 +3,8 @@ import { LayoutDashboard, Wallet, Activity, ArrowUpRight, Terminal } from 'lucid
 import CapitalPotsChart from './components/CapitalPotsChart';
 import PerformanceMetrics from './components/PerformanceMetrics';
 import SystemModeToggle from './components/SystemModeToggle';
+import SystemHealthPanel from './components/SystemHealthPanel';
+import ShefaCalendar from './components/ShefaCalendar';
 
 function App() {
   const [portfolio, setPortfolio] = useState(null);
@@ -51,24 +53,24 @@ function App() {
     return () => clearInterval(interval);
   }, [fetchSystemData]);
 
-  if (loading) return <div className="flex h-screen items-center justify-center text-bosskey-green font-bold px-4 text-center">Initializing System...</div>;
+  if (loading) return <div className="flex h-screen items-center justify-center text-shefa-accent font-bold px-4 text-center">Initializing SHEFA…</div>;
   if (error) return <div className="flex h-screen items-center justify-center text-red-500 font-bold px-4 text-center">System Error: {error}</div>;
 
   return (
-    <div className="flex flex-col md:flex-row min-h-screen bg-bosskey-dark text-white font-sans md:overflow-hidden">
+    <div className="flex flex-col md:flex-row min-h-screen bg-shefa-bg text-white font-sans md:overflow-hidden">
 
       {/* Sidebar Navigation */}
-      <aside className="w-full md:w-64 bg-bosskey-panel flex flex-row md:flex-col items-center md:items-stretch justify-between md:justify-start gap-4 p-4 md:p-6 rounded-b-3xl md:rounded-b-none md:rounded-r-3xl md:my-4 md:ml-4">
-        <div className="flex items-center gap-3 md:mb-10 text-bosskey-green">
+      <aside className="w-full md:w-64 bg-shefa-panel flex flex-row md:flex-col items-center md:items-stretch justify-between md:justify-start gap-4 p-4 md:p-6 rounded-b-3xl md:rounded-b-none md:rounded-r-3xl md:my-4 md:ml-4">
+        <div className="flex items-center gap-3 md:mb-10 text-shefa-accent">
           <Activity size={28} className="shrink-0" />
-          <h1 className="text-xl md:text-2xl font-extrabold tracking-wider">BOSSKEY</h1>
+          <h1 className="text-xl md:text-2xl font-extrabold tracking-[0.3em] shefa-glow">SHEFA</h1>
         </div>
         <nav className="flex flex-row md:flex-col gap-2 md:gap-4">
-          <button className="flex items-center gap-2 md:gap-3 bg-bosskey-dark p-2 md:p-3 rounded-lg text-bosskey-green transition-colors">
+          <button className="flex items-center gap-2 md:gap-3 bg-shefa-bg p-2 md:p-3 rounded-lg text-shefa-accent transition-colors">
             <LayoutDashboard size={20} />
             <span className="hidden sm:inline font-semibold">Dashboard</span>
           </button>
-          <button className="flex items-center gap-2 md:gap-3 hover:bg-bosskey-dark p-2 md:p-3 rounded-lg text-gray-400 hover:text-white transition-colors">
+          <button className="flex items-center gap-2 md:gap-3 hover:bg-shefa-bg p-2 md:p-3 rounded-lg text-gray-400 hover:text-white transition-colors">
             <Wallet size={20} />
             <span className="hidden sm:inline font-semibold">Capital Pots</span>
           </button>
@@ -83,17 +85,17 @@ function App() {
 
         {/* Top Metric Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6 mb-6 md:mb-8">
-          <div className="bg-bosskey-panel p-4 md:p-6 rounded-2xl shadow-lg border border-gray-800">
+          <div className="bg-shefa-panel p-4 md:p-6 rounded-2xl shadow-lg border border-gray-800">
             <h2 className="text-gray-400 text-sm font-semibold mb-2">Active Capital</h2>
             <div className="flex items-end gap-3 flex-wrap">
               <span className="text-3xl md:text-4xl font-bold">${parseFloat(portfolio.capital.active_capital).toLocaleString()}</span>
-              <span className="flex items-center text-bosskey-green text-sm font-bold bg-bosskey-green/10 px-2 py-1 rounded-md mb-1">
+              <span className="flex items-center text-shefa-accent text-sm font-bold bg-shefa-accent/10 px-2 py-1 rounded-md mb-1">
                 <ArrowUpRight size={16} /> Live
               </span>
             </div>
           </div>
 
-          <div className="bg-bosskey-panel p-4 md:p-6 rounded-2xl shadow-lg border border-gray-800">
+          <div className="bg-shefa-panel p-4 md:p-6 rounded-2xl shadow-lg border border-gray-800">
             <h2 className="text-gray-400 text-sm font-semibold mb-2">Active Slots</h2>
             <div className="flex items-end gap-3">
               <span className="text-3xl md:text-4xl font-bold">{portfolio.activeSlotCount} <span className="text-gray-500 text-xl md:text-2xl">/ {portfolio.maxSlots}</span></span>
@@ -105,13 +107,19 @@ function App() {
         <PerformanceMetrics capital={portfolio.capital} history={portfolio.tradeHistory} />
 
         {/* Capital Pots Breakdown */}
-        <div className="bg-bosskey-panel rounded-2xl p-4 md:p-6 shadow-lg border border-gray-800 mb-6 md:mb-8">
-          <h2 className="text-lg md:text-xl font-bold mb-6">Capital Pots</h2>
-          <CapitalPotsChart capital={portfolio.capital} />
+        <div className="bg-shefa-panel rounded-2xl p-4 md:p-6 shadow-lg border border-gray-800 mb-6 md:mb-8">
+          <div className="flex flex-wrap items-baseline justify-between gap-2 mb-6">
+            <h2 className="text-lg md:text-xl font-bold">Capital Pots</h2>
+            <span className="text-gray-500 text-xs">SHEFA Fund takes {Math.round((portfolio.potShares?.shefa_fund ?? 0) * 100)}% of each winning day first</span>
+          </div>
+          <CapitalPotsChart capital={portfolio.capital} potShares={portfolio.potShares} />
         </div>
 
+        {/* SHEFA's goal calendar */}
+        <ShefaCalendar />
+
         {/* Active Positions Table */}
-        <div className="bg-bosskey-panel rounded-2xl p-4 md:p-6 shadow-lg border border-gray-800 mb-6 md:mb-8">
+        <div className="bg-shefa-panel rounded-2xl p-4 md:p-6 shadow-lg border border-gray-800 mb-6 md:mb-8">
           <h2 className="text-lg md:text-xl font-bold mb-6">Open Market Positions</h2>
 
           {portfolio.openPositions.length === 0 ? (
@@ -133,7 +141,7 @@ function App() {
                     <tr key={pos.id} className="border-b border-gray-800/50 hover:bg-white/5 transition-colors">
                       <td className="py-4 font-bold">{pos.symbol}</td>
                       <td className="py-4">
-                        <span className="bg-bosskey-green/10 text-bosskey-green px-3 py-1 rounded-full text-xs font-bold tracking-wider">
+                        <span className="bg-shefa-accent/10 text-shefa-accent px-3 py-1 rounded-full text-xs font-bold tracking-wider">
                           {pos.action}
                         </span>
                       </td>
@@ -149,9 +157,9 @@ function App() {
         </div>
 
         {/* Live System Feed (Logs) */}
-        <div className="bg-bosskey-panel rounded-2xl p-4 md:p-6 shadow-lg border border-gray-800">
+        <div className="bg-shefa-panel rounded-2xl p-4 md:p-6 shadow-lg border border-gray-800">
           <div className="flex items-center gap-3 mb-6">
-            <Terminal size={24} className="text-bosskey-green" />
+            <Terminal size={24} className="text-shefa-accent" />
             <h2 className="text-lg md:text-xl font-bold">Live System Feed</h2>
           </div>
 
@@ -160,9 +168,9 @@ function App() {
               <p className="text-gray-500">No recent system activity...</p>
             ) : (
               logs.map((log, index) => (
-                <div key={index} className="flex flex-col bg-[#0B1115] p-3 rounded-lg border border-gray-800/50 border-l-2 border-l-bosskey-green">
+                <div key={index} className="flex flex-col bg-shefa-bg p-3 rounded-lg border border-gray-800/50 border-l-2 border-l-shefa-accent">
                   <div className="flex justify-between items-center mb-1 gap-2">
-                    <span className="text-bosskey-green text-xs font-bold uppercase tracking-wider">
+                    <span className="text-shefa-accent text-xs font-bold uppercase tracking-wider">
                       {log.level || 'SYSTEM'}
                     </span>
                     <span className="text-gray-500 text-xs shrink-0">
@@ -175,6 +183,9 @@ function App() {
             )}
           </div>
         </div>
+
+        {/* Infrastructure Telemetry */}
+        <SystemHealthPanel />
 
       </main>
     </div>

@@ -4,6 +4,7 @@ const BrokerClient = require('./BrokerClient');
 const DatabaseClient = require('./DatabaseClient');
 const Logger = require('./Logger');
 const Notifier = require('./Notifier');
+const { splitWinningDay } = require('./PotSplit');
 
 // Reconciles trade_analytics against Alpaca's live account state. Two passes:
 //
@@ -199,47 +200,59 @@ class Reconciliation {
             }
 
             if (!dryRun) {
-                for (const closeItem of report.resolvedCloses) {
-                    await this.db.client.query(
-                        `UPDATE trade_analytics
-                         SET status = 'CLOSED', sell_price = $1, net_profit = $2, margin_percentage = $3, closed_at = $4
-                         WHERE id = $5`,
-                        [closeItem.sellPrice, closeItem.netProfit, closeItem.marginPercentage, closeItem.closedAt, closeItem.trade.id]
-                    );
-                }
+                // Row repairs and the pot update commit together or not at all, the
+                // same guarantee Settlement gives.
+                await this.db.client.query('BEGIN');
+                try {
+                    for (const closeItem of report.resolvedCloses) {
+                        // settled_at = NOW(): this run books the P&L into capital_pots
+                        // below, so Settlement's nightly sweep must not book it again.
+                        await this.db.client.query(
+                            `UPDATE trade_analytics
+                             SET status = 'CLOSED', sell_price = $1, net_profit = $2, margin_percentage = $3, closed_at = $4,
+                                 settled_at = NOW()
+                             WHERE id = $5`,
+                            [closeItem.sellPrice, closeItem.netProfit, closeItem.marginPercentage, closeItem.closedAt, closeItem.trade.id]
+                        );
+                    }
 
-                for (const trade of report.reopened) {
-                    await this.db.client.query(
-                        `UPDATE trade_analytics
-                         SET status = 'OPEN', sell_price = NULL, net_profit = NULL, margin_percentage = NULL, closed_at = NULL
-                         WHERE id = $1`,
-                        [trade.id]
-                    );
-                }
+                    for (const trade of report.reopened) {
+                        await this.db.client.query(
+                            `UPDATE trade_analytics
+                             SET status = 'OPEN', sell_price = NULL, net_profit = NULL, margin_percentage = NULL, closed_at = NULL,
+                                 settled_at = NULL
+                             WHERE id = $1`,
+                            [trade.id]
+                        );
+                    }
 
-                // Same pot-distribution rule Settlement.js applies for a day's net result,
-                // applied here once for the trades this run newly resolved.
-                if (totalNetProfit > 0) {
-                    const activeAddition = totalNetProfit * 0.50;
-                    const emergencyAddition = totalNetProfit * 0.20;
-                    const taxAddition = totalNetProfit * 0.20;
-                    const personalAddition = totalNetProfit * 0.10;
+                    // Same pot-distribution rule Settlement.js applies for a day's net result
+                    // (src/PotSplit.js, SHEFA fund first), applied once for the trades this
+                    // run newly resolved.
+                    if (totalNetProfit > 0) {
+                        const split = splitWinningDay(totalNetProfit);
 
-                    await this.db.client.query(
-                        `UPDATE capital_pots
-                         SET active_capital = active_capital + $1,
-                             emergency_reserve = emergency_reserve + $2,
-                             tax_vault = tax_vault + $3,
-                             personal_payout = personal_payout + $4,
-                             last_settled = CURRENT_TIMESTAMP
-                         WHERE id = 1`,
-                        [activeAddition, emergencyAddition, taxAddition, personalAddition]
-                    );
-                } else if (totalNetProfit < 0) {
-                    await this.db.client.query(
-                        `UPDATE capital_pots SET active_capital = active_capital + $1, last_settled = CURRENT_TIMESTAMP WHERE id = 1`,
-                        [totalNetProfit]
-                    );
+                        await this.db.client.query(
+                            `UPDATE capital_pots
+                             SET active_capital = active_capital + $1,
+                                 emergency_reserve = emergency_reserve + $2,
+                                 tax_vault = tax_vault + $3,
+                                 personal_payout = personal_payout + $4,
+                                 shefa_fund = shefa_fund + $5,
+                                 last_settled = CURRENT_TIMESTAMP
+                             WHERE id = 1`,
+                            [split.active_capital, split.emergency_reserve, split.tax_vault, split.personal_payout, split.shefa_fund]
+                        );
+                    } else if (totalNetProfit < 0) {
+                        await this.db.client.query(
+                            `UPDATE capital_pots SET active_capital = active_capital + $1, last_settled = CURRENT_TIMESTAMP WHERE id = 1`,
+                            [totalNetProfit]
+                        );
+                    }
+                    await this.db.client.query('COMMIT');
+                } catch (writeErr) {
+                    await this.db.client.query('ROLLBACK').catch(() => {});
+                    throw writeErr;
                 }
 
                 if (report.resolvedCloses.length > 0 || report.reopened.length > 0) {

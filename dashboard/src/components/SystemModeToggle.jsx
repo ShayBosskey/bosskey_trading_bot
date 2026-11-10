@@ -68,7 +68,7 @@ export default function SystemModeToggle({ mode, onModeChanged }) {
   };
 
   return (
-    <div className="bg-bosskey-panel rounded-2xl p-4 md:p-6 shadow-lg border border-gray-800 mb-6 md:mb-8">
+    <div className="bg-shefa-panel rounded-2xl p-4 md:p-6 shadow-lg border border-gray-800 mb-6 md:mb-8">
       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
         <div>
           <h2 className="text-gray-400 text-sm font-semibold mb-2">System Mode</h2>
@@ -89,7 +89,7 @@ export default function SystemModeToggle({ mode, onModeChanged }) {
         <div
           role="radiogroup"
           aria-label="System mode"
-          className="relative grid grid-cols-3 gap-1 p-1 bg-bosskey-dark rounded-xl border border-gray-800 w-full lg:w-auto lg:min-w-[380px]"
+          className="relative grid grid-cols-3 gap-1 p-1 bg-shefa-bg rounded-xl border border-gray-800 w-full lg:w-auto lg:min-w-[380px]"
         >
           {/* Sliding indicator sits behind the labels and tracks the active mode */}
           {activeMode && (

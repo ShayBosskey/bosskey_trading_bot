@@ -54,13 +54,15 @@ describe('Settlement daily net profit calculation', () => {
         await settlement.runDailySettlement();
 
         expect(updateCalls).toHaveLength(1);
-        // $100 net: $20 to SHEFA's fund first, then $80 split 50/20/20/10.
+        // $100 net: $10 to SHEFA's fund first, then $90 split 50/20/20/10.
         const [activeAddition, emergencyAddition, taxAddition, personalAddition, shefaAddition] = updateCalls[0];
-        expect(shefaAddition).toBeCloseTo(20);
-        expect(activeAddition).toBeCloseTo(40);
-        expect(emergencyAddition).toBeCloseTo(16);
-        expect(taxAddition).toBeCloseTo(16);
-        expect(personalAddition).toBeCloseTo(8);
+        expect(shefaAddition).toBeCloseTo(10);
+        expect(activeAddition).toBeCloseTo(45);
+        expect(emergencyAddition).toBeCloseTo(18);
+        expect(taxAddition).toBeCloseTo(18);
+        expect(personalAddition).toBeCloseTo(9);
+        // Nothing is created or lost in the split.
+        expect(activeAddition + emergencyAddition + taxAddition + personalAddition + shefaAddition).toBeCloseTo(100);
     });
 
     test('a losing day gives the SHEFA fund nothing', async () => {

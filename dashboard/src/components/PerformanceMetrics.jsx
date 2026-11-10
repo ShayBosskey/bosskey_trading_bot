@@ -88,7 +88,7 @@ function EquityTooltip({ active, payload }) {
   if (!active || !payload?.length) return null;
   const point = payload[0].payload;
   return (
-    <div className="bg-bosskey-dark border border-gray-800 rounded-lg px-3 py-2 text-sm shadow-lg">
+    <div className="bg-shefa-bg border border-gray-800 rounded-lg px-3 py-2 text-sm shadow-lg">
       <p className="text-gray-400 text-xs mb-1">{new Date(point.date).toLocaleString()}</p>
       <p className="text-white font-semibold">{usd(point.equity)}</p>
     </div>
@@ -99,7 +99,7 @@ function PotTooltip({ active, payload }) {
   if (!active || !payload?.length) return null;
   const pot = payload[0].payload;
   return (
-    <div className="bg-bosskey-dark border border-gray-800 rounded-lg px-3 py-2 text-sm shadow-lg">
+    <div className="bg-shefa-bg border border-gray-800 rounded-lg px-3 py-2 text-sm shadow-lg">
       <p className="text-gray-300 font-semibold">{pot.name}</p>
       <p className="text-white">{usd(pot.value)}</p>
       <p className="text-gray-400 text-xs mt-1">{pot.share.toFixed(1)}% of portfolio</p>
@@ -143,7 +143,7 @@ export default function PerformanceMetrics({ capital, history }) {
     <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 md:gap-6 mb-6 md:mb-8">
 
       {/* Equity Over Time */}
-      <div className="bg-bosskey-panel rounded-2xl p-4 md:p-6 shadow-lg border border-gray-800">
+      <div className="bg-shefa-panel rounded-2xl p-4 md:p-6 shadow-lg border border-gray-800">
         <div className="flex flex-wrap items-start justify-between gap-3 mb-4">
           <div>
             <h2 className="text-lg md:text-xl font-bold">Equity Over Time</h2>
@@ -165,7 +165,7 @@ export default function PerformanceMetrics({ capital, history }) {
           <span
             className={`flex items-center gap-1 text-sm font-bold px-2 py-1 rounded-md mb-1 ${
               isUp
-                ? 'text-bosskey-green bg-bosskey-green/10'
+                ? 'text-shefa-accent bg-shefa-accent/10'
                 : 'text-red-400 bg-red-400/10'
             }`}
           >
@@ -220,9 +220,9 @@ export default function PerformanceMetrics({ capital, history }) {
       </div>
 
       {/* Capital Pot Allocations */}
-      <div className="bg-bosskey-panel rounded-2xl p-4 md:p-6 shadow-lg border border-gray-800">
+      <div className="bg-shefa-panel rounded-2xl p-4 md:p-6 shadow-lg border border-gray-800">
         <div className="flex items-center gap-3 mb-4">
-          <BarChart3 size={22} className="text-bosskey-green shrink-0" />
+          <BarChart3 size={22} className="text-shefa-accent shrink-0" />
           <div>
             <h2 className="text-lg md:text-xl font-bold">Capital Pot Allocations</h2>
             <p className="text-gray-500 text-xs mt-1">Balance held per pot</p>
