@@ -31,3 +31,8 @@ type=aor
 max_contacts=1
 remove_existing=yes         ; a re-registering phone replaces its stale contact
 qualify_frequency=30        ; ping the phone every 30 s so we know it's reachable
+qualify_timeout=8.0         ; default 3 s is too tight: RTT over Tailscale/cellular hit 2.3 s
+                            ; on 2026-11-10 and caused false "Unreachable" flaps
+default_expiration=600      ; phone re-REGISTERs every <=10 min instead of hourly, so a
+maximum_expiration=600      ; dropped tunnel heals in minutes and a dead contact is
+                            ; cleared in 10 min rather than lingering for an hour

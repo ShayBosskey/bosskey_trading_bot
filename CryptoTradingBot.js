@@ -8,6 +8,7 @@ const Notifier = require('./src/Notifier');
 const Config = require('./src/Config');
 const RiskEngine = require('./src/RiskEngine');
 const Capacity = require('./src/Capacity');
+const Cooldown = require('./src/Cooldown');
 const NewsClient = require('./src/NewsClient');
 const { HEARTBEAT_FILE } = require('./src/CryptoExitEngine');
 const attachGlobalErrorLogger = require('./src/ErrorHandler');
@@ -161,8 +162,15 @@ async function runCryptoCycle({ dryRun = false, maxCandidates = Infinity } = {})
         let activeCapital = parseFloat(await db.getActiveCapital());
         await logger.log(`Active Capital Available: $${activeCapital.toFixed(2)}`);
 
+        // Anti-whipsaw: a symbol that was just stopped out is not re-scanned until its cool-down ends.
+        const cooled = await Cooldown.getCooledDownSymbols(db.client);
+        if (cooled.length > 0) {
+            await logger.log(`[Cool-down] Skipping ${cooled.map(c => `${c.symbol} (${c.stopouts} stop-out${c.stopouts > 1 ? 's' : ''}, until ${c.until})`).join(', ')}.`);
+        }
+        const excluded = [...heldSymbols, ...cooled.map(c => c.symbol)];
+
         const broker = new BrokerClient();
-        const setups = await broker.scanCryptoMarket(heldSymbols, Math.min(available, maxCandidates), {
+        const setups = await broker.scanCryptoMarket(excluded, Math.min(available, maxCandidates), {
             maxNotional: activeCapital * MAX_ALLOCATION_FRACTION
         });
         if (setups.length === 0) {
